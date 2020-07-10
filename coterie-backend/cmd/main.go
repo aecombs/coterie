@@ -1,20 +1,27 @@
 package main
 
 import (
-	"coterie/platform/controllers"
+	"coterie/packages/controllers"
 	"database/sql"
 	"flag"
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
 	flag.Parse()
-	Database, _ := sql.Open("sqlite3", "./database/coterie.db")
+	//open the database!
+	db, err := sql.Open("sqlite3", "./database/coterie.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
 
-	// announcements := models.NewAnnouncementTable(db)
+	// Announcements := models.NewAnnouncementTable(db)
 	// chapters := models.NewChapterTable(db)
 	// events := models.NewEventTable(db)
 	// holidays := models.NewHolidayTable(db)
@@ -54,7 +61,7 @@ func main() {
 	// 	})
 	// })
 
-	r.Mount("/announcements", controllers.announcementsResource{}.Routes())
+	r.Mount("/announcements", controllers.AnnouncementsResource{}.Routes())
 	// r.Mount("/todos", todosResource{}.Routes())
 
 	http.ListenAndServe(":3000", r)

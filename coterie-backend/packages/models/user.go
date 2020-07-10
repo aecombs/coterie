@@ -23,6 +23,7 @@ func NewUserTable(db *sql.DB) *UserTable {
 			"updated_at"	DATETIME,
 			"name"	TEXT,
 			"email"  TEXT,
+			"bio"  TEXT,
 			"avatar"  TEXT,
 			PRIMARY KEY("ID" AUTOINCREMENT)
 		);
