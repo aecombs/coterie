@@ -21,7 +21,7 @@ func main() {
 	}
 	defer db.Close()
 
-	// Announcements := models.NewAnnouncementTable(db)
+	announcements := models.NewAnnouncementTable(db)
 	// chapters := models.NewChapterTable(db)
 	// events := models.NewEventTable(db)
 	// holidays := models.NewHolidayTable(db)
@@ -41,7 +41,8 @@ func main() {
 	// r.Use(render.SetContentType(render.ContentTypeJSON))
 	r.Use(middleware.RequestID)
 	r.Use(middleware.RealIP)
-	r.Use(middleware.Logger)
+	// r.Use(middleware.Logger)
+	r.Use(yin.SimpleLogger)
 	r.Use(middleware.Recoverer)
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {

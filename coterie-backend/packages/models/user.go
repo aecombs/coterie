@@ -3,12 +3,12 @@ package models
 import "database/sql"
 
 type User struct {
-	ID         int
-	Name       string
-	Email      string
-	Avatar     string
-	created_at string
-	updated_at string
+	ID        int
+	Name      string
+	Email     string
+	Avatar    string
+	CreatedAt string
+	UpdatedAt string
 }
 
 type UserTable struct {

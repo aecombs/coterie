@@ -3,13 +3,14 @@ package models
 import "database/sql"
 
 type Event struct {
-	ID          int
-	Name        string
-	Date        string
-	Type        string
-	Description string
-	created_at  string
-	updated_at  string
+	ID             int
+	Name           string
+	Date           string
+	Type           string
+	Description    string
+	OrganizationID int
+	CreatedAt      string
+	UpdatedAt      string
 }
 
 type EventTable struct {

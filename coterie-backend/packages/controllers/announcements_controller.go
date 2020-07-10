@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"coterie/packages/models"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -12,6 +13,9 @@ type AnnouncementsResource struct{}
 // Routes creates a REST router for the announcements resource
 func (rs AnnouncementsResource) Routes() chi.Router {
 	r := chi.NewRouter()
+
+	r.Use(yin.SimpleLogger)
+
 	r.Get("/", rs.Index) // GET /announcements - read a list of announcements
 	// r.Get("/new", rs.New) // GET /announcements/new - get the form for a new announcement
 	r.Post("/", rs.Create) // POST /announcements - create a new announcement and persist it
@@ -27,7 +31,6 @@ func (rs AnnouncementsResource) Routes() chi.Router {
 }
 
 func (rs AnnouncementsResource) Index(w http.ResponseWriter, r *http.Request) {
-	// w.Write([]byte("aaa list of stuff.."))
 	res, _ := yin.Event(w, r)
 	// announcements := models.ListAllAnnouncements()
 	// res.SendJSON(announcements)
@@ -39,7 +42,24 @@ func (rs AnnouncementsResource) Index(w http.ResponseWriter, r *http.Request) {
 // }
 
 func (rs AnnouncementsResource) Create(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("aaa create"))
+	// w.Write([]byte("aaa create"))
+	res, req := yin.Event(w, r)
+	body := map[string]string{}
+	req.BindBody(&body)
+
+	// fmt.Println(body)
+
+	// res.SendStatus(http.StatusNoContent)
+
+	announcement := models.Announcement{
+		Text: body["text"],
+		Date: body["date"],
+		created_at: time.Now(),
+		updated_at: time.Now(),
+	}
+	// feed.Add(item)
+	res.SendJSON(announcement)
+
 }
 
 func (rs AnnouncementsResource) Show(w http.ResponseWriter, r *http.Request) {

@@ -5,11 +5,12 @@ import (
 )
 
 type Announcement struct {
-	ID         int
-	Text       string
-	Date       string
-	created_at string
-	updated_at string
+	ID             int
+	Text           string
+	Date           string
+	OrganizationID int
+	CreatedAt      string
+	UpdatedAt      string
 }
 
 type AnnouncementTable struct {
