@@ -2,6 +2,7 @@ package main
 
 import (
 	"coterie/packages/controllers"
+	"coterie/packages/models"
 	"database/sql"
 	"flag"
 	"log"
@@ -10,6 +11,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/qkgo/yin"
 )
 
 func main() {
@@ -49,6 +51,9 @@ func main() {
 		w.Write([]byte("."))
 	})
 
+	r.Get("/announcements", controllers.GetAnnouncements(announcements))
+	r.Post("/announcements", controllers.AddAnnouncement(announcements))
+
 	// r.Route("/announcements", func(r chi.Router) {
 	// 	r.With(paginate).Get("/", controllers.GetAnnouncements(db))
 	// 	r.Post("/", controllers.CreateAnnouncement(db))       // POST /Announcements
@@ -62,7 +67,7 @@ func main() {
 	// 	})
 	// })
 
-	r.Mount("/announcements", controllers.AnnouncementsResource{}.Routes())
+	// r.Mount("/announcements", controllers.AnnouncementsResource{}.Routes())
 	// r.Mount("/todos", todosResource{}.Routes())
 
 	http.ListenAndServe(":3000", r)
