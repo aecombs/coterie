@@ -3,11 +3,11 @@ package models
 import "database/sql"
 
 type Scripture struct {
-	ID          int
-	Name        string
-	OrganizationIDs []*Organization
-	created_at  string
-	updated_at  string
+	ID             int
+	Name           string
+	OrganizationID int
+	CreatedAt      string
+	UpdatedAt      string
 }
 
 type ScriptureTable struct {

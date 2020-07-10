@@ -8,8 +8,9 @@ type Organization struct {
 	Date        string
 	Type        string
 	Description string
-	created_at  string
-	updated_at  string
+	UserID      int
+	CreatedAt   string
+	UpdatedAt   string
 }
 
 type OrganizationTable struct {

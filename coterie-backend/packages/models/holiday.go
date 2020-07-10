@@ -3,12 +3,13 @@ package models
 import "database/sql"
 
 type Holiday struct {
-	ID          int
-	Name        string
-	Date        string
-	Description string
-	created_at  string
-	updated_at  string
+	ID             int
+	Name           string
+	Date           string
+	Description    string
+	OrganizationID int
+	CreatedAt      string
+	UpdatedAt      string
 }
 
 type HolidayTable struct {

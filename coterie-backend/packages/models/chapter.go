@@ -3,13 +3,13 @@ package models
 import "database/sql"
 
 type Chapter struct {
-	ID         int
-	Name       string
-	Text       string
-	Position   int
-	ScriptureIds []*Scripture
-	created_at string
-	updated_at string
+	ID          int
+	Name        string
+	Text        string
+	Position    int
+	ScriptureID int
+	CreatedAt   string
+	UpdatedAt   string
 }
 
 type ChapterTable struct {
