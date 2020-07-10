@@ -1,35 +1,61 @@
 package main
 
 import (
+	"coterie/platform/controllers"
+	"database/sql"
+	"flag"
 	"net/http"
 
 	"github.com/go-chi/chi"
-	"github.com/qkgo/yin"
+	"github.com/go-chi/chi/middleware"
 )
 
 func main() {
-	// db, _ := sql.Open("sqlite3", "./database/coterie.db")
+	flag.Parse()
+	Database, _ := sql.Open("sqlite3", "./database/coterie.db")
+
+	// announcements := models.NewAnnouncementTable(db)
+	// chapters := models.NewChapterTable(db)
+	// events := models.NewEventTable(db)
+	// holidays := models.NewHolidayTable(db)
+	// members := models.NewMemberTable(db)
+	// organizations := models.NewOrganizationTable(db)
+	// scriptures := models.NewScriptureTable(db)
+	// users := models.NewUserTable(db)
 
 	r := chi.NewRouter()
 
-	r.Use(yin.SimpleLogger)
+	// r.Use(yin.SimpleLogger)
 
-	// r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-	// 	res, _ := yin.Event(w, r)
-	// 	items := feed.Get()
-	// 	res.SendJSON(items)
+	// r.Use(middleware.RequestID)
+	// r.Use(middleware.Logger)
+	// r.Use(middleware.Recoverer)
+	// r.Use(middleware.URLFormat)
+	// r.Use(render.SetContentType(render.ContentTypeJSON))
+	r.Use(middleware.RequestID)
+	r.Use(middleware.RealIP)
+	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
+
+	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("."))
+	})
+
+	// r.Route("/announcements", func(r chi.Router) {
+	// 	r.With(paginate).Get("/", controllers.GetAnnouncements(db))
+	// 	r.Post("/", controllers.CreateAnnouncement(db))       // POST /Announcements
+	// 	// r.Get("/search", controllers.SearchAnnouncements()) // GET /Announcements/search
+
+	// 	r.Route("/{announcementID}", func(r chi.Router) {
+	// 		// r.Use(controllers.AnnouncementCtx)       // Load the *Announcement on the request context
+	// 		r.Get("/", controllers.GetAnnouncement(db))       // GET /Announcements/123
+	// 		r.Put("/", controllers.UpdateAnnouncement(db))    // PUT /Announcements/123
+	// 		r.Delete("/", controllers.DeleteAnnouncement(db)) // DELETE /Announcements/123
+	// 	})
 	// })
 
-	// r.Post("/posts", func(w http.ResponseWriter, r *http.Request) {
-	// 	res, req := yin.Event(w, r)
-	// 	body := map[string]string{}
-	// 	req.BindBody(&body)
-	// 	item := newsfeed.Item{
-	// 		Content: body["content"],
-	// 	}
-	// 	feed.Add(item)
-	// 	res.SendStatus(204)
-	// })
+	r.Mount("/announcements", controllers.announcementsResource{}.Routes())
+	// r.Mount("/todos", todosResource{}.Routes())
 
 	http.ListenAndServe(":3000", r)
 }
