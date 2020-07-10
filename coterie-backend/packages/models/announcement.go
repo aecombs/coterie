@@ -38,6 +38,7 @@ func NewAnnouncementTable(db *sql.DB) *AnnouncementTable {
 	}
 }
 
+//Model.All
 func (announcementTable *AnnouncementTable) AnnouncementsLister() []Announcement {
 	announcements := []Announcement{}
 	rows, _ := announcementTable.DB.Query(`
@@ -64,6 +65,24 @@ func (announcementTable *AnnouncementTable) AnnouncementsLister() []Announcement
 	return announcements
 }
 
+//Model.where(id: "")
+func (announcementTable *AnnouncementTable) AnnouncementGetter(id int) *Announcement {
+	// var announcement *Announcement
+	rows, _ := announcementTable.DB.Query("SELECT * FROM announcement WHERE id = ?", id)
+
+	announcement := Announcement{
+		ID:             id,
+		Text:           text,
+		Date:           date,
+		CreatedAt:      createdAt,
+		UpdatedAt:      updatedAt,
+		OrganizationID: organizationID,
+	}
+
+	return announcement
+}
+
+//Model.create
 func (announcementTable *AnnouncementTable) AnnouncementAdder(announcement Announcement) int {
 	stmt, err := announcementTable.DB.Prepare(`
 		INSERT INTO announcement (date,text,created_at,updated_at) values (?,?,?,?)

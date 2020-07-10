@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/go-chi/chi"
 	"github.com/qkgo/yin"
 )
 
@@ -30,15 +31,38 @@ import (
 // 	return r
 // }
 
+//Index
 func GetAnnouncements(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		announcements := announcementTable.AnnouncementsLister()
+
+		announcements, err := announcementTable.AnnouncementsLister()
+		if err != nil {
+			http.Error(w, http.StatusText(404), 404)
+			return
+		}
+
 		res.SendJSON(announcements)
-		// res.SendJSON("There are no announcements here!")
 	}
 }
 
+//Show
+func GetAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		res, _ := yin.Event(w, r)
+		announcementID := chi.URLParam(r, "announcementID")
+
+		announcement, err := announcementTable.AnnouncementGetter(announcementID)
+		if err != nil {
+			http.Error(w, http.StatusText(404), 404)
+			return
+		}
+
+		res.SendJSON(announcement)
+	}
+}
+
+//Create
 func AddAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
@@ -54,10 +78,10 @@ func AddAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFu
 
 		result := announcementTable.AnnouncementAdder(announcement)
 
-		if result == 400 {
-			res.SendStatus(400)
-		} else {
-			res.SendJSON(announcement)
+		result, err := announcementTable.AnnouncementAdder(announcement)
+		if err != nil {
+			http.Error(w, http.StatusText(404), 404)
+			return
 		}
 	}
 }
