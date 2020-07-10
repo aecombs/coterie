@@ -3,14 +3,15 @@ package models
 import "database/sql"
 
 type Member struct {
-	ID          int
-	Name        string
-	Birthdate   string
-	Class       string
-	Email       string
-	FundsRaised int
-	created_at  string
-	updated_at  string
+	ID             int
+	Name           string
+	Birthdate      string
+	Class          string
+	Email          string
+	FundsRaised    int
+	OrganizationID int
+	CreatedAt      string
+	UpdatedAt      string
 }
 
 type MemberTable struct {
