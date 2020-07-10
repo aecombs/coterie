@@ -3,10 +3,19 @@ package models
 import "database/sql"
 
 type User struct {
+	ID         int
+	Name       string
+	Email      string
+	Avatar     string
+	created_at string
+	updated_at string
+}
+
+type UserTable struct {
 	DB *sql.DB
 }
 
-func NewUserTable(db *sql.DB) *User {
+func NewUserTable(db *sql.DB) *UserTable {
 	stmt, _ := db.Prepare(`
 		CREATE TABLE IF NOT EXISTS "user" (
 			"ID"	INTEGER NOT NULL UNIQUE,
@@ -20,7 +29,7 @@ func NewUserTable(db *sql.DB) *User {
 	`)
 
 	stmt.Exec()
-	return &User{
+	return &UserTable{
 		DB: db,
 	}
 }

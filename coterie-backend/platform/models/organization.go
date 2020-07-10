@@ -3,10 +3,20 @@ package models
 import "database/sql"
 
 type Organization struct {
+	ID          int
+	Name        string
+	Date        string
+	Type        string
+	Description string
+	created_at  string
+	updated_at  string
+}
+
+type OrganizationTable struct {
 	DB *sql.DB
 }
 
-func NewOrganizationTable(db *sql.DB) *Organization {
+func NewOrganizationTable(db *sql.DB) *OrganizationTable {
 	stmt, _ := db.Prepare(`
 		CREATE TABLE IF NOT EXISTS "organization" (
 			"ID"	INTEGER NOT NULL,
@@ -15,12 +25,14 @@ func NewOrganizationTable(db *sql.DB) *Organization {
 			"name"	TEXT,
 			"mission_statement"	TEXT,
 			"total_funds"	INTEGER,
+			"user_id"	INTEGER,
+			FOREIGN KEY("user_id") REFERENCES "user"("ID"),
 			PRIMARY KEY("ID" AUTOINCREMENT)
 		);
 	`)
 
 	stmt.Exec()
-	return &Organization{
+	return &OrganizationTable{
 		DB: db,
 	}
 }

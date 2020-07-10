@@ -24,6 +24,8 @@ func NewAnnouncementTable(db *sql.DB) *AnnouncementTable {
 			"updated_at"	DATETIME,
 			"text"	TEXT,
 			"date"	DATE,
+			"organization_id"	INTEGER,
+			FOREIGN KEY("organization_id") REFERENCES "organization"("ID"),
 			PRIMARY KEY("ID" AUTOINCREMENT)
 		);
 	`)
