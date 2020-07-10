@@ -76,8 +76,6 @@ func AddAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFu
 			UpdatedAt: time.Now().String(),
 		}
 
-		result := announcementTable.AnnouncementAdder(announcement)
-
 		result, err := announcementTable.AnnouncementAdder(announcement)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)

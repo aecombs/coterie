@@ -39,11 +39,16 @@ func NewAnnouncementTable(db *sql.DB) *AnnouncementTable {
 }
 
 //Model.All
-func (announcementTable *AnnouncementTable) AnnouncementsLister() []Announcement {
+func (announcementTable *AnnouncementTable) AnnouncementsLister() ([]Announcement, error) {
 	announcements := []Announcement{}
-	rows, _ := announcementTable.DB.Query(`
+	rows, err := announcementTable.DB.Query(`
 		SELECT * FROM announcement
 	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
 	var id int
 	var text string
 	var date string
@@ -62,28 +67,40 @@ func (announcementTable *AnnouncementTable) AnnouncementsLister() []Announcement
 		}
 		announcements = append(announcements, announcement)
 	}
-	return announcements
+	return announcements, err
 }
 
 //Model.where(id: "")
-func (announcementTable *AnnouncementTable) AnnouncementGetter(id int) *Announcement {
-	// var announcement *Announcement
-	rows, _ := announcementTable.DB.Query("SELECT * FROM announcement WHERE id = ?", id)
+func (announcementTable *AnnouncementTable) AnnouncementGetter(announcementID string) (*Announcement, error) {
+	var announcement *Announcement
+	rows, err := announcementTable.DB.Query("SELECT * FROM announcement WHERE id = ?", announcementID)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
 
-	announcement := Announcement{
-		ID:             id,
-		Text:           text,
-		Date:           date,
-		CreatedAt:      createdAt,
-		UpdatedAt:      updatedAt,
-		OrganizationID: organizationID,
+	var id int
+	var text string
+	var date string
+	var createdAt string
+	var updatedAt string
+	var organizationID int
+	for rows.Next() {
+		rows.Scan(&id, &text, &date, &createdAt, &updatedAt, &organizationID)
+
+		announcement.ID = id
+		announcement.Text = text
+		announcement.Date = date
+		announcement.CreatedAt = createdAt
+		announcement.UpdatedAt = updatedAt
+		announcement.OrganizationID = organizationID
 	}
 
-	return announcement
+	return announcement, err
 }
 
 //Model.create
-func (announcementTable *AnnouncementTable) AnnouncementAdder(announcement Announcement) int {
+func (announcementTable *AnnouncementTable) AnnouncementAdder(announcement Announcement) (Announcement, error) {
 	stmt, err := announcementTable.DB.Prepare(`
 		INSERT INTO announcement (date,text,created_at,updated_at) values (?,?,?,?)
 	`)
@@ -92,10 +109,6 @@ func (announcementTable *AnnouncementTable) AnnouncementAdder(announcement Annou
 
 	if err != nil {
 		log.Fatal(err)
-		// res.SendStatus(400)
-		return 400
-	} else {
-		return 204
-		// res.SendJSON(announcement)
 	}
+	return announcement, err
 }
