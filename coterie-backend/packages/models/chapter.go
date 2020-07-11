@@ -77,40 +77,42 @@ func (chapterTable *ChapterTable) ChaptersLister() ([]Chapter, error) {
 	return chapters, err
 }
 
-// //Model.where(id: "")
-// func (announcementTable *AnnouncementTable) AnnouncementGetter(announcementID string) (Announcement, error) {
-// 	var announcement Announcement
+//Model.where(id: "")
+func (chapterTable *ChapterTable) ChapterGetter(chapterID string) (Chapter, error) {
+	var chapter Chapter
 
-// 	stmt, err := announcementTable.DB.Prepare(`
-// 		SELECT * FROM announcement WHERE id = ?
-// 	`)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	defer stmt.Close()
+	stmt, err := chapterTable.DB.Prepare(`
+		SELECT * FROM chapter WHERE id = ?
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
 
-// 	if stmt != nil {
-// 		var id int
-// 		var text string
-// 		var date string
-// 		var createdAt string
-// 		var updatedAt string
-// 		var organizationID int
+	if stmt != nil {
+		var id int
+		var name string
+		var text string
+		var position int
+		var createdAt string
+		var updatedAt string
+		var scriptureID int
 
-// 		err = stmt.QueryRow(announcementID).Scan(&id, &text, &date, &createdAt, &updatedAt, &organizationID)
-// 		if err != nil {
-// 			log.Fatal(err)
-// 		}
+		err = stmt.QueryRow(chapterID).Scan(&id, &name, &text, &position, &createdAt, &updatedAt, &scriptureID)
+		if err != nil {
+			log.Fatal(err)
+		}
 
-// 		announcement.ID = id
-// 		announcement.Text = text
-// 		announcement.Date = date
-// 		announcement.CreatedAt = createdAt
-// 		announcement.UpdatedAt = updatedAt
-// 		announcement.OrganizationID = organizationID
-// 	}
-// 	return announcement, err
-// }
+		chapter.ID = id
+		chapter.Name = name
+		chapter.Text = text
+		chapter.Position = position
+		chapter.CreatedAt = createdAt
+		chapter.UpdatedAt = updatedAt
+		chapter.ScriptureID = scriptureID
+	}
+	return chapter, err
+}
 
 //Model.create
 func (chapterTable *ChapterTable) ChapterAdder(chapter Chapter) (Chapter, error) {
