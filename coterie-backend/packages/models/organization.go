@@ -3,14 +3,13 @@ package models
 import "database/sql"
 
 type Organization struct {
-	ID          int
-	Name        string
-	Date        string
-	Type        string
-	Description string
-	UserID      int
-	CreatedAt   string
-	UpdatedAt   string
+	ID               int    `json:"id,omitempty"`
+	Name             string `json:"name,omitempty"`
+	MissionStatement string `json:"mission_statement,omitempty"`
+	TotalFunds       int    `json:"total_funds,omitempty"`
+	CreatedAt        string `json:"created_at,omitempty"`
+	UpdatedAt        string `json:"updated_at,omitempty"`
+	UserID           int    `json:"user_id,omitempty"`
 }
 
 type OrganizationTable struct {
@@ -20,12 +19,12 @@ type OrganizationTable struct {
 func NewOrganizationTable(db *sql.DB) *OrganizationTable {
 	stmt, _ := db.Prepare(`
 		CREATE TABLE IF NOT EXISTS "organization" (
-			"ID"	INTEGER NOT NULL,
-			"created_at"	DATETIME,
-			"updated_at"	DATETIME,
+			"ID"	INTEGER NOT NULL UNIQUE,
 			"name"	TEXT,
 			"mission_statement"	TEXT,
 			"total_funds"	INTEGER,
+			"created_at"	TEXT,
+			"updated_at"	TEXT,
 			"user_id"	INTEGER,
 			FOREIGN KEY("user_id") REFERENCES "user"("ID"),
 			PRIMARY KEY("ID" AUTOINCREMENT)
@@ -33,6 +32,9 @@ func NewOrganizationTable(db *sql.DB) *OrganizationTable {
 	`)
 
 	stmt.Exec()
+
+	defer stmt.Close()
+
 	return &OrganizationTable{
 		DB: db,
 	}
