@@ -56,6 +56,7 @@ func main() {
 	r.Get("/announcements/{announcementID}", controllers.GetAnnouncement(announcements))
 	r.Post("/announcements", controllers.AddAnnouncement(announcements))
 	r.Put("/announcements/{announcementID}", controllers.UpdateAnnouncement(announcements))
+	r.Delete("/announcements/{announcementID}", controllers.DeleteAnnouncement(announcements))
 
 	// r.Route("/announcements", func(r chi.Router) {
 	// 	r.With(paginate).Get("/", controllers.GetAnnouncements(db))

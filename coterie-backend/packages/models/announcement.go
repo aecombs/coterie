@@ -116,6 +116,7 @@ func (announcementTable *AnnouncementTable) AnnouncementAdder(announcement Annou
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer stmt.Close()
 
 	return announcement, err
 }
@@ -128,6 +129,7 @@ func (announcementTable *AnnouncementTable) AnnouncementUpdater(announcement Ann
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer stmt.Close()
 
 	_, err = stmt.Exec(announcement.Date, announcement.Text, announcement.UpdatedAt, announcement.ID)
 
@@ -135,4 +137,23 @@ func (announcementTable *AnnouncementTable) AnnouncementUpdater(announcement Ann
 		log.Fatal(err)
 	}
 	return announcement, err
+}
+
+//Model.delete
+func (announcementTable *AnnouncementTable) AnnouncementDeleter(announcementID string) error {
+	stmt, err := announcementTable.DB.Prepare(`
+		DELETE FROM announcement WHERE announcement.id = ?
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(announcementID)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return err
 }

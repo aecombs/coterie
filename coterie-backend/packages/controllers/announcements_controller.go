@@ -97,14 +97,11 @@ func UpdateAnnouncement(announcementTable *models.AnnouncementTable) http.Handle
 		body := map[string]string{}
 		req.BindBody(&body)
 
-		// orgID, _ := strconv.Atoi(body["organization_id"])
 		annID, _ := strconv.Atoi(announcementID)
 		announcement := models.Announcement{
-			ID:   annID,
-			Text: body["text"],
-			Date: body["date"],
-			// OrganizationID: orgID,
-			// CreatedAt:      time.Now().String(),
+			ID:        annID,
+			Text:      body["text"],
+			Date:      body["date"],
 			UpdatedAt: time.Now().String(),
 		}
 
@@ -115,5 +112,21 @@ func UpdateAnnouncement(announcementTable *models.AnnouncementTable) http.Handle
 		}
 
 		res.SendJSON(result)
+	}
+}
+
+//Delete
+func DeleteAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		res, _ := yin.Event(w, r)
+		announcementID := chi.URLParam(r, "announcementID")
+
+		err := announcementTable.AnnouncementDeleter(announcementID)
+		if err != nil {
+			http.Error(w, http.StatusText(400), 400)
+			return
+		}
+
+		res.SendStatus(200)
 	}
 }
