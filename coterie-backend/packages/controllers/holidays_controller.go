@@ -50,8 +50,9 @@ func AddHoliday(holidayTable *models.HolidayTable) http.HandlerFunc {
 
 		orgID, _ := strconv.Atoi(body["organization_id"])
 		holiday := models.Holiday{
-			Text:           body["text"],
+			Name:           body["name"],
 			Date:           body["date"],
+			Description:    body["description"],
 			OrganizationID: orgID,
 			CreatedAt:      time.Now().String(),
 			UpdatedAt:      time.Now().String(),
@@ -77,10 +78,11 @@ func UpdateHoliday(holidayTable *models.HolidayTable) http.HandlerFunc {
 
 		holID, _ := strconv.Atoi(holidayID)
 		holiday := models.Holiday{
-			ID:        holID,
-			Text:      body["text"],
-			Date:      body["date"],
-			UpdatedAt: time.Now().String(),
+			ID:          holID,
+			Name:        body["name"],
+			Date:        body["date"],
+			Description: body["description"],
+			UpdatedAt:   time.Now().String(),
 		}
 
 		result, err := holidayTable.HolidayUpdater(holiday)
