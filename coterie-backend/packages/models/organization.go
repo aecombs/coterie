@@ -93,24 +93,24 @@ func (organizationTable *OrganizationTable) OrganizationGetter(organizationID st
 	if stmt != nil {
 		var id int
 		var name string
-		var date string
-		var description string
+		var missionStatement string
+		var totalFunds int
 		var createdAt string
 		var updatedAt string
-		var organizationID int
+		var userID int
 
-		err = stmt.QueryRow(organizationID).Scan(&id, &name, &date, &description, &createdAt, &updatedAt, &organizationID)
+		err = stmt.QueryRow(organizationID).Scan(&id, &name, &missionStatement, &totalFunds, &createdAt, &updatedAt, &userID)
 		if err != nil {
 			log.Fatal(err)
 		}
 
 		organization.ID = id
 		organization.Name = name
-		organization.Date = date
-		organization.Description = description
+		organization.MissionStatement = missionStatement
+		organization.TotalFunds = totalFunds
 		organization.CreatedAt = createdAt
 		organization.UpdatedAt = updatedAt
-		organization.OrganizationID = organizationID
+		organization.UserID = userID
 	}
 	return organization, err
 }
@@ -118,10 +118,10 @@ func (organizationTable *OrganizationTable) OrganizationGetter(organizationID st
 //Model.create
 func (organizationTable *OrganizationTable) OrganizationAdder(organization Organization) (Organization, error) {
 	stmt, err := organizationTable.DB.Prepare(`
-		INSERT INTO organization (name,date,description,created_at,updated_at,user_id) VALUES (?,?,?,?,?,?)
+		INSERT INTO organization (name,mission_statement,total_funds,created_at,updated_at,user_id) VALUES (?,?,?,?,?,?)
 	`)
 
-	stmt.Exec(organization.Name, organization.Date, organization.Description, organization.CreatedAt, organization.UpdatedAt, organization.OrganizationID)
+	stmt.Exec(organization.Name, organization.MissionStatement, organization.TotalFunds, organization.CreatedAt, organization.UpdatedAt, organization.UserID)
 
 	if err != nil {
 		log.Fatal(err)
@@ -134,14 +134,14 @@ func (organizationTable *OrganizationTable) OrganizationAdder(organization Organ
 //Model.update
 func (organizationTable *OrganizationTable) OrganizationUpdater(organization Organization) (Organization, error) {
 	stmt, err := organizationTable.DB.Prepare(`
-	UPDATE organization SET name = ?, date = ?, description = ?, updated_at = ? WHERE organization.id = ?
+	UPDATE organization SET name = ?, mission_statement = ?, total_funds = ?, updated_at = ? WHERE organization.id = ?
 	`)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(organization.Name, organization.Date, organization.Description, organization.UpdatedAt, organization.ID)
+	_, err = stmt.Exec(organization.Name, organization.MissionStatement, organization.TotalFunds, organization.UpdatedAt, organization.ID)
 
 	if err != nil {
 		log.Fatal(err)
