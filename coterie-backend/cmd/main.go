@@ -100,5 +100,12 @@ func main() {
 	r.Put("/scriptures/{scriptureID}", controllers.UpdateScripture(scriptures))
 	r.Delete("/scriptures/{scriptureID}", controllers.DeleteScripture(scriptures))
 
+	//Users
+	r.Get("/dashboard", controllers.Dashboard(users))
+	r.Post("/login", controllers.Login(users))
+	r.Get("/users/{userID}", controllers.GetUser(users))
+	r.Put("/users/{userID}", controllers.UpdateUser(users))
+	r.Delete("/logout", controllers.DeleteUser(users))
+
 	http.ListenAndServe(":3000", r)
 }
