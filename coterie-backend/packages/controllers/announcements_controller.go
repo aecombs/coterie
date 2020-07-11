@@ -10,28 +10,6 @@ import (
 	"github.com/qkgo/yin"
 )
 
-// type AnnouncementsResource struct{}
-
-// Routes creates a REST router for the announcements resource
-// func (rs AnnouncementsResource) Routes() chi.Router {
-// 	r := chi.NewRouter()
-
-// 	r.Use(yin.SimpleLogger)
-
-// 	r.Get("/", rs.Index) // GET /announcements - read a list of announcements
-// 	// r.Get("/new", rs.New) // GET /announcements/new - get the form for a new announcement
-// 	r.Post("/", rs.Create) // POST /announcements - create a new announcement and persist it
-
-// 	r.Route("/{id}", func(r chi.Router) {
-// 		r.Get("/", rs.Show) // GET /announcements/{id} - read a single announcement by :id
-// 		// r.Get("/edit", rs.Edit)    // GET /announcements/{id}/edit - get form to edit a single announcement by :id
-// 		r.Put("/", rs.Update)    // PUT /announcements/{id} - update a single announcement by :id
-// 		r.Delete("/", rs.Delete) // DELETE /announcements/{id} - delete a single announcement by :id
-// 	})
-
-// 	return r
-// }
-
 //Index
 func GetAnnouncements(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
