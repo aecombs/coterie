@@ -27,7 +27,7 @@ func main() {
 	chapters := models.NewChapterTable(db)
 	events := models.NewEventTable(db)
 	holidays := models.NewHolidayTable(db)
-	// members := models.NewMemberTable(db)
+	members := models.NewMemberTable(db)
 	// organizations := models.NewOrganizationTable(db)
 	// scriptures := models.NewScriptureTable(db)
 	// users := models.NewUserTable(db)
