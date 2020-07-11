@@ -32,11 +32,14 @@ func NewEventTable(db *sql.DB) *EventTable {
 			"updated_at"	TEXT,
 			"organization_id"	INTEGER,
 			FOREIGN KEY("organization_id") REFERENCES "organization"("ID"),
-			PRIMARY KEY("ID")
+			PRIMARY KEY("ID" AUTOINCREMENT)
 		);
 	`)
 
 	stmt.Exec()
+
+	defer stmt.Close()
+
 	return &EventTable{
 		DB: db,
 	}
@@ -120,7 +123,7 @@ func (eventTable *EventTable) EventGetter(eventID string) (Event, error) {
 //Model.create
 func (eventTable *EventTable) EventAdder(event Event) (Event, error) {
 	stmt, err := eventTable.DB.Prepare(`
-		INSERT INTO event (name,occasion,date,description,created_at,updated_at,organization_id) VALUES (?,?,?,?,?,?)
+		INSERT INTO event (name,occasion,date,description,created_at,updated_at,organization_id) VALUES (?,?,?,?,?,?,?)
 	`)
 
 	stmt.Exec(event.Name, event.Occasion, event.Date, event.Description, event.CreatedAt, event.UpdatedAt, event.OrganizationID)
