@@ -29,7 +29,7 @@ func main() {
 	holidays := models.NewHolidayTable(db)
 	members := models.NewMemberTable(db)
 	organizations := models.NewOrganizationTable(db)
-	// scriptures := models.NewScriptureTable(db)
+	scriptures := models.NewScriptureTable(db)
 	// users := models.NewUserTable(db)
 
 	r := chi.NewRouter()
@@ -92,6 +92,13 @@ func main() {
 	r.Post("/organizations", controllers.AddOrganization(organizations))
 	r.Put("/organizations/{organizationID}", controllers.UpdateOrganization(organizations))
 	r.Delete("/organizations/{organizationID}", controllers.DeleteOrganization(organizations))
+
+	//Scriptures
+	r.Get("/scriptures", controllers.GetScriptures(scriptures))
+	r.Get("/scriptures/{scriptureID}", controllers.GetScripture(scriptures))
+	r.Post("/scriptures", controllers.AddScripture(scriptures))
+	r.Put("/scriptures/{scriptureID}", controllers.UpdateScripture(scriptures))
+	r.Delete("/scriptures/{scriptureID}", controllers.DeleteScripture(scriptures))
 
 	http.ListenAndServe(":3000", r)
 }
