@@ -3,11 +3,11 @@ package models
 import "database/sql"
 
 type Scripture struct {
-	ID             int
-	Name           string
-	OrganizationID int
-	CreatedAt      string
-	UpdatedAt      string
+	ID             int    `json:"id,omitempty"`
+	Name           string `json:"name,omitempty"`
+	CreatedAt      string `json:"created_at,omitempty"`
+	UpdatedAt      string `json:"updated_at,omitempty"`
+	OrganizationID int    `json:"organization_id,omitempty"`
 }
 
 type ScriptureTable struct {
@@ -18,9 +18,9 @@ func NewScriptureTable(db *sql.DB) *ScriptureTable {
 	stmt, _ := db.Prepare(`
 		CREATE TABLE IF NOT EXISTS "scripture" (
 			"ID"	INTEGER NOT NULL UNIQUE,
-			"created_at"	DATETIME,
-			"updated_at"	DATETIME,
 			"name"	TEXT,
+			"created_at"	TEXT,
+			"updated_at"	TEXT,
 			"organization_id"	INTEGER,
 			FOREIGN KEY("organization_id") REFERENCES "organization"("ID"),
 			PRIMARY KEY("ID" AUTOINCREMENT)
@@ -28,6 +28,9 @@ func NewScriptureTable(db *sql.DB) *ScriptureTable {
 	`)
 
 	stmt.Exec()
+
+	defer stmt.Close()
+
 	return &ScriptureTable{
 		DB: db,
 	}
