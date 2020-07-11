@@ -130,39 +130,39 @@ func (chapterTable *ChapterTable) ChapterAdder(chapter Chapter) (Chapter, error)
 	return chapter, err
 }
 
-// //Model.update
-// func (announcementTable *AnnouncementTable) AnnouncementUpdater(announcement Announcement) (Announcement, error) {
-// 	stmt, err := announcementTable.DB.Prepare(`
-// 	UPDATE announcement SET date = ?, text = ?, updated_at = ? WHERE announcement.id = ?
-// 	`)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	defer stmt.Close()
+//Model.update
+func (chapterTable *ChapterTable) ChapterUpdater(chapter Chapter) (Chapter, error) {
+	stmt, err := chapterTable.DB.Prepare(`
+	UPDATE chapter SET name = ?, text = ?, position = ?, updated_at = ? WHERE chapter.id = ?
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
 
-// 	_, err = stmt.Exec(announcement.Date, announcement.Text, announcement.UpdatedAt, announcement.ID)
+	_, err = stmt.Exec(chapter.Name, chapter.Text, chapter.Position, chapter.UpdatedAt, chapter.ID)
 
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	return announcement, err
-// }
+	if err != nil {
+		log.Fatal(err)
+	}
+	return chapter, err
+}
 
-// //Model.delete
-// func (announcementTable *AnnouncementTable) AnnouncementDeleter(announcementID string) error {
-// 	stmt, err := announcementTable.DB.Prepare(`
-// 		DELETE FROM announcement WHERE announcement.id = ?
-// 	`)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	defer stmt.Close()
+//Model.delete
+func (chapterTable *ChapterTable) ChapterDeleter(chapterID string) error {
+	stmt, err := chapterTable.DB.Prepare(`
+		DELETE FROM chapter WHERE chapter.id = ?
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
 
-// 	_, err = stmt.Exec(announcementID)
+	_, err = stmt.Exec(chapterID)
 
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
+	if err != nil {
+		log.Fatal(err)
+	}
 
-// 	return err
-// }
+	return err
+}
