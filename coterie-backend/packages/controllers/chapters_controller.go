@@ -48,13 +48,15 @@ func AddChapter(chapterTable *models.ChapterTable) http.HandlerFunc {
 		body := map[string]string{}
 		req.BindBody(&body)
 
-		orgID, _ := strconv.Atoi(body["organization_id"])
+		scripID, _ := strconv.Atoi(body["scripture_id"])
+		pos, _ := strconv.Atoi(body["position"])
 		chapter := models.Chapter{
-			// Text:           body["text"],
-			// Date:           body["date"],
-			// OrganizationID: orgID,
-			// CreatedAt:      time.Now().String(),
-			// UpdatedAt:      time.Now().String(),
+			Name:        body["name"],
+			Text:        body["text"],
+			Position:    pos,
+			ScriptureID: scripID,
+			CreatedAt:   time.Now().String(),
+			UpdatedAt:   time.Now().String(),
 		}
 
 		result, err := chapterTable.ChapterAdder(chapter)
@@ -76,10 +78,12 @@ func UpdateChapter(chapterTable *models.ChapterTable) http.HandlerFunc {
 		req.BindBody(&body)
 
 		chapID, _ := strconv.Atoi(chapterID)
+		pos, _ := strconv.Atoi(body["position"])
 		chapter := models.Chapter{
-			ID: chapID,
-			// Text:      body["text"],
-			// Date:      body["date"],
+			ID:        chapID,
+			Name:      body["name"],
+			Text:      body["text"],
+			Position:  pos,
 			UpdatedAt: time.Now().String(),
 		}
 
