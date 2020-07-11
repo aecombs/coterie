@@ -26,7 +26,7 @@ func main() {
 	announcements := models.NewAnnouncementTable(db)
 	chapters := models.NewChapterTable(db)
 	events := models.NewEventTable(db)
-	// holidays := models.NewHolidayTable(db)
+	holidays := models.NewHolidayTable(db)
 	// members := models.NewMemberTable(db)
 	// organizations := models.NewOrganizationTable(db)
 	// scriptures := models.NewScriptureTable(db)
@@ -71,6 +71,13 @@ func main() {
 	r.Post("/events", controllers.AddEvent(events))
 	r.Put("/events/{eventID}", controllers.UpdateEvent(events))
 	r.Delete("/events/{eventID}", controllers.DeleteEvent(events))
+
+	//Holidays
+	r.Get("/holidays", controllers.GetHolidays(holidays))
+	r.Get("/holidays/{holidayID}", controllers.GetHoliday(holidays))
+	r.Post("/holidays", controllers.AddHoliday(holidays))
+	r.Put("/holidays/{holidayID}", controllers.UpdateHoliday(holidays))
+	r.Delete("/holidays/{holidayID}", controllers.DeleteHoliday(holidays))
 
 	http.ListenAndServe(":3000", r)
 }
