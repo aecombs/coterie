@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"log"
 )
 
 type Chapter struct {
@@ -9,9 +10,9 @@ type Chapter struct {
 	Name        string `json:"name,omitempty"`
 	Text        string `json:"text,omitempty"`
 	Position    int    `json:"position,omitempty"`
-	ScriptureID int    `json:"scripture_id,omitempty"`
 	CreatedAt   string `json:"created_at,omitempty"`
 	UpdatedAt   string `json:"updated_at,omitempty"`
+	ScriptureID int    `json:"scripture_id,omitempty"`
 }
 
 type ChapterTable struct {
@@ -42,37 +43,37 @@ func NewChapterTable(db *sql.DB) *ChapterTable {
 	}
 }
 
-// //Model.All
-// func (announcementTable *AnnouncementTable) AnnouncementsLister() ([]Announcement, error) {
-// 	announcements := []Announcement{}
-// 	rows, err := announcementTable.DB.Query(`
-// 		SELECT * FROM announcement
-// 	`)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	defer rows.Close()
+//Model.All
+func (chapterTable *ChapterTable) ChaptersLister() ([]Chapter, error) {
+	chapters := []Chapter{}
+	rows, err := chapterTable.DB.Query(`
+		SELECT * FROM chapter
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
 
-// 	var id int
-// 	var text string
-// 	var date string
-// 	var createdAt string
-// 	var updatedAt string
-// 	var organizationID int
-// 	for rows.Next() {
-// 		rows.Scan(&id, &text, &date, &createdAt, &updatedAt, &organizationID)
-// 		announcement := Announcement{
-// 			ID:             id,
-// 			Text:           text,
-// 			Date:           date,
-// 			CreatedAt:      createdAt,
-// 			UpdatedAt:      updatedAt,
-// 			OrganizationID: organizationID,
-// 		}
-// 		announcements = append(announcements, announcement)
-// 	}
-// 	return announcements, err
-// }
+	var id int
+	var text string
+	var position int
+	var createdAt string
+	var updatedAt string
+	var scriptureID int
+	for rows.Next() {
+		rows.Scan(&id, &text, &position, &createdAt, &updatedAt, &scriptureID)
+		chapter := Chapter{
+			ID:          id,
+			Text:        text,
+			Position:    position,
+			CreatedAt:   createdAt,
+			UpdatedAt:   updatedAt,
+			ScriptureID: scriptureID,
+		}
+		chapters = append(chapters, chapter)
+	}
+	return chapters, err
+}
 
 // //Model.where(id: "")
 // func (announcementTable *AnnouncementTable) AnnouncementGetter(announcementID string) (Announcement, error) {
