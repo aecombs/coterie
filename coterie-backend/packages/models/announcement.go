@@ -121,7 +121,7 @@ func (announcementTable *AnnouncementTable) AnnouncementAdder(announcement Annou
 }
 
 //Model.update
-func (announcementTable *AnnouncementTable) AnnouncementUpdater(announcementID string, announcement Announcement) {
+func (announcementTable *AnnouncementTable) AnnouncementUpdater(announcement Announcement) (Announcement, error) {
 	stmt, err := announcementTable.DB.Prepare(`
 	UPDATE announcement SET date = ?, text = ?, updated_at = ? WHERE announcement.id = ?
 	`)
@@ -134,4 +134,5 @@ func (announcementTable *AnnouncementTable) AnnouncementUpdater(announcementID s
 	if err != nil {
 		log.Fatal(err)
 	}
+	return announcement, err
 }
