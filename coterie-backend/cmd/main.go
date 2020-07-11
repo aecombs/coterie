@@ -86,5 +86,12 @@ func main() {
 	r.Put("/members/{memberID}", controllers.UpdateMember(members))
 	r.Delete("/members/{memberID}", controllers.DeleteMember(members))
 
+	//Organizations
+	r.Get("/organizations", controllers.GetOrganizations(organizations))
+	r.Get("/organizations/{organizationID}", controllers.GetOrganization(organizations))
+	r.Post("/organizations", controllers.AddOrganization(organizations))
+	r.Put("/organizations/{organizationID}", controllers.UpdateOrganization(organizations))
+	r.Delete("/organizations/{organizationID}", controllers.DeleteOrganization(organizations))
+
 	http.ListenAndServe(":3000", r)
 }
