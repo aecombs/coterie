@@ -71,22 +71,29 @@ func (announcementTable *AnnouncementTable) AnnouncementsLister() ([]Announcemen
 }
 
 //Model.where(id: "")
-func (announcementTable *AnnouncementTable) AnnouncementGetter(announcementID string) (*Announcement, error) {
-	var announcement *Announcement
-	rows, err := announcementTable.DB.Query("SELECT * FROM announcement WHERE id = ?", announcementID)
+func (announcementTable *AnnouncementTable) AnnouncementGetter(announcementID string) (Announcement, error) {
+	var announcement Announcement
+
+	stmt, err := announcementTable.DB.Prepare(`
+		SELECT * FROM announcement WHERE id = ?
+	`)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer rows.Close()
+	defer stmt.Close()
 
-	var id int
-	var text string
-	var date string
-	var createdAt string
-	var updatedAt string
-	var organizationID int
-	for rows.Next() {
-		rows.Scan(&id, &text, &date, &createdAt, &updatedAt, &organizationID)
+	if stmt != nil {
+		var id int
+		var text string
+		var date string
+		var createdAt string
+		var updatedAt string
+		var organizationID int
+
+		err = stmt.QueryRow(announcementID).Scan(&id, &text, &date, &createdAt, &updatedAt, &organizationID)
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		announcement.ID = id
 		announcement.Text = text
@@ -95,20 +102,20 @@ func (announcementTable *AnnouncementTable) AnnouncementGetter(announcementID st
 		announcement.UpdatedAt = updatedAt
 		announcement.OrganizationID = organizationID
 	}
-
 	return announcement, err
 }
 
 //Model.create
 func (announcementTable *AnnouncementTable) AnnouncementAdder(announcement Announcement) (Announcement, error) {
 	stmt, err := announcementTable.DB.Prepare(`
-		INSERT INTO announcement (date,text,created_at,updated_at) values (?,?,?,?)
+		INSERT INTO announcement (date,text,created_at,updated_at,organization_id) values (?,?,?,?,?)
 	`)
 
-	stmt.Exec(announcement.Date, announcement.Text, announcement.CreatedAt, announcement.UpdatedAt)
+	stmt.Exec(announcement.Date, announcement.Text, announcement.CreatedAt, announcement.UpdatedAt, announcement.OrganizationID)
 
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	return announcement, err
 }

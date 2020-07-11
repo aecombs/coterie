@@ -2,7 +2,9 @@ package controllers
 
 import (
 	"coterie/packages/models"
+	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/go-chi/chi"
@@ -51,6 +53,7 @@ func GetAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFu
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
 		announcementID := chi.URLParam(r, "announcementID")
+		fmt.Print("url:" + announcementID)
 
 		announcement, err := announcementTable.AnnouncementGetter(announcementID)
 		if err != nil {
@@ -69,11 +72,13 @@ func AddAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFu
 		body := map[string]string{}
 		req.BindBody(&body)
 
+		orgID, _ := strconv.Atoi(body["organization_id"])
 		announcement := models.Announcement{
-			Text:      body["text"],
-			Date:      body["date"],
-			CreatedAt: time.Now().String(),
-			UpdatedAt: time.Now().String(),
+			Text:           body["text"],
+			Date:           body["date"],
+			OrganizationID: orgID,
+			CreatedAt:      time.Now().String(),
+			UpdatedAt:      time.Now().String(),
 		}
 
 		result, err := announcementTable.AnnouncementAdder(announcement)
@@ -81,6 +86,8 @@ func AddAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFu
 			http.Error(w, http.StatusText(404), 404)
 			return
 		}
+
+		res.SendJSON(result)
 	}
 }
 
