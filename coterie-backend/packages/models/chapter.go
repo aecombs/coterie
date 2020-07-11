@@ -34,9 +34,9 @@ func NewChapterTable(db *sql.DB) *ChapterTable {
 		);
 	`)
 
-	defer stmt.Close()
-
 	stmt.Exec()
+
+	defer stmt.Close()
 
 	return &ChapterTable{
 		DB: db,

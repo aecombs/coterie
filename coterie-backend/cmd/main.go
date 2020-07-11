@@ -24,7 +24,7 @@ func main() {
 	defer db.Close()
 
 	announcements := models.NewAnnouncementTable(db)
-	// chapters := models.NewChapterTable(db)
+	chapters := models.NewChapterTable(db)
 	// events := models.NewEventTable(db)
 	// holidays := models.NewHolidayTable(db)
 	// members := models.NewMemberTable(db)
@@ -58,21 +58,12 @@ func main() {
 	r.Put("/announcements/{announcementID}", controllers.UpdateAnnouncement(announcements))
 	r.Delete("/announcements/{announcementID}", controllers.DeleteAnnouncement(announcements))
 
-	// r.Route("/announcements", func(r chi.Router) {
-	// 	r.With(paginate).Get("/", controllers.GetAnnouncements(db))
-	// 	r.Post("/", controllers.CreateAnnouncement(db))       // POST /Announcements
-	// 	// r.Get("/search", controllers.SearchAnnouncements()) // GET /Announcements/search
-
-	// 	r.Route("/{announcementID}", func(r chi.Router) {
-	// 		// r.Use(controllers.AnnouncementCtx)       // Load the *Announcement on the request context
-	// 		r.Get("/", controllers.GetAnnouncement(db))       // GET /Announcements/123
-	// 		r.Put("/", controllers.UpdateAnnouncement(db))    // PUT /Announcements/123
-	// 		r.Delete("/", controllers.DeleteAnnouncement(db)) // DELETE /Announcements/123
-	// 	})
-	// })
-
-	// r.Mount("/announcements", controllers.AnnouncementsResource{}.Routes())
-	// r.Mount("/todos", todosResource{}.Routes())
+	//Chapters
+	r.Get("/chapters", controllers.GetChapters(chapters))
+	r.Get("/chapters/{chapterID}", controllers.GetChapter(chapters))
+	r.Post("/chapters", controllers.AddChapter(chapters))
+	r.Put("/chapters/{chapterID}", controllers.UpdateChapter(chapters))
+	r.Delete("/chapters/{chapterID}", controllers.DeleteChapter(chapters))
 
 	http.ListenAndServe(":3000", r)
 }
