@@ -33,6 +33,9 @@ func NewAnnouncementTable(db *sql.DB) *AnnouncementTable {
 	`)
 
 	stmt.Exec()
+
+	defer stmt.Close()
+
 	return &AnnouncementTable{
 		DB: db,
 	}

@@ -33,7 +33,10 @@ func NewChapterTable(db *sql.DB) *ChapterTable {
 		);
 	`)
 
+	defer stmt.Close()
+
 	stmt.Exec()
+
 	return &ChapterTable{
 		DB: db,
 	}
