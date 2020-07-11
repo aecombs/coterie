@@ -79,5 +79,12 @@ func main() {
 	r.Put("/holidays/{holidayID}", controllers.UpdateHoliday(holidays))
 	r.Delete("/holidays/{holidayID}", controllers.DeleteHoliday(holidays))
 
+	//Members
+	r.Get("/members", controllers.GetMembers(members))
+	r.Get("/members/{memberID}", controllers.GetMember(members))
+	r.Post("/members", controllers.AddMember(members))
+	r.Put("/members/{memberID}", controllers.UpdateMember(members))
+	r.Delete("/members/{memberID}", controllers.DeleteMember(members))
+
 	http.ListenAndServe(":3000", r)
 }
