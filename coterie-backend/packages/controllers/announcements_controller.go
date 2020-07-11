@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"coterie/packages/models"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -53,7 +52,6 @@ func GetAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFu
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
 		announcementID := chi.URLParam(r, "announcementID")
-		fmt.Print("url:" + announcementID)
 
 		announcement, err := announcementTable.AnnouncementGetter(announcementID)
 		if err != nil {
@@ -91,50 +89,31 @@ func AddAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFu
 	}
 }
 
-// func (rs AnnouncementsResource) Index(w http.ResponseWriter, r *http.Request) {
-// 	res, _ := yin.Event(w, r)
-// 	// announcements := models.ListAllAnnouncements()
-// 	// res.SendJSON(announcements)
-// 	res.SendJSON("There are no announcements here!")
-// }
+//Update
+func UpdateAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		res, req := yin.Event(w, r)
+		announcementID := chi.URLParam(r, "announcementID")
+		body := map[string]string{}
+		req.BindBody(&body)
 
-// func (rs AnnouncementsResource) New(w http.ResponseWriter, r *http.Request) {
-// 	w.Write([]byte("aaa new"))
-// }
+		// orgID, _ := strconv.Atoi(body["organization_id"])
+		annID, _ := strconv.Atoi(announcementID)
+		announcement := models.Announcement{
+			ID:   annID,
+			Text: body["text"],
+			Date: body["date"],
+			// OrganizationID: orgID,
+			// CreatedAt:      time.Now().String(),
+			UpdatedAt: time.Now().String(),
+		}
 
-// func (rs AnnouncementsResource) Create(w http.ResponseWriter, r *http.Request) {
-// 	// w.Write([]byte("aaa create"))
-// 	res, req := yin.Event(w, r)
-// 	body := map[string]string{}
-// 	req.BindBody(&body)
+		result, err := announcementTable.AnnouncementUpdater(announcement)
+		if err != nil {
+			http.Error(w, http.StatusText(404), 404)
+			return
+		}
 
-// fmt.Println(body)
-
-// res.SendStatus(http.StatusNoContent)
-
-// 	announcement := models.Announcement{
-// 		Text: body["text"],
-// 		Date: body["date"],
-// 		created_at: time.Now(),
-// 		updated_at: time.Now(),
-// 	}
-// 	// feed.Add(item)
-// 	res.SendJSON(announcement)
-
-// }
-
-// func (rs AnnouncementsResource) Show(w http.ResponseWriter, r *http.Request) {
-// 	w.Write([]byte("aaa show"))
-// }
-
-// func (rs AnnouncementsResource) Edit(w http.ResponseWriter, r *http.Request) {
-// 	w.Write([]byte("aaa edit"))
-// }
-
-// func (rs AnnouncementsResource) Update(w http.ResponseWriter, r *http.Request) {
-// 	w.Write([]byte("aaa update"))
-// }
-
-// func (rs AnnouncementsResource) Delete(w http.ResponseWriter, r *http.Request) {
-// 	w.Write([]byte("aaa delete"))
-// }
+		res.SendJSON(result)
+	}
+}
