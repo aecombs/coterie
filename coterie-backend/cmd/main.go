@@ -65,5 +65,12 @@ func main() {
 	r.Put("/chapters/{chapterID}", controllers.UpdateChapter(chapters))
 	r.Delete("/chapters/{chapterID}", controllers.DeleteChapter(chapters))
 
+	//Events
+	r.Get("/events", controllers.GetEvents(events))
+	r.Get("/events/{eventID}", controllers.GetEvent(events))
+	r.Post("/events", controllers.AddEvent(events))
+	r.Put("/events/{eventID}", controllers.UpdateEvent(events))
+	r.Delete("/events/{eventID}", controllers.DeleteEvent(events))
+
 	http.ListenAndServe(":3000", r)
 }
