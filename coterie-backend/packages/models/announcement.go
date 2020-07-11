@@ -111,7 +111,7 @@ func (announcementTable *AnnouncementTable) AnnouncementGetter(announcementID st
 //Model.create
 func (announcementTable *AnnouncementTable) AnnouncementAdder(announcement Announcement) (Announcement, error) {
 	stmt, err := announcementTable.DB.Prepare(`
-		INSERT INTO announcement (date,text,created_at,updated_at,organization_id) values (?,?,?,?,?)
+		INSERT INTO announcement (date,text,created_at,updated_at,organization_id) VALUES (?,?,?,?,?)
 	`)
 
 	stmt.Exec(announcement.Date, announcement.Text, announcement.CreatedAt, announcement.UpdatedAt, announcement.OrganizationID)

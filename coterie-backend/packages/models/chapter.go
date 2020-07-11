@@ -55,15 +55,17 @@ func (chapterTable *ChapterTable) ChaptersLister() ([]Chapter, error) {
 	defer rows.Close()
 
 	var id int
+	var name string
 	var text string
 	var position int
 	var createdAt string
 	var updatedAt string
 	var scriptureID int
 	for rows.Next() {
-		rows.Scan(&id, &text, &position, &createdAt, &updatedAt, &scriptureID)
+		rows.Scan(&id, &name, &text, &position, &createdAt, &updatedAt, &scriptureID)
 		chapter := Chapter{
 			ID:          id,
+			Name:        name,
 			Text:        text,
 			Position:    position,
 			CreatedAt:   createdAt,
@@ -110,21 +112,21 @@ func (chapterTable *ChapterTable) ChaptersLister() ([]Chapter, error) {
 // 	return announcement, err
 // }
 
-// //Model.create
-// func (announcementTable *AnnouncementTable) AnnouncementAdder(announcement Announcement) (Announcement, error) {
-// 	stmt, err := announcementTable.DB.Prepare(`
-// 		INSERT INTO announcement (date,text,created_at,updated_at,organization_id) values (?,?,?,?,?)
-// 	`)
+//Model.create
+func (chapterTable *ChapterTable) ChapterAdder(chapter Chapter) (Chapter, error) {
+	stmt, err := chapterTable.DB.Prepare(`
+		INSERT INTO chapter (name,text,position,created_at,updated_at,scripture_id) VALUES (?,?,?,?,?,?)
+	`)
 
-// 	stmt.Exec(announcement.Date, announcement.Text, announcement.CreatedAt, announcement.UpdatedAt, announcement.OrganizationID)
+	stmt.Exec(chapter.Name, chapter.Text, chapter.Position, chapter.CreatedAt, chapter.UpdatedAt, chapter.ScriptureID)
 
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	defer stmt.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
 
-// 	return announcement, err
-// }
+	return chapter, err
+}
 
 // //Model.update
 // func (announcementTable *AnnouncementTable) AnnouncementUpdater(announcement Announcement) (Announcement, error) {
