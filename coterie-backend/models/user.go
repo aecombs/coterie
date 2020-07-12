@@ -6,13 +6,13 @@ import (
 )
 
 type User struct {
-	ID             int    `json:"id,omitempty"`
-	Name           string `json:"name,omitempty"`
-	Email          string `json:"email,omitempty"`
-	Avatar         string `json:"avatar,omitempty"`
-	CreatedAt      string `json:"created_at,omitempty"`
-	UpdatedAt      string `json:"updated_at,omitempty"`
-	OrganizationID int    `json:"organization_id,omitempty"`
+	ID        int    `json:"id,omitempty"`
+	Name      string `json:"name,omitempty"`
+	Email     string `json:"email,omitempty"`
+	Bio       string `json:"bio,omitempty"`
+	Avatar    string `json:"avatar,omitempty"`
+	CreatedAt string `json:"created_at,omitempty"`
+	UpdatedAt string `json:"updated_at,omitempty"`
 }
 
 type UserTable struct {
@@ -29,8 +29,6 @@ func NewUserTable(db *sql.DB) *UserTable {
 			"avatar"  TEXT,
 			"created_at"	TEXT,
 			"updated_at"	TEXT,
-			"organization_id"	INTEGER,
-			FOREIGN KEY("organization_id") REFERENCES "organization"("ID"),
 			PRIMARY KEY("ID" AUTOINCREMENT)
 		);
 	`)
@@ -60,12 +58,12 @@ func (userTable *UserTable) UserGetter(userID string) (User, error) {
 		var id int
 		var name string
 		var email string
+		var bio string
 		var avatar string
 		var createdAt string
 		var updatedAt string
-		var organizationID int
 
-		err = stmt.QueryRow(userID).Scan(&id, &name, &email, &avatar, &createdAt, &updatedAt, &organizationID)
+		err = stmt.QueryRow(userID).Scan(&id, &name, &email, &bio, &avatar, &createdAt, &updatedAt)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -73,10 +71,10 @@ func (userTable *UserTable) UserGetter(userID string) (User, error) {
 		user.ID = id
 		user.Name = name
 		user.Email = email
+		user.Bio = bio
 		user.Avatar = avatar
 		user.CreatedAt = createdAt
 		user.UpdatedAt = updatedAt
-		user.OrganizationID = organizationID
 	}
 	return user, err
 }
@@ -84,10 +82,10 @@ func (userTable *UserTable) UserGetter(userID string) (User, error) {
 //Model.login
 func (userTable *UserTable) Login(user User) (User, error) {
 	stmt, err := userTable.DB.Prepare(`
-		INSERT INTO user (name,email,avatar,created_at,updated_at,organization_id) VALUES (?,?,?,?,?,?)
+		INSERT INTO user (name,email,bio,avatar,created_at,updated_at) VALUES (?,?,?,?,?,?)
 	`)
 
-	stmt.Exec(user.Name, user.Email, user.Avatar, user.CreatedAt, user.UpdatedAt, user.OrganizationID)
+	stmt.Exec(user.Name, user.Email, user.Bio, user.Avatar, user.CreatedAt, user.UpdatedAt)
 
 	if err != nil {
 		log.Fatal(err)
@@ -100,14 +98,14 @@ func (userTable *UserTable) Login(user User) (User, error) {
 //Model.update
 func (userTable *UserTable) UserUpdater(user User) (User, error) {
 	stmt, err := userTable.DB.Prepare(`
-	UPDATE user SET name = ?, email = ?, avatar = ?, updated_at = ? WHERE user.id = ?
+	UPDATE user SET name = ?, email = ?, bio = ?, updated_at = ? WHERE user.id = ?
 	`)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(user.Name, user.Email, user.Avatar, user.UpdatedAt, user.ID)
+	_, err = stmt.Exec(user.Name, user.Email, user.Bio, user.UpdatedAt, user.ID)
 
 	if err != nil {
 		log.Fatal(err)

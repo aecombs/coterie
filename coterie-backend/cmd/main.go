@@ -5,7 +5,6 @@ import (
 	"coterie/models"
 	"database/sql"
 	"flag"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -45,6 +44,19 @@ func main() {
 	// r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 	// 	w.Write([]byte("."))
 	// })
+
+	//Users
+	r.Route("/", func(r chi.Router) {
+		r.Get("/dashboard", controllers.Dashboard(users))
+		r.Post("/login", controllers.Login(users))
+		r.Post("/callback", controllers.Callback(users))
+		r.Delete("/logout", controllers.Logout(users))
+
+		r.Route("/users/{userID}", func(r chi.Router) {
+			r.Get("/", controllers.GetUser(users))
+			r.Put("/", controllers.UpdateUser(users))
+		})
+	})
 
 	//Announcements
 	r.Route("/announcements", func(r chi.Router) {
@@ -131,42 +143,34 @@ func main() {
 	})
 
 	// Mount the admin sub-router, which btw is the same as:
-	r.Mount("/admin", adminRouter())
-
-	// //Users
-	// r.Get("/dashboard", controllers.Dashboard(users))
-	// r.Post("/login", controllers.Login(users))
-	// r.Post("/callback", controllers.Callback(users))
-	// r.Get("/users/{userID}", controllers.GetUser(users))
-	// r.Put("/users/{userID}", controllers.UpdateUser(users))
-	// r.Delete("/logout", controllers.Logout(users))
+	// r.Mount("/admin", adminRouter())
 
 	http.ListenAndServe(":3000", r)
 }
 
 // A completely separate router for administrator routes
-func adminRouter() chi.Router {
-	r := chi.NewRouter()
-	r.Use(AdminOnly)
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("admin: dashboard"))
-	})
-	r.Get("/account", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("admin: show account."))
-	})
-	r.Get("/users/{userId}", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(fmt.Sprintf("admin: view user id %v", chi.URLParam(r, "userId"))))
-	})
-	return r
-}
+// func adminRouter() chi.Router {
+// 	r := chi.NewRouter()
+// 	r.Use(AdminOnly)
+// 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+// 		w.Write([]byte("admin: dashboard"))
+// 	})
+// 	r.Get("/account", func(w http.ResponseWriter, r *http.Request) {
+// 		w.Write([]byte("admin: show account."))
+// 	})
+// 	r.Get("/users/{userId}", func(w http.ResponseWriter, r *http.Request) {
+// 		w.Write([]byte(fmt.Sprintf("admin: view user id %v", chi.URLParam(r, "userId"))))
+// 	})
+// 	return r
+// }
 
-func AdminOnly(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		isAdmin, ok := r.Context().Value("acl.admin").(bool)
-		if !ok || !isAdmin {
-			http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
-			return
-		}
-		next.ServeHTTP(w, r)
-	})
-}
+// func AdminOnly(next http.Handler) http.Handler {
+// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+// 		isAdmin, ok := r.Context().Value("acl.admin").(bool)
+// 		if !ok || !isAdmin {
+// 			http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+// 			return
+// 		}
+// 		next.ServeHTTP(w, r)
+// 	})
+// }
