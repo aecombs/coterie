@@ -10,6 +10,10 @@ import (
 	"github.com/qkgo/yin"
 )
 
+//Login
+//Callback
+//Logout
+
 //Show
 func GetUser(userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -41,7 +45,7 @@ func AddUser(userTable *models.UserTable) http.HandlerFunc {
 			UpdatedAt: time.Now().String(),
 		}
 
-		result, err := userTable.Login(user)
+		result, err := userTable.UserAdder(user)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
@@ -60,11 +64,11 @@ func UpdateUser(userTable *models.UserTable) http.HandlerFunc {
 		req.BindBody(&body)
 
 		IntUserID, _ := strconv.Atoi(userID)
-		funds, _ := strconv.Atoi(body["funds_raised"])
 		user := models.User{
 			ID:        IntUserID,
 			Name:      body["name"],
 			Email:     body["email"],
+			Bio:       body["bio"],
 			UpdatedAt: time.Now().String(),
 		}
 

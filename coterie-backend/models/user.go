@@ -79,8 +79,8 @@ func (userTable *UserTable) UserGetter(userID string) (User, error) {
 	return user, err
 }
 
-//Model.login
-func (userTable *UserTable) Login(user User) (User, error) {
+//Model.create...only used when user is new
+func (userTable *UserTable) UserAdder(user User) (User, error) {
 	stmt, err := userTable.DB.Prepare(`
 		INSERT INTO user (name,email,bio,avatar,created_at,updated_at) VALUES (?,?,?,?,?,?)
 	`)
