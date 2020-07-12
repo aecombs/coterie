@@ -1,8 +1,8 @@
 package main
 
 import (
-	"coterie/packages/controllers"
-	"coterie/packages/models"
+	"coterie/controllers"
+	"coterie/models"
 	"database/sql"
 	"flag"
 	"log"
@@ -30,7 +30,7 @@ func main() {
 	members := models.NewMemberTable(db)
 	organizations := models.NewOrganizationTable(db)
 	scriptures := models.NewScriptureTable(db)
-	users := models.NewUserTable(db)
+	// users := models.NewUserTable(db)
 
 	r := chi.NewRouter()
 
@@ -41,65 +41,121 @@ func main() {
 	r.Use(yin.SimpleLogger)
 	r.Use(middleware.Recoverer)
 
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("."))
-	})
+	// r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+	// 	w.Write([]byte("."))
+	// })
 
 	//Announcements
-	r.Get("/announcements", controllers.GetAnnouncements(announcements))
-	r.Get("/announcements/{announcementID}", controllers.GetAnnouncement(announcements))
-	r.Post("/announcements", controllers.AddAnnouncement(announcements))
-	r.Put("/announcements/{announcementID}", controllers.UpdateAnnouncement(announcements))
-	r.Delete("/announcements/{announcementID}", controllers.DeleteAnnouncement(announcements))
+	r.Route("/announcements", func(r chi.Router) {
+		r.Get("/", controllers.GetAnnouncements(announcements))
+		r.Post("/", controllers.AddAnnouncement(announcements))
+
+		r.Route("/{announcementID}", func(r chi.Router) {
+			r.Get("/", controllers.GetAnnouncement(announcements))
+			r.Put("/", controllers.UpdateAnnouncement(announcements))
+			r.Delete("/", controllers.DeleteAnnouncement(announcements))
+		})
+	})
 
 	//Chapters
-	r.Get("/chapters", controllers.GetChapters(chapters))
-	r.Get("/chapters/{chapterID}", controllers.GetChapter(chapters))
-	r.Post("/chapters", controllers.AddChapter(chapters))
-	r.Put("/chapters/{chapterID}", controllers.UpdateChapter(chapters))
-	r.Delete("/chapters/{chapterID}", controllers.DeleteChapter(chapters))
+	r.Route("/chapters", func(r chi.Router) {
+		r.Get("/", controllers.GetChapters(chapters))
+		r.Post("/", controllers.AddChapter(chapters))
+
+		r.Route("/{chapterID}", func(r chi.Router) {
+			r.Get("/", controllers.GetChapter(chapters))
+			r.Put("/", controllers.UpdateChapter(chapters))
+			r.Delete("/", controllers.DeleteChapter(chapters))
+		})
+	})
 
 	//Events
-	r.Get("/events", controllers.GetEvents(events))
-	r.Get("/events/{eventID}", controllers.GetEvent(events))
-	r.Post("/events", controllers.AddEvent(events))
-	r.Put("/events/{eventID}", controllers.UpdateEvent(events))
-	r.Delete("/events/{eventID}", controllers.DeleteEvent(events))
+	r.Route("/events", func(r chi.Router) {
+		r.Get("/", controllers.GetEvents(events))
+		r.Post("/", controllers.AddEvent(events))
+
+		r.Route("/{eventID}", func(r chi.Router) {
+			r.Get("/", controllers.GetEvent(events))
+			r.Put("/", controllers.UpdateEvent(events))
+			r.Delete("/", controllers.DeleteEvent(events))
+		})
+	})
 
 	//Holidays
-	r.Get("/holidays", controllers.GetHolidays(holidays))
-	r.Get("/holidays/{holidayID}", controllers.GetHoliday(holidays))
-	r.Post("/holidays", controllers.AddHoliday(holidays))
-	r.Put("/holidays/{holidayID}", controllers.UpdateHoliday(holidays))
-	r.Delete("/holidays/{holidayID}", controllers.DeleteHoliday(holidays))
+	r.Route("/holidays", func(r chi.Router) {
+		r.Get("/", controllers.GetHolidays(holidays))
+		r.Post("/", controllers.AddHoliday(holidays))
+
+		r.Route("/{holidayID}", func(r chi.Router) {
+			r.Get("/", controllers.GetHoliday(holidays))
+			r.Put("/", controllers.UpdateHoliday(holidays))
+			r.Delete("/", controllers.DeleteHoliday(holidays))
+		})
+	})
 
 	//Members
-	r.Get("/members", controllers.GetMembers(members))
-	r.Get("/members/{memberID}", controllers.GetMember(members))
-	r.Post("/members", controllers.AddMember(members))
-	r.Put("/members/{memberID}", controllers.UpdateMember(members))
-	r.Delete("/members/{memberID}", controllers.DeleteMember(members))
+	r.Route("/members", func(r chi.Router) {
+		r.Get("/", controllers.GetMembers(members))
+		r.Post("/", controllers.AddMember(members))
+
+		r.Route("/{memberID}", func(r chi.Router) {
+			r.Get("/", controllers.GetMember(members))
+			r.Put("/", controllers.UpdateMember(members))
+			r.Delete("/", controllers.DeleteMember(members))
+		})
+	})
 
 	//Organizations
-	r.Get("/organizations", controllers.GetOrganizations(organizations))
-	r.Get("/organizations/{organizationID}", controllers.GetOrganization(organizations))
-	r.Post("/organizations", controllers.AddOrganization(organizations))
-	r.Put("/organizations/{organizationID}", controllers.UpdateOrganization(organizations))
-	r.Delete("/organizations/{organizationID}", controllers.DeleteOrganization(organizations))
+	r.Route("/organizations", func(r chi.Router) {
+		r.Get("/", controllers.GetOrganizations(organizations))
+		r.Post("/", controllers.AddOrganization(organizations))
+
+		r.Route("/{organizationID}", func(r chi.Router) {
+			r.Get("/", controllers.GetOrganization(organizations))
+			r.Put("/", controllers.UpdateOrganization(organizations))
+			r.Delete("/", controllers.DeleteOrganization(organizations))
+		})
+	})
 
 	//Scriptures
-	r.Get("/scriptures", controllers.GetScriptures(scriptures))
-	r.Get("/scriptures/{scriptureID}", controllers.GetScripture(scriptures))
-	r.Post("/scriptures", controllers.AddScripture(scriptures))
-	r.Put("/scriptures/{scriptureID}", controllers.UpdateScripture(scriptures))
-	r.Delete("/scriptures/{scriptureID}", controllers.DeleteScripture(scriptures))
+	r.Route("/scriptures", func(r chi.Router) {
+		r.Get("/", controllers.GetScriptures(scriptures))
+		r.Post("/", controllers.AddScripture(scriptures))
 
-	//Users
-	r.Get("/dashboard", controllers.Dashboard(users))
-	r.Post("/login", controllers.Login(users))
-	r.Get("/users/{userID}", controllers.GetUser(users))
-	r.Put("/users/{userID}", controllers.UpdateUser(users))
-	r.Delete("/logout", controllers.DeleteUser(users))
+		r.Route("/{scriptureID}", func(r chi.Router) {
+			r.Get("/", controllers.GetScripture(scriptures))
+			r.Put("/", controllers.UpdateScripture(scriptures))
+			r.Delete("/", controllers.DeleteScripture(scriptures))
+		})
+	})
+
+	// Mount the admin sub-router, which btw is the same as:
+	// r.Route("/admin", func(r chi.Router) { admin routes here })
+	// r.Mount("/admin", adminRouter())
+
+	// //Users
+	// r.Get("/dashboard", controllers.Dashboard(users))
+	// r.Post("/login", controllers.Login(users))
+	// r.Post("/callback", controllers.Callback(users))
+	// r.Get("/users/{userID}", controllers.GetUser(users))
+	// r.Put("/users/{userID}", controllers.UpdateUser(users))
+	// r.Delete("/logout", controllers.Logout(users))
 
 	http.ListenAndServe(":3000", r)
 }
+
+// // A completely separate router for administrator routes
+// func adminRouter() chi.Router {
+// 	r := chi.NewRouter()
+// 	r.Use(AdminOnly)
+// 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+// 		w.Write([]byte("admin: index"))
+// 	})
+// 	r.Get("/accounts", func(w http.ResponseWriter, r *http.Request) {
+// 		w.Write([]byte("admin: list accounts.."))
+// 	})
+// 	r.Get("/users/{userId}", func(w http.ResponseWriter, r *http.Request) {
+// 		w.Write([]byte(fmt.Sprintf("admin: view user id %v", chi.URLParam(r, "userId"))))
+// 	})
+// 	return r
+// }

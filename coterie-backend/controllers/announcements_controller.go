@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"coterie/packages/models"
+	"coterie/models"
 	"net/http"
 	"strconv"
 	"time"
