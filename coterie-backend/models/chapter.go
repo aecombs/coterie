@@ -44,11 +44,11 @@ func NewChapterTable(db *sql.DB) *ChapterTable {
 }
 
 //Model.All
-func (chapterTable *ChapterTable) ChaptersLister() ([]Chapter, error) {
+func (chapterTable *ChapterTable) ChaptersLister(scripID string) ([]Chapter, error) {
 	chapters := []Chapter{}
 	rows, err := chapterTable.DB.Query(`
-		SELECT * FROM chapter
-	`)
+		SELECT * FROM chapter WHERE chapter.scripture_id = ?
+	`, scripID)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -61,6 +61,7 @@ func (chapterTable *ChapterTable) ChaptersLister() ([]Chapter, error) {
 	var createdAt string
 	var updatedAt string
 	var scriptureID int
+
 	for rows.Next() {
 		rows.Scan(&id, &name, &text, &position, &createdAt, &updatedAt, &scriptureID)
 		chapter := Chapter{
