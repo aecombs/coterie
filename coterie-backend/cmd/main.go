@@ -5,6 +5,7 @@ import (
 	"coterie/models"
 	"database/sql"
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -54,18 +55,6 @@ func main() {
 			r.Get("/", controllers.GetAnnouncement(announcements))
 			r.Put("/", controllers.UpdateAnnouncement(announcements))
 			r.Delete("/", controllers.DeleteAnnouncement(announcements))
-		})
-	})
-
-	//Chapters
-	r.Route("/chapters", func(r chi.Router) {
-		r.Get("/", controllers.GetChapters(chapters))
-		r.Post("/", controllers.AddChapter(chapters))
-
-		r.Route("/{chapterID}", func(r chi.Router) {
-			r.Get("/", controllers.GetChapter(chapters))
-			r.Put("/", controllers.UpdateChapter(chapters))
-			r.Delete("/", controllers.DeleteChapter(chapters))
 		})
 	})
 
@@ -126,12 +115,23 @@ func main() {
 			r.Get("/", controllers.GetScripture(scriptures))
 			r.Put("/", controllers.UpdateScripture(scriptures))
 			r.Delete("/", controllers.DeleteScripture(scriptures))
+
+			//Nested Chapters
+			r.Route("/chapters", func(r chi.Router) {
+				r.Get("/chapters", controllers.GetChapters(chapters))
+				r.Post("/chapters", controllers.AddChapter(chapters))
+
+				r.Route("/{chapterID}", func(r chi.Router) {
+					r.Get("/", controllers.GetChapter(chapters))
+					r.Put("/", controllers.UpdateChapter(chapters))
+					r.Delete("/", controllers.DeleteChapter(chapters))
+				})
+			})
 		})
 	})
 
 	// Mount the admin sub-router, which btw is the same as:
-	// r.Route("/admin", func(r chi.Router) { admin routes here })
-	// r.Mount("/admin", adminRouter())
+	r.Mount("/admin", adminRouter())
 
 	// //Users
 	// r.Get("/dashboard", controllers.Dashboard(users))
@@ -144,18 +144,29 @@ func main() {
 	http.ListenAndServe(":3000", r)
 }
 
-// // A completely separate router for administrator routes
-// func adminRouter() chi.Router {
-// 	r := chi.NewRouter()
-// 	r.Use(AdminOnly)
-// 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-// 		w.Write([]byte("admin: index"))
-// 	})
-// 	r.Get("/accounts", func(w http.ResponseWriter, r *http.Request) {
-// 		w.Write([]byte("admin: list accounts.."))
-// 	})
-// 	r.Get("/users/{userId}", func(w http.ResponseWriter, r *http.Request) {
-// 		w.Write([]byte(fmt.Sprintf("admin: view user id %v", chi.URLParam(r, "userId"))))
-// 	})
-// 	return r
-// }
+// A completely separate router for administrator routes
+func adminRouter() chi.Router {
+	r := chi.NewRouter()
+	r.Use(AdminOnly)
+	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("admin: dashboard"))
+	})
+	r.Get("/account", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("admin: show account."))
+	})
+	r.Get("/users/{userId}", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(fmt.Sprintf("admin: view user id %v", chi.URLParam(r, "userId"))))
+	})
+	return r
+}
+
+func AdminOnly(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		isAdmin, ok := r.Context().Value("acl.admin").(bool)
+		if !ok || !isAdmin {
+			http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
+}
