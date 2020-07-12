@@ -14,8 +14,9 @@ import (
 func GetChapters(chapterTable *models.ChapterTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
+		scriptureID := chi.URLParam(r, "scriptureID")
 
-		chapters, err := chapterTable.ChaptersLister()
+		chapters, err := chapterTable.ChaptersLister(scriptureID)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
