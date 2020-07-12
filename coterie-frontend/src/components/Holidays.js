@@ -1,13 +1,13 @@
 import React from 'react';
-import Member from './Member';
+import Holiday from './Holiday';
 import Collection from './Collection';
 
-const Members = () => {
+const Holidays = () => {
   return (
     <div>
-      <p>Members</p>
+      <p>Holidays</p>
     </div>
   )
 }
 
-export default Members;
+export default Holidays;

@@ -1,13 +1,13 @@
 import React from 'react';
-import Member from './Member';
+import Event from './Event';
 import Collection from './Collection';
 
-const Members = () => {
+const Events = () => {
   return (
     <div>
-      <p>Members</p>
+      <p>Events</p>
     </div>
   )
 }
 
-export default Members;
+export default Events;
