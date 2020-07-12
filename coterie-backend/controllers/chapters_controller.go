@@ -46,10 +46,11 @@ func GetChapter(chapterTable *models.ChapterTable) http.HandlerFunc {
 func AddChapter(chapterTable *models.ChapterTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
+		scriptureID := chi.URLParam(r, "scriptureID")
 		body := map[string]string{}
 		req.BindBody(&body)
 
-		scripID, _ := strconv.Atoi(body["scripture_id"])
+		scripID, _ := strconv.Atoi(scriptureID)
 		pos, _ := strconv.Atoi(body["position"])
 		chapter := models.Chapter{
 			Name:        body["name"],
