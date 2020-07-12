@@ -118,8 +118,8 @@ func main() {
 
 			//Nested Chapters
 			r.Route("/chapters", func(r chi.Router) {
-				r.Get("/chapters", controllers.GetChapters(chapters))
-				r.Post("/chapters", controllers.AddChapter(chapters))
+				r.Get("/", controllers.GetChapters(chapters))
+				r.Post("/", controllers.AddChapter(chapters))
 
 				r.Route("/{chapterID}", func(r chi.Router) {
 					r.Get("/", controllers.GetChapter(chapters))
