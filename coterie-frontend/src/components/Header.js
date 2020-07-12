@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import logo from '../logo.png';
 import Homepage from './Homepage';
 import Login from './Login';
 import Dashboard from './Dashboard';
@@ -12,7 +13,7 @@ const Header = () => {
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className=" navbar-brand float-left w-50">
-          <a href="/"><img className="w-75" alt="logo" src="../public/coterie-full-logo.png"/></a>
+          <a href="/"><img className="w-25" alt="logo" src={logo}/></a>
         </div>
         <ul className=" navbar-nav mr-auto float-left">
           <li><Link to={'/'} className="nav-link">Homepage</Link></li>
