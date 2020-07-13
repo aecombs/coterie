@@ -70,7 +70,7 @@ func main() {
 	members := models.NewMemberTable(db)
 	organizations := models.NewOrganizationTable(db)
 	scriptures := models.NewScriptureTable(db)
-	// users := models.NewUserTable(db)
+	users := models.NewUserTable(db)
 
 	r := chi.NewRouter()
 
@@ -86,97 +86,97 @@ func main() {
 	// })
 
 	//Users
-	// r.Route("/", func(r chi.Router) {
-	// 	r.Get("/dashboard", isAuthorized(controllers.Dashboard(users)))
-	// 	r.Post("/login", isAuthorized(controllers.Login(users)))
-	// 	r.Post("/callback", isAuthorized(controllers.Callback(users)))
-	// 	r.Delete("/logout", isAuthorized(controllers.Logout(users)))
+	r.Route("/", func(r chi.Router) {
+		// 	r.Get("/dashboard", controllers.Dashboard(users))
+		r.Get("/auth/google", controllers.GoogleLogin())
+		r.Get("/auth/google/callback", controllers.GoogleCallback(users))
+		r.Delete("/logout", controllers.LogoutUser())
 
-	// 	r.Route("/profile", func(r chi.Router) {
-	// 		r.Get("/", isAuthorized(controllers.GetUser(users)))
-	// 		r.Put("/", isAuthorized(controllers.UpdateUser(users)))
-	// 	})
-	// })
+		r.Route("/profile", func(r chi.Router) {
+			r.Get("/", controllers.GetUser(users))
+			r.Put("/", controllers.UpdateUser(users))
+		})
+	})
 
 	//Announcements
 	r.Route("/announcements", func(r chi.Router) {
-		r.Get("/", isAuthorized(controllers.GetAnnouncements(announcements)))
-		r.Post("/", isAuthorized(controllers.AddAnnouncement(announcements)))
+		r.Get("/", controllers.GetAnnouncements(announcements))
+		r.Post("/", controllers.AddAnnouncement(announcements))
 
 		r.Route("/{announcementID}", func(r chi.Router) {
-			r.Get("/", isAuthorized(controllers.GetAnnouncement(announcements)))
-			r.Put("/", isAuthorized(controllers.UpdateAnnouncement(announcements)))
-			r.Delete("/", isAuthorized(controllers.DeleteAnnouncement(announcements)))
+			r.Get("/", controllers.GetAnnouncement(announcements))
+			r.Put("/", controllers.UpdateAnnouncement(announcements))
+			r.Delete("/", controllers.DeleteAnnouncement(announcements))
 		})
 	})
 
 	//Events
 	r.Route("/events", func(r chi.Router) {
-		r.Get("/", isAuthorized(controllers.GetEvents(events)))
-		r.Post("/", isAuthorized(controllers.AddEvent(events)))
+		r.Get("/", controllers.GetEvents(events))
+		r.Post("/", controllers.AddEvent(events))
 
 		r.Route("/{eventID}", func(r chi.Router) {
-			r.Get("/", isAuthorized(controllers.GetEvent(events)))
-			r.Put("/", isAuthorized(controllers.UpdateEvent(events)))
-			r.Delete("/", isAuthorized(controllers.DeleteEvent(events)))
+			r.Get("/", controllers.GetEvent(events))
+			r.Put("/", controllers.UpdateEvent(events))
+			r.Delete("/", controllers.DeleteEvent(events))
 		})
 	})
 
 	//Holidays
 	r.Route("/holidays", func(r chi.Router) {
-		r.Get("/", isAuthorized(controllers.GetHolidays(holidays)))
-		r.Post("/", isAuthorized(controllers.AddHoliday(holidays)))
+		r.Get("/", controllers.GetHolidays(holidays))
+		r.Post("/", controllers.AddHoliday(holidays))
 
 		r.Route("/{holidayID}", func(r chi.Router) {
-			r.Get("/", isAuthorized(controllers.GetHoliday(holidays)))
-			r.Put("/", isAuthorized(controllers.UpdateHoliday(holidays)))
-			r.Delete("/", isAuthorized(controllers.DeleteHoliday(holidays)))
+			r.Get("/", controllers.GetHoliday(holidays))
+			r.Put("/", controllers.UpdateHoliday(holidays))
+			r.Delete("/", controllers.DeleteHoliday(holidays))
 		})
 	})
 
 	//Members
 	r.Route("/members", func(r chi.Router) {
-		r.Get("/", isAuthorized(controllers.GetMembers(members)))
-		r.Post("/", isAuthorized(controllers.AddMember(members)))
+		r.Get("/", controllers.GetMembers(members))
+		r.Post("/", controllers.AddMember(members))
 
 		r.Route("/{memberID}", func(r chi.Router) {
-			r.Get("/", isAuthorized(controllers.GetMember(members)))
-			r.Put("/", isAuthorized(controllers.UpdateMember(members)))
-			r.Delete("/", isAuthorized(controllers.DeleteMember(members)))
+			r.Get("/", controllers.GetMember(members))
+			r.Put("/", controllers.UpdateMember(members))
+			r.Delete("/", controllers.DeleteMember(members))
 		})
 	})
 
 	//Organizations
 	r.Route("/organizations", func(r chi.Router) {
-		r.Get("/", isAuthorized(controllers.GetOrganizations(organizations)))
-		r.Post("/", isAuthorized(controllers.AddOrganization(organizations)))
+		r.Get("/", controllers.GetOrganizations(organizations))
+		r.Post("/", controllers.AddOrganization(organizations))
 
 		r.Route("/{organizationID}", func(r chi.Router) {
-			r.Get("/", isAuthorized(controllers.GetOrganization(organizations)))
-			r.Put("/", isAuthorized(controllers.UpdateOrganization(organizations)))
-			r.Delete("/", isAuthorized(controllers.DeleteOrganization(organizations)))
+			r.Get("/", controllers.GetOrganization(organizations))
+			r.Put("/", controllers.UpdateOrganization(organizations))
+			r.Delete("/", controllers.DeleteOrganization(organizations))
 		})
 	})
 
 	//Scriptures
 	r.Route("/scriptures", func(r chi.Router) {
-		r.Get("/", isAuthorized(controllers.GetScriptures(scriptures)))
-		r.Post("/", isAuthorized(controllers.AddScripture(scriptures)))
+		r.Get("/", controllers.GetScriptures(scriptures))
+		r.Post("/", controllers.AddScripture(scriptures))
 
 		r.Route("/{scriptureID}", func(r chi.Router) {
-			r.Get("/", isAuthorized(controllers.GetScripture(scriptures)))
-			r.Put("/", isAuthorized(controllers.UpdateScripture(scriptures)))
-			r.Delete("/", isAuthorized(controllers.DeleteScripture(scriptures)))
+			r.Get("/", controllers.GetScripture(scriptures))
+			r.Put("/", controllers.UpdateScripture(scriptures))
+			r.Delete("/", controllers.DeleteScripture(scriptures))
 
 			//Nested Chapters
 			r.Route("/chapters", func(r chi.Router) {
-				r.Get("/", isAuthorized(controllers.GetChapters(chapters)))
-				r.Post("/", isAuthorized(controllers.AddChapter(chapters)))
+				r.Get("/", controllers.GetChapters(chapters))
+				r.Post("/", controllers.AddChapter(chapters))
 
 				r.Route("/{chapterID}", func(r chi.Router) {
-					r.Get("/", isAuthorized(controllers.GetChapter(chapters)))
-					r.Put("/", isAuthorized(controllers.UpdateChapter(chapters)))
-					r.Delete("/", isAuthorized(controllers.DeleteChapter(chapters)))
+					r.Get("/", controllers.GetChapter(chapters))
+					r.Put("/", controllers.UpdateChapter(chapters))
+					r.Delete("/", controllers.DeleteChapter(chapters))
 				})
 			})
 		})

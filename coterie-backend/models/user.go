@@ -43,11 +43,11 @@ func NewUserTable(db *sql.DB) *UserTable {
 }
 
 //Model.where(id: "")
-func (userTable *UserTable) UserGetter(userID string) (User, error) {
+func (userTable *UserTable) UserGetter(option string, userID string) (User, error) {
 	var user User
 
 	stmt, err := userTable.DB.Prepare(`
-		SELECT * FROM user WHERE id = ?
+		SELECT * FROM user WHERE ? = ?
 	`)
 	if err != nil {
 		log.Fatal(err)
@@ -63,7 +63,7 @@ func (userTable *UserTable) UserGetter(userID string) (User, error) {
 		var createdAt string
 		var updatedAt string
 
-		err = stmt.QueryRow(userID).Scan(&id, &name, &email, &bio, &avatar, &createdAt, &updatedAt)
+		err = stmt.QueryRow(option, userID).Scan(&id, &name, &email, &bio, &avatar, &createdAt, &updatedAt)
 		if err != nil {
 			log.Fatal(err)
 		}

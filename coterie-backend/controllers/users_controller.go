@@ -3,16 +3,18 @@ package controllers
 import (
 	"coterie/models"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
 
-	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/go-chi/chi"
 	"github.com/joho/godotenv"
 	"github.com/qkgo/yin"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
 )
 
 func goDotEnvVariable(key string) string {
@@ -27,43 +29,98 @@ func goDotEnvVariable(key string) string {
 	return os.Getenv(key)
 }
 
-var mySigningKey = goDotEnvVariable("MY_JWT_TOKEN")
+// var mySigningKey = goDotEnvVariable("MY_JWT_TOKEN")
 
-func GenerateJWT() (string, error) {
-	token := jwt.New(jwt.SigningMethodHS256)
+// func GenerateJWT() (string, error) {
+// 	token := jwt.New(jwt.SigningMethodHS256)
 
-	claims := token.Claims.(jwt.MapClaims)
+// 	claims := token.Claims.(jwt.MapClaims)
 
-	claims["authorized"] = true
-	claims["user"] = "Your Mom"
-	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+// 	claims["authorized"] = true
+// 	claims["user"] = "Your Mom"
+// 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 
-	tokenString, err := token.SignedString(mySigningKey)
+// 	tokenString, err := token.SignedString(mySigningKey)
 
-	if err != nil {
-		fmt.Errorf("Something went wrong: %s", err.Error())
-		return "", err
-	}
-	return tokenString, nil
-}
-
-// var (
-// 	googleOauthConfig *oauth2.Config
-// )
-
-// func init() {
-// 	googleOauthConfig = &oauth2.Config{
-// 		RedirectURL:  "http://localhost:8080/callback",
-// 		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
-// 		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
-// 		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
-// 		Endpoint:     google.Endpoint,
+// 	if err != nil {
+// 		fmt.Errorf("Something went wrong: %s", err.Error())
+// 		return "", err
 // 	}
+// 	return tokenString, nil
 // }
 
-//Login
-//Callback
+var (
+	googleOauthConfig *oauth2.Config
+	// TODO: randomize it
+	oauthStateString = "pseudo-random"
+)
+
+func init() {
+	googleOauthConfig = &oauth2.Config{
+		RedirectURL:  "http://localhost:8080/auth/google/callback",
+		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
+		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
+		Endpoint:     google.Endpoint,
+	}
+}
+
+//Google Login
+func GoogleLogin() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		url := googleOauthConfig.AuthCodeURL(oauthStateString)
+		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
+	}
+}
+
+//Google Callback
+func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		content, err := getUserInfo(r.FormValue("state"), r.FormValue("code"))
+		if err != nil {
+			fmt.Println(err.Error())
+			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+			return
+		}
+		userID :=
+
+			fmt.Fprintf(w, "Content: %s\n", content)
+	}
+}
+
+func getUserInfo(state string, code string) ([]byte, error) {
+	if state != oauthStateString {
+		return nil, fmt.Errorf("invalid oauth state")
+	}
+
+	token, err := googleOauthConfig.Exchange(oauth2.NoContext, code)
+	if err != nil {
+		return nil, fmt.Errorf("code exchange failed: %s", err.Error())
+	}
+
+	response, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
+	if err != nil {
+		return nil, fmt.Errorf("failed getting user info: %s", err.Error())
+	}
+
+	defer response.Body.Close()
+	contents, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed reading response body: %s", err.Error())
+	}
+
+	return contents, nil
+}
+
 //Logout
+func LogoutUser() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		//TODO: reset session...Or is that React's job?
+		url := "/"
+		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
+		return
+	}
+}
 
 //Show
 func GetUser(userTable *models.UserTable) http.HandlerFunc {
@@ -72,7 +129,7 @@ func GetUser(userTable *models.UserTable) http.HandlerFunc {
 		//TODO: update this to use session
 		userID := chi.URLParam(r, "userID")
 
-		user, err := userTable.UserGetter(userID)
+		user, err := userTable.UserGetter("id", userID)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
@@ -82,30 +139,56 @@ func GetUser(userTable *models.UserTable) http.HandlerFunc {
 	}
 }
 
-//Create
-func AddUser(userTable *models.UserTable) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		res, req := yin.Event(w, r)
-		body := map[string]string{}
-		req.BindBody(&body)
-
-		user := models.User{
-			Name:      body["name"],
-			Email:     body["email"],
-			Avatar:    body["avatar"],
-			CreatedAt: time.Now().String(),
-			UpdatedAt: time.Now().String(),
-		}
-
-		result, err := userTable.UserAdder(user)
-		if err != nil {
-			http.Error(w, http.StatusText(404), 404)
-			return
-		}
-
-		res.SendJSON(result)
+//Create New User
+func AddUser(userTable *models.UserTable, content []byte) string {
+	//logic to part content
+	userBefore := models.User{
+		Name:      body["name"],
+		Email:     body["email"],
+		Avatar:    body["avatar"],
+		CreatedAt: time.Now().String(),
+		UpdatedAt: time.Now().String(),
 	}
+
+	result, err := userTable.UserAdder(userBefore)
+	if err != nil {
+		fmt.Errorf("Unable to add user to database")
+		return ""
+	}
+
+	userAfter, err := userTable.UserGetter("email", userBefore.Email)
+	if err != nil {
+		fmt.Errorf("Something went wrong")
+		return ""
+	}
+	userID := strconv.Itoa(userAfter.ID)
+
+	return userID
 }
+
+// func AddUser(userTable *models.UserTable) http.HandlerFunc {
+// 	return func(w http.ResponseWriter, r *http.Request) {
+// 		res, req := yin.Event(w, r)
+// 		body := map[string]string{}
+// 		req.BindBody(&body)
+
+// 		user := models.User{
+// 			Name:      body["name"],
+// 			Email:     body["email"],
+// 			Avatar:    body["avatar"],
+// 			CreatedAt: time.Now().String(),
+// 			UpdatedAt: time.Now().String(),
+// 		}
+
+// 		result, err := userTable.UserAdder(user)
+// 		if err != nil {
+// 			http.Error(w, http.StatusText(404), 404)
+// 			return
+// 		}
+
+// 		res.SendJSON(result)
+// 	}
+// }
 
 //Update
 func UpdateUser(userTable *models.UserTable) http.HandlerFunc {

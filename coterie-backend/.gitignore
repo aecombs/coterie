@@ -1,2 +1,5 @@
 # Secret secrets
 .env
+
+#postman shortcuts
+postman-shortcuts.json
