@@ -7,13 +7,13 @@ class Auth {
 
   login(callback) {
     this.authenticated = true;
-    Header.setLoginButtonText("Logout");
+    // Header.setLoginButtonText("Logout");
     callback();
   }
 
   logout(callback) {
     this.authenticated = false;
-    Header.setLoginButtonText("Login");
+    // Header.setLoginButtonText("Login");
     callback();
   }
 

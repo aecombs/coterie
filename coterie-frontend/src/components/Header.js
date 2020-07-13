@@ -10,6 +10,10 @@ import Dashboard from './Dashboard';
 const Header = () => {
   const [loginButtonText, setLoginButtonText] = useState("Login");
 
+  const changeLoginButtonCallback = (text) => {
+    setLoginButtonText(text);
+  }
+
 
 
   return (
@@ -22,20 +26,21 @@ const Header = () => {
         <ul className=" navbar-nav mr-auto justify-content-end w-75">
           {/* TODO: Make dashboard only visible to auth'd users */}
           <li><Link to={'/dashboard'} className="nav-link float-right">Dashboard</Link></li>
-          <li><Link to={ loginButtonText === "login" ? "/login" : "/logout" } className="nav-link float-right">{ loginButtonText }</Link></li>
+          <li><Link to={ '/'+loginButtonText.toLowerCase() } className="nav-link float-right">{ loginButtonText }</Link></li>
         </ul>
       </nav>
       
       <Switch> 
         <Route exact path='/' component={Homepage} />
         <Route path='/dashboard' component={Dashboard} />
-        <Route path='/login' component={Login} />
-        {/* <Route 
-          path={'/'}
-          render={() => (
-          <Login 
+        {/* <Route path='/signin' component={Login} /> */}
+        <Route 
+          path={'/'+loginButtonText.toLowerCase()}
+          render={(props) => (
+          <Login {...props}
+            buttonTextCallback={changeLoginButtonCallback}
           />
-        )} /> */}
+        )} />
       </Switch>
     </div>
   </Router>

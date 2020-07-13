@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Profile from './Profile';
 import Announcements from './Announcements';
 import Events from './Events';
 import Holidays from './Holidays';
 import Scriptures from './Scriptures';
-import Chapters from './Chapters';
 
 const SideNav = () => {
   return (
