@@ -5,6 +5,7 @@ import logo from '../logo.png';
 import Homepage from './Homepage';
 import Login from './Login';
 import Dashboard from './Dashboard';
+import ProtectedRoute from '../ProtectedRoute';
 // import axios from 'axios'
 
 const Header = () => {
@@ -31,7 +32,7 @@ const Header = () => {
         </div>
         <ul className=" navbar-nav mr-auto justify-content-end w-75">
           {/* TODO: Make dashboard only visible to auth'd users */}
-          {/* <li><button onClick={ setLoginButtonText("Logout") }><Link to={'/dashboard'} className="nav-link float-right">Dashboard</Link></button></li> */}
+          <li><Link to={'/dashboard'} className="nav-link float-right">Dashboard</Link></li>
           {/* { loginButtonText === "Login" ? <li><Link to={ loginButtonText === "Login" ? '/login' : '/' } className="nav-link float-right">{ loginButtonText }</Link></li> : <button onClick={toggleButtonText}>Logout</button>} */}
 
           <li><Link to={'/login'} className={ loginButtonText === "Login" ? "nav-link float-right" : "hidden"}>Login</Link></li>
@@ -41,7 +42,7 @@ const Header = () => {
       
       <Switch> 
         <Route exact path='/' component={Homepage} />
-        <Route path='/dashboard' component={Dashboard} />
+        <ProtectedRoute path='/dashboard' component={Dashboard} />
         {/* <Route path='/login' component={Login} /> */}
         
         {/* <Route 

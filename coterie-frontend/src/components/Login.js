@@ -1,5 +1,5 @@
 import React from 'react';
-import auth from '../auth';
+import auth from '../Auth';
 
 const Login = (props) => {
   const loginCallback = () => {
