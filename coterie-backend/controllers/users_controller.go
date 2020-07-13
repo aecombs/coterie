@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"strconv"
@@ -51,11 +52,15 @@ func goDotEnvVariable(key string) string {
 
 var (
 	googleOauthConfig *oauth2.Config
-	// TODO: randomize it
-	oauthStateString = "pseudo-random"
+
+	//randomized string of nums
+	oauthStateString = "oauth" + strconv.Itoa(rand.Intn(999999-111111)+111111)
 )
 
 func init() {
+	//seed value
+	rand.Seed(time.Now().UnixNano())
+
 	googleOauthConfig = &oauth2.Config{
 		RedirectURL:  "http://localhost:8080/auth/google/callback",
 		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
@@ -82,9 +87,12 @@ func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 			return
 		}
-		userID :=
+		//logic to check if they exit in database.
+		// if they do, return the info that react needs.
+		// if they don't, create a new user and return the info react needs.
+		//Note: React might only need the userID to store in it's session
 
-			fmt.Fprintf(w, "Content: %s\n", content)
+		fmt.Fprintf(w, "Content: %s\n", content)
 	}
 }
 
@@ -112,33 +120,6 @@ func getUserInfo(state string, code string) ([]byte, error) {
 	return contents, nil
 }
 
-//Logout
-func LogoutUser() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		//TODO: reset session...Or is that React's job?
-		url := "/"
-		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
-		return
-	}
-}
-
-//Show
-func GetUser(userTable *models.UserTable) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		res, _ := yin.Event(w, r)
-		//TODO: update this to use session
-		userID := chi.URLParam(r, "userID")
-
-		user, err := userTable.UserGetter("id", userID)
-		if err != nil {
-			http.Error(w, http.StatusText(404), 404)
-			return
-		}
-
-		res.SendJSON(user)
-	}
-}
-
 //Create New User
 func AddUser(userTable *models.UserTable, content []byte) string {
 	//logic to part content
@@ -164,6 +145,33 @@ func AddUser(userTable *models.UserTable, content []byte) string {
 	userID := strconv.Itoa(userAfter.ID)
 
 	return userID
+}
+
+//Logout
+func LogoutUser() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		//TODO: reset session...Or is that React's job?
+		url := "/"
+		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
+		return
+	}
+}
+
+//Show
+func GetUser(userTable *models.UserTable) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		res, _ := yin.Event(w, r)
+		//TODO: update this to use session
+		userID := chi.URLParam(r, "userID")
+
+		user, err := userTable.UserGetter("id", userID)
+		if err != nil {
+			http.Error(w, http.StatusText(404), 404)
+			return
+		}
+
+		res.SendJSON(user)
+	}
 }
 
 // func AddUser(userTable *models.UserTable) http.HandlerFunc {
