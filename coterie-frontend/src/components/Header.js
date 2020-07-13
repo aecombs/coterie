@@ -15,25 +15,27 @@ const Header = () => {
         <div className=" navbar-brand float-left w-50">
           <a href="/"><img className="w-25" alt="logo" src={logo}/></a>
         </div>
-        <ul className=" navbar-nav mr-auto float-left">
-          <li><Link to={'/'} className="nav-link">Homepage</Link></li>
+        <ul className=" navbar-nav mr-auto justify-content-end w-75">
+          {/* TODO: Make dashboard only visible to auth'd users */}
+          <li><Link to={'/dashboard'} className="nav-link float-right">Dashboard</Link></li>
+          <li><Link to={'/login'} className="nav-link float-right">Login</Link></li>
           {/* TODO: Login/Logout... */}
           {/* { authButtonText = "" }
           { session[user_id] ? authButtonText = "logout" : authButtonText = "login" }
           <li><Link to={'/'+authButtonText} className="nav-link">{authButtonText}</Link></li> */}
         </ul>
-        <div className="w-50"></div>
       </nav>
       
       <Switch> 
         <Route exact path='/' component={Homepage} />
-        <Route path='/dashboard' component={Dashboard} />
-        <Route 
+        <Route path='/login' component={Login} />
+        <Route path='/login' component={Login} />
+        {/* <Route 
           path={'/'}
           render={() => (
           <Login 
           />
-        )} />
+        )} /> */}
       </Switch>
     </div>
   </Router>
