@@ -3,7 +3,7 @@ import React from 'react';
 const Chapter = () => {
   return (
     <div>
-      <p>Chapter</p>
+      <p className="baloo-da">Chapter</p>
     </div>
   )
 }

@@ -1,15 +1,16 @@
 import React from 'react';
 import SideNav from './SideNav';
-import Members from './Members';
-import Organization from './Organization';
 
 const Dashboard = () => {
+  //TODO: logic that checks the URL... is it just the dashboard? then show xyz stuff.
+
+
   return (
-    <div>
-      <p>Dashboard</p>
-      <Organization />
-      <SideNav />
-      <Members />
+    <div className="d-flex">
+      
+      <div className="">
+        <SideNav />
+      </div>
     </div>
   )
 }

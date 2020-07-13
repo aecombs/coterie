@@ -3,7 +3,7 @@ import React from 'react';
 const Holiday = () => {
   return (
     <div>
-      <p>Holiday</p>
+      <p className="baloo-da">Holiday</p>
     </div>
   )
 }

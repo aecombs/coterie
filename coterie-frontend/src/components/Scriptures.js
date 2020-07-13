@@ -1,11 +1,12 @@
 import React from 'react';
-import Scripture from './Scripture';
 import Collection from './Collection';
 
 const Scriptures = () => {
   return (
     <div>
-      <p>Scriptures</p>
+      <p className="baloo-da">Scriptures</p>
+      <Collection 
+      selection="Scripture"/>
     </div>
   )
 }

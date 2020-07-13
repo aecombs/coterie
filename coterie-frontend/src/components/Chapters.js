@@ -1,11 +1,13 @@
 import React from 'react';
-import Chapter from './Chapter';
 import Collection from './Collection';
 
 const Chapters = () => {
   return (
     <div>
-      <p>Chapters</p>
+      <p className="baloo-da">Chapters</p>
+      <Collection
+      selection="Chapters"
+       />
     </div>
   )
 }

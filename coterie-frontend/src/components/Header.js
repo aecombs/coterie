@@ -6,26 +6,13 @@ import Homepage from './Homepage';
 import Login from './Login';
 import Dashboard from './Dashboard';
 import ProtectedRoute from '../ProtectedRoute';
+// import auth from './Auth';
 // import axios from 'axios'
 
-const Header = () => {
-  const [loginButtonText, setLoginButtonText] = useState("Login");
-
-  const toggleButtonText = () => {
-    if (loginButtonText === "Login") {
-      setLoginButtonText("Logout");
-    } else {
-      setLoginButtonText("Login");
-    }
-  }
-
-  const loginButtonCallback = (text) => {
-    setLoginButtonText(text);
-  }
-
+const Header = (props) => {
   return (
   <Router>
-    <div>
+    <div className="">
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className=" navbar-brand float-left w-50">
           <a href="/"><img className="w-25" alt="logo" src={logo}/></a>
@@ -33,16 +20,24 @@ const Header = () => {
         <ul className=" navbar-nav mr-auto justify-content-end w-75">
           {/* TODO: Make dashboard only visible to auth'd users */}
           <li><Link to={'/dashboard'} className="nav-link float-right">Dashboard</Link></li>
-          {/* { loginButtonText === "Login" ? <li><Link to={ loginButtonText === "Login" ? '/login' : '/' } className="nav-link float-right">{ loginButtonText }</Link></li> : <button onClick={toggleButtonText}>Logout</button>} */}
 
-          <li><Link to={'/login'} className={ loginButtonText === "Login" ? "nav-link float-right" : "hidden"}>Login</Link></li>
-          <li><Link to={'/'} className={ loginButtonText === "Logout" ? "nav-link float-right" : "hidden"}>Logout</Link></li>
+
+          {/* <li><Link to={'/login'} className={ loginButtonText === "Login" ? "nav-link float-right" : "hidden"}>Login</Link></li>
+          <li><Link to={'/'} className={ loginButtonText === "Logout" ? "nav-link float-right" : "hidden"}>Logout</Link></li> */}
+
+          {/* using props */}
+          {/* <li><Link to={'/'+props.buttonText.toLowerCase()} className="nav-link float-right">{props.buttonText}</Link></li> */}
+
+          {/* Not using the fucking router holy fuck */}
+          {/* <li><button className="nav-link float-right btn btn-info" onClick={props.buttonTextCallback}><a className="text-white text-decoration-none" href={props.buttonText === "Login" ? "/login" : "/logout"}>{props.buttonText}</a></button></li> */}
+
         </ul>
       </nav>
       
       <Switch> 
         <Route exact path='/' component={Homepage} />
-        <ProtectedRoute path='/dashboard' component={Dashboard} />
+        <Route path='/dashboard' component={Dashboard} />
+
         {/* <Route path='/login' component={Login} /> */}
         
         {/* <Route 
@@ -50,17 +45,17 @@ const Header = () => {
           component=
           { loginButtonText === "Login" ? Login: Homepage } 
         /> */}
-        <Route 
-        path={'/'+loginButtonText.toLowerCase()}
-        render={ loginButtonText === "Login" ? (props) => (
+        {/* <Route 
+        path={'/'+props.buttonText.toLowerCase()}
+        render={ props.buttonText === "Login" ? (props) => (
         <Login {...props} 
-          loginButtonCallback={loginButtonCallback}
-          /> ) 
+          loginButtonCallback={props.buttonTextCallback}
+          /> )
           : (props) => (
             <Homepage {...props} 
             />)
           }
-        />
+        /> */}
       </Switch>
     </div>
   </Router>

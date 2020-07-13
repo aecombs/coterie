@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import Organization from './Organization';
 import Profile from './Profile';
 import Announcements from './Announcements';
 import Events from './Events';
@@ -9,31 +10,33 @@ import Scriptures from './Scriptures';
 const SideNav = () => {
   return (
     <Router>
-    <div className="">
+    <div className="d-flex side-nav">
       <nav className="">
-        <ul className="">
-          <li><Link to={'/dashboard'} className="">Dashboard</Link></li>
-          <li><Link to={'/profile'} className="">Profile</Link></li>
-          <li><Link to={'/scriptures'} className="">Scriptures</Link></li>
-          <li><Link to={'/holidays'} className="">Holidays</Link></li>
-          <li><Link to={'/events'} className="">Events</Link></li>
-          <li><Link to={'/announcements'} className="">Announcements</Link></li>
+        <ul className="nav flex-column">
+          <li className="nav-item nav-link text-decoration-none"><Link to={'/dashboard'} className="">Dashboard</Link></li>
+          <li className="nav-item nav-link"><Link to={'/dashboard/profile'} className="">Profile</Link></li>
+          <li className="nav-item nav-link"><Link to={'/dashboard/scriptures'} className="">Scriptures</Link></li>
+          <li className="nav-item nav-link"><Link to={'/dashboard/holidays'} className="">Holidays</Link></li>
+          <li className="nav-item nav-link"><Link to={'/dashboard/events'} className="">Events</Link></li>
+          <li className="nav-item nav-link"><Link to={'/dashboard/announcements'} className="">Announcements</Link></li>
         </ul>
       </nav>
-      
-      <Switch> 
-        <Route exact path='/profile' component={Profile} />
-        <Route exact path='/announcements' component={Announcements} />
-        <Route exact path='/events' component={Events} />
-        <Route exact path='/holidays' component={Holidays} />
-        <Route exact path='/scriptures' component={Scriptures} />
-        {/* <Route 
-          path={'/'}
-          render={() => (
-          <Announcements 
-          />
-        )} /> */}
-      </Switch>
+      <div className="dashboard-display">
+        <Switch>
+        <Route exact path='/dashboard' component={Organization} />
+          <Route path='/dashboard/profile' component={Profile} />
+          <Route path='/dashboard/announcements' component={Announcements} />
+          <Route path='/dashboard/events' component={Events} />
+          <Route path='/dashboard/holidays' component={Holidays} />
+          <Route path='/dashboard/scriptures' component={Scriptures} />
+            {/* <Route 
+              path={'/'}
+              render={() => (
+              <Announcements 
+              />
+            )} /> */}
+        </Switch>
+      </div>
     </div>
   </Router>
   )

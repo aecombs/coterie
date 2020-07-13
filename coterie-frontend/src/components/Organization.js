@@ -4,7 +4,8 @@ import Members from './Members';
 const Organization = () => {
   return (
     <div>
-      <p>Organization</p>
+      <p className="baloo-da">Organization</p>
+      <Members />
     </div>
   )
 }

@@ -5,7 +5,7 @@ import Collection from './Collection';
 const Announcements = () => {
   return (
     <div>
-      <p>Announcements</p>
+      <p className="baloo-da">Announcements</p>
     </div>
   )
 }

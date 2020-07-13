@@ -4,7 +4,6 @@ import auth from '../Auth';
 const Login = (props) => {
   const loginCallback = () => {
     auth.login(() => {
-      props.loginButtonCallback("Logout");
       props.history.push("/dashboard");
     })
     //probably add some junk to add info to LocalStorage
@@ -12,7 +11,7 @@ const Login = (props) => {
 
   return (
     <div>
-      <p>Login</p>
+      <p className="baloo-da">Login</p>
       <div className="card">
         <button className="btn btn-primary" onClick={loginCallback}>
         Login Here!
