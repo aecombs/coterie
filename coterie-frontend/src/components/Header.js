@@ -8,6 +8,10 @@ import Dashboard from './Dashboard';
 // import axios from 'axios'
 
 const Header = () => {
+  const [loginButtonText, setLoginButtonText] = useState("Login");
+
+
+
   return (
   <Router>
     <div>
@@ -18,17 +22,13 @@ const Header = () => {
         <ul className=" navbar-nav mr-auto justify-content-end w-75">
           {/* TODO: Make dashboard only visible to auth'd users */}
           <li><Link to={'/dashboard'} className="nav-link float-right">Dashboard</Link></li>
-          <li><Link to={'/login'} className="nav-link float-right">Login</Link></li>
-          {/* TODO: Login/Logout... */}
-          {/* { authButtonText = "" }
-          { session[user_id] ? authButtonText = "logout" : authButtonText = "login" }
-          <li><Link to={'/'+authButtonText} className="nav-link">{authButtonText}</Link></li> */}
+          <li><Link to={ loginButtonText === "login" ? "/login" : "/logout" } className="nav-link float-right">{ loginButtonText }</Link></li>
         </ul>
       </nav>
       
       <Switch> 
         <Route exact path='/' component={Homepage} />
-        <Route path='/login' component={Login} />
+        <Route path='/dashboard' component={Dashboard} />
         <Route path='/login' component={Login} />
         {/* <Route 
           path={'/'}
