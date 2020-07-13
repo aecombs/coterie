@@ -2,24 +2,19 @@ import React from 'react';
 import auth from '../auth';
 
 const Login = (props) => {
-  // const login = () => {
-  //   auth.login(() => {
-  //     this.props.history.push("/dashboard");
-  //   })
-  //   //probably add some junk to add info to LocalStorage
-  // }
+  const loginCallback = () => {
+    auth.login(() => {
+      props.loginButtonCallback("Logout");
+      props.history.push("/dashboard");
+    })
+    //probably add some junk to add info to LocalStorage
+  }
 
   return (
     <div>
       <p>Login</p>
       <div className="card">
-        <button className="btn btn-primary" onClick={() => {
-          auth.login(() => {
-            props.buttonTextCallback("Logout")
-            props.history.push("/dashboard");
-          })
-          //probably add some junk to add info to LocalStorage
-        }}>
+        <button className="btn btn-primary" onClick={loginCallback}>
         Login Here!
         </button>
 

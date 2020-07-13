@@ -10,11 +10,17 @@ import Dashboard from './Dashboard';
 const Header = () => {
   const [loginButtonText, setLoginButtonText] = useState("Login");
 
-  const changeLoginButtonCallback = (text) => {
-    setLoginButtonText(text);
+  const toggleButtonText = () => {
+    if (loginButtonText === "Login") {
+      setLoginButtonText("Logout");
+    } else {
+      setLoginButtonText("Login");
+    }
   }
 
-
+  const loginButtonCallback = (text) => {
+    setLoginButtonText(text);
+  }
 
   return (
   <Router>
@@ -25,22 +31,35 @@ const Header = () => {
         </div>
         <ul className=" navbar-nav mr-auto justify-content-end w-75">
           {/* TODO: Make dashboard only visible to auth'd users */}
-          <li><Link to={'/dashboard'} className="nav-link float-right">Dashboard</Link></li>
-          <li><Link to={ '/'+loginButtonText.toLowerCase() } className="nav-link float-right">{ loginButtonText }</Link></li>
+          {/* <li><button onClick={ setLoginButtonText("Logout") }><Link to={'/dashboard'} className="nav-link float-right">Dashboard</Link></button></li> */}
+          {/* { loginButtonText === "Login" ? <li><Link to={ loginButtonText === "Login" ? '/login' : '/' } className="nav-link float-right">{ loginButtonText }</Link></li> : <button onClick={toggleButtonText}>Logout</button>} */}
+
+          <li><Link to={'/login'} className={ loginButtonText === "Login" ? "nav-link float-right" : "hidden"}>Login</Link></li>
+          <li><Link to={'/'} className={ loginButtonText === "Logout" ? "nav-link float-right" : "hidden"}>Logout</Link></li>
         </ul>
       </nav>
       
       <Switch> 
         <Route exact path='/' component={Homepage} />
         <Route path='/dashboard' component={Dashboard} />
-        {/* <Route path='/signin' component={Login} /> */}
-        <Route 
+        {/* <Route path='/login' component={Login} /> */}
+        
+        {/* <Route 
           path={'/'+loginButtonText.toLowerCase()}
-          render={(props) => (
-          <Login {...props}
-            buttonTextCallback={changeLoginButtonCallback}
-          />
-        )} />
+          component=
+          { loginButtonText === "Login" ? Login: Homepage } 
+        /> */}
+        <Route 
+        path={'/'+loginButtonText.toLowerCase()}
+        render={ loginButtonText === "Login" ? (props) => (
+        <Login {...props} 
+          loginButtonCallback={loginButtonCallback}
+          /> ) 
+          : (props) => (
+            <Homepage {...props} 
+            />)
+          }
+        />
       </Switch>
     </div>
   </Router>
