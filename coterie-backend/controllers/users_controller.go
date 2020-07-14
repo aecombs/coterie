@@ -160,22 +160,21 @@ func AddUser(userTable *models.UserTable, content Data) (models.User, error) {
 		GoogleID:  content.ID,
 		Name:      content.Name,
 		Email:     content.Email,
+		Bio:       "",
 		Avatar:    content.Picture,
 		CreatedAt: time.Now().String(),
 		UpdatedAt: time.Now().String(),
 	}
 
-	// _, err := userTable.RegisterUser(userBefore)
-	// if err != nil {
-	// 	fmt.Errorf("Unable to add user to database")
-	// 	return "", err
-	// }
+	_, err := userTable.RegisterUser(userBefore)
+	if err != nil {
+		fmt.Errorf("Unable to add user to database")
+	}
 
-	// userAfter, err := userTable.UserGetter("email", userBefore.Email)
-	// if err != nil {
-	// 	fmt.Errorf("Something went wrong")
-	// 	return "", err
-	// }
+	userAfter, err := userTable.UserGetter("email", userBefore.Email)
+	if err != nil {
+		fmt.Errorf("Something went wrong")
+	}
 	// userID := strconv.Itoa(userAfter.ID)
 
 	return userBefore, nil

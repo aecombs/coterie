@@ -24,7 +24,7 @@ func NewUserTable(db *sql.DB) *UserTable {
 	stmt, _ := db.Prepare(`
 		CREATE TABLE IF NOT EXISTS "user" (
 			"ID"	INTEGER NOT NULL UNIQUE,
-			"GoogleID" TEXT,
+			"google_id" TEXT,
 			"name"	TEXT,
 			"email"  TEXT,
 			"bio"  TEXT,
@@ -89,7 +89,7 @@ func (userTable *UserTable) RegisterUser(user User) (User, error) {
 		INSERT INTO user (google_id,name,email,bio,avatar,created_at,updated_at) VALUES (?,?,?,?,?,?,?)
 	`)
 
-	stmt.Exec(user.GoogleID, user.Name, user.Email, "", user.Avatar, user.CreatedAt, user.UpdatedAt)
+	stmt.Exec(user.GoogleID, user.Name, user.Email, user.Bio, user.Avatar, user.CreatedAt, user.UpdatedAt)
 
 	if err != nil {
 		log.Fatal(err)
