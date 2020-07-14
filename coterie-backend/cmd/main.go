@@ -5,60 +5,45 @@ import (
 	"coterie/models"
 	"database/sql"
 	"flag"
-	"fmt"
 	"log"
 	"net/http"
-	"os"
 
-	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/joho/godotenv"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/qkgo/yin"
 )
 
-func goDotEnvVariable(key string) string {
+// var mySigningKey = goDotEnvVariable("MY_JWT_TOKEN")
 
-	// load .env file
-	err := godotenv.Load(".env")
+// func isAuthorized(endpoint func(w http.ResponseWriter, r *http.Request)) http.HandlerFunc {
+// 	return func(w http.ResponseWriter, r *http.Request) {
+// 		if r.Header["Token"] != nil {
+// 			token, err := jwt.Parse(r.Header["Token"][0], func(token *jwt.Token) (interface{}, error) {
+// 				if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+// 					return nil, fmt.Errorf("There was an error")
+// 				}
+// 				return mySigningKey, nil
+// 			})
+// 			if err != nil {
+// 				fmt.Fprintf(w, err.Error())
+// 			}
 
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
-
-	return os.Getenv(key)
-}
-
-var mySigningKey = goDotEnvVariable("MY_JWT_TOKEN")
-
-func isAuthorized(endpoint func(w http.ResponseWriter, r *http.Request)) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		if r.Header["Token"] != nil {
-			token, err := jwt.Parse(r.Header["Token"][0], func(token *jwt.Token) (interface{}, error) {
-				if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-					return nil, fmt.Errorf("There was an error")
-				}
-				return mySigningKey, nil
-			})
-			if err != nil {
-				fmt.Fprintf(w, err.Error())
-			}
-
-			if token.Valid {
-				endpoint(w, r)
-			}
-		} else {
-			fmt.Fprintf(w, "Not Authorized")
-		}
-	}
-}
+// 			if token.Valid {
+// 				endpoint(w, r)
+// 			}
+// 		} else {
+// 			fmt.Fprintf(w, "Not Authorized")
+// 		}
+// 	}
+// }
 
 func main() {
 	flag.Parse()
 	//open the database!
 	db, err := sql.Open("sqlite3", "./database/coterie.db")
 	if err != nil {
+		log.Printf("Unable to access database: %s", err.Error())
 		log.Fatal(err)
 	}
 	defer db.Close()
@@ -87,8 +72,6 @@ func main() {
 
 	//Users
 	r.Route("/", func(r chi.Router) {
-		r.Get("/env", controllers.LoadEnv())
-		// 	r.Get("/dashboard", controllers.Dashboard(users))
 		r.Get("/auth/google", controllers.GoogleLogin())
 		r.Get("/auth/google/callback", controllers.GoogleCallback(users))
 		r.Delete("/logout", controllers.LogoutUser())

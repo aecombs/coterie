@@ -48,6 +48,7 @@ func (announcementTable *AnnouncementTable) AnnouncementsLister() ([]Announcemen
 		SELECT * FROM announcement
 	`)
 	if err != nil {
+		log.Printf("Unable to access database: %s", err.Error())
 		log.Fatal(err)
 	}
 	defer rows.Close()
@@ -81,6 +82,7 @@ func (announcementTable *AnnouncementTable) AnnouncementGetter(announcementID st
 		SELECT * FROM announcement WHERE id = ?
 	`)
 	if err != nil {
+		log.Printf("Invalid sql query: %s", err.Error())
 		log.Fatal(err)
 	}
 	defer stmt.Close()
@@ -95,7 +97,8 @@ func (announcementTable *AnnouncementTable) AnnouncementGetter(announcementID st
 
 		err = stmt.QueryRow(announcementID).Scan(&id, &text, &date, &createdAt, &updatedAt, &organizationID)
 		if err != nil {
-			log.Fatal(err)
+			log.Printf("Unable to retrieve announcement: %s", err.Error())
+			return Announcement{}, err
 		}
 
 		announcement.ID = id
@@ -105,7 +108,7 @@ func (announcementTable *AnnouncementTable) AnnouncementGetter(announcementID st
 		announcement.UpdatedAt = updatedAt
 		announcement.OrganizationID = organizationID
 	}
-	return announcement, err
+	return announcement, nil
 }
 
 //Model.create
@@ -117,11 +120,13 @@ func (announcementTable *AnnouncementTable) AnnouncementAdder(announcement Annou
 	stmt.Exec(announcement.Date, announcement.Text, announcement.CreatedAt, announcement.UpdatedAt, announcement.OrganizationID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to create announcement: %s", err.Error())
+		return Announcement{}, err
+		// log.Fatal(err)
 	}
 	defer stmt.Close()
 
-	return announcement, err
+	return announcement, nil
 }
 
 //Model.update
@@ -130,6 +135,7 @@ func (announcementTable *AnnouncementTable) AnnouncementUpdater(announcement Ann
 	UPDATE announcement SET date = ?, text = ?, updated_at = ? WHERE announcement.id = ?
 	`)
 	if err != nil {
+		log.Printf("Bad Query: %s", err.Error())
 		log.Fatal(err)
 	}
 	defer stmt.Close()
@@ -137,9 +143,11 @@ func (announcementTable *AnnouncementTable) AnnouncementUpdater(announcement Ann
 	_, err = stmt.Exec(announcement.Date, announcement.Text, announcement.UpdatedAt, announcement.ID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to update announcement: %s", err.Error())
+		return Announcement{}, err
+		// log.Fatal(err)
 	}
-	return announcement, err
+	return announcement, nil
 }
 
 //Model.delete
@@ -148,6 +156,7 @@ func (announcementTable *AnnouncementTable) AnnouncementDeleter(announcementID s
 		DELETE FROM announcement WHERE announcement.id = ?
 	`)
 	if err != nil {
+		log.Printf("Bad query: %s", err.Error())
 		log.Fatal(err)
 	}
 	defer stmt.Close()
@@ -155,7 +164,8 @@ func (announcementTable *AnnouncementTable) AnnouncementDeleter(announcementID s
 	_, err = stmt.Exec(announcementID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to delete announcement: %s", err.Error())
+		// log.Fatal(err)
 	}
 
 	return err

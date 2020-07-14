@@ -30,35 +30,6 @@ func goDotEnvVariable(key string) string {
 	return os.Getenv(key)
 }
 
-func LoadEnv() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		res, _ := yin.Event(w, r)
-		//TODO: update this to use session
-		data := goDotEnvVariable("GOOGLE_CLIENT_SECRET")
-
-		res.SendJSON(data)
-	}
-}
-
-// var mySigningKey = goDotEnvVariable("MY_JWT_TOKEN")
-
-// func GenerateJWT() (string, error) {
-// 	token := jwt.New(jwt.SigningMethodHS256)
-
-// 	claims := token.Claims.(jwt.MapClaims)
-
-// 	claims["authorized"] = true
-// 	claims["user"] = "Your Mom"
-// 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
-
-// 	tokenString, err := token.SignedString(mySigningKey)
-
-// 	if err != nil {
-// 		log.Errorf("Something went wrong: %s", err.Error())
-// 		return "", err
-// 	}
-// 	return tokenString, nil
-// }
 type Data struct {
 	ID       string
 	Name     string
@@ -115,9 +86,8 @@ func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 			// http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 			return
 		}
-		//send content
-		// if they do, return the info that react needs.
-		// if they don't, create a new user and return the info react needs.
+		// return the info that react needs.
+
 		//Note: React might only need the userID to store in it's session
 
 		fmt.Fprintf(w, "Responded with: %s\n", response)
@@ -133,12 +103,12 @@ func getUserInfo(state string, code string) (Data, error) {
 
 	token, err := googleOauthConfig.Exchange(oauth2.NoContext, code)
 	if err != nil {
-		log.Println("code exchange failed: %s", err.Error())
+		log.Printf("code exchange failed: %s", err.Error())
 	}
 
 	response, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
 	if err != nil {
-		log.Println("failed getting user info: %s", err.Error())
+		log.Printf("Failed getting user info: %s", err.Error())
 	}
 
 	defer response.Body.Close()
@@ -147,6 +117,7 @@ func getUserInfo(state string, code string) (Data, error) {
 
 	err = json.NewDecoder(response.Body).Decode(&data)
 	if err != nil {
+		log.Printf("Unable to decode into json: %s", err.Error())
 		log.Fatal(err)
 	}
 
@@ -167,21 +138,18 @@ func AddUser(userTable *models.UserTable, content Data) (models.User, error) {
 
 	existingUser, err := userTable.UserGetter(userBefore.GoogleID)
 	if err != nil {
-		log.Println("Unable to retrieve user from database")
-		log.Fatal(err)
+		log.Printf("Unable to retrieve existing user from database: %s", err.Error())
 	}
-
 	if existingUser.Name == userBefore.Name {
 		return existingUser, nil
 	}
+
 	newUser, err := userTable.RegisterUser(userBefore)
 	if err != nil {
-		log.Println("Unable to add user to database")
+		log.Printf("Unable to add user to database: %s", err.Error())
 		log.Fatal(err)
 	}
-
-	fmt.Printf("FUCK YOU, %s", newUser.Name)
-	return existingUser, err
+	return newUser, nil
 }
 
 //Logout
@@ -201,7 +169,7 @@ func GetUser(userTable *models.UserTable) http.HandlerFunc {
 		//TODO: update this to use session
 		userID := chi.URLParam(r, "userID")
 
-		user, err := userTable.UserGetter(userID)
+		user, err := userTable.UserGetterByID(userID)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
@@ -210,30 +178,6 @@ func GetUser(userTable *models.UserTable) http.HandlerFunc {
 		res.SendJSON(user)
 	}
 }
-
-// func AddUser(userTable *models.UserTable) http.HandlerFunc {
-// 	return func(w http.ResponseWriter, r *http.Request) {
-// 		res, req := yin.Event(w, r)
-// 		body := map[string]string{}
-// 		req.BindBody(&body)
-
-// 		user := models.User{
-// 			Name:      body["name"],
-// 			Email:     body["email"],
-// 			Avatar:    body["avatar"],
-// 			CreatedAt: time.Now().String(),
-// 			UpdatedAt: time.Now().String(),
-// 		}
-
-// 		result, err := userTable.UserAdder(user)
-// 		if err != nil {
-// 			http.Error(w, http.StatusText(404), 404)
-// 			return
-// 		}
-
-// 		res.SendJSON(result)
-// 	}
-// }
 
 //Update
 func UpdateUser(userTable *models.UserTable) http.HandlerFunc {
