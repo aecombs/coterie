@@ -52,7 +52,8 @@ func (eventTable *EventTable) EventsLister() ([]Event, error) {
 		SELECT * FROM event
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to retrieve events: %s", err.Error())
+		return nil, err
 	}
 	defer rows.Close()
 
@@ -78,7 +79,7 @@ func (eventTable *EventTable) EventsLister() ([]Event, error) {
 		}
 		events = append(events, event)
 	}
-	return events, err
+	return events, nil
 }
 
 //Model.where(id: "")
@@ -89,7 +90,8 @@ func (eventTable *EventTable) EventGetter(eventID string) (Event, error) {
 		SELECT * FROM event WHERE id = ?
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Bad Query: %s", err.Error())
+		return Event{}, err
 	}
 	defer stmt.Close()
 
@@ -105,7 +107,8 @@ func (eventTable *EventTable) EventGetter(eventID string) (Event, error) {
 
 		err = stmt.QueryRow(eventID).Scan(&id, &name, &occasion, &date, &description, &createdAt, &updatedAt, &organizationID)
 		if err != nil {
-			log.Fatal(err)
+			log.Printf("Unable to retrieve event: %s", err.Error())
+			return Event{}, err
 		}
 
 		event.ID = id
@@ -117,7 +120,7 @@ func (eventTable *EventTable) EventGetter(eventID string) (Event, error) {
 		event.UpdatedAt = updatedAt
 		event.OrganizationID = organizationID
 	}
-	return event, err
+	return event, nil
 }
 
 //Model.create
@@ -129,11 +132,12 @@ func (eventTable *EventTable) EventAdder(event Event) (Event, error) {
 	stmt.Exec(event.Name, event.Occasion, event.Date, event.Description, event.CreatedAt, event.UpdatedAt, event.OrganizationID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to add event: %s", err.Error())
+		return Event{}, err
 	}
 	defer stmt.Close()
 
-	return event, err
+	return event, nil
 }
 
 //Model.update
@@ -142,16 +146,18 @@ func (eventTable *EventTable) EventUpdater(event Event) (Event, error) {
 	UPDATE event SET name = ?, occasion = ?, date = ?, description = ?, updated_at = ? WHERE event.id = ?
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Bad Query: %s", err.Error())
+		return Event{}, err
 	}
 	defer stmt.Close()
 
 	_, err = stmt.Exec(event.Name, event.Occasion, event.Date, event.Description, event.UpdatedAt, event.ID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to update event: %s", err.Error())
+		return Event{}, err
 	}
-	return event, err
+	return event, nil
 }
 
 //Model.delete
@@ -160,15 +166,17 @@ func (eventTable *EventTable) EventDeleter(eventID string) error {
 		DELETE FROM event WHERE event.id = ?
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Bad Query: %s", err.Error())
+		return err
 	}
 	defer stmt.Close()
 
 	_, err = stmt.Exec(eventID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to delete event: %s", err.Error())
+		return err
 	}
 
-	return err
+	return nil
 }
