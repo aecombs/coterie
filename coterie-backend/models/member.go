@@ -54,7 +54,8 @@ func (memberTable *MemberTable) MembersLister() ([]Member, error) {
 		SELECT * FROM member
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to retrieve members: %s", err.Error())
+		return nil, err
 	}
 	defer rows.Close()
 
@@ -82,7 +83,7 @@ func (memberTable *MemberTable) MembersLister() ([]Member, error) {
 		}
 		members = append(members, member)
 	}
-	return members, err
+	return members, nil
 }
 
 //Model.where(id: "")
@@ -93,7 +94,8 @@ func (memberTable *MemberTable) MemberGetter(memberID string) (Member, error) {
 		SELECT * FROM member WHERE id = ?
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Bad Query: %s", err.Error())
+		return Member{}, err
 	}
 	defer stmt.Close()
 
@@ -110,7 +112,8 @@ func (memberTable *MemberTable) MemberGetter(memberID string) (Member, error) {
 
 		err = stmt.QueryRow(memberID).Scan(&id, &name, &birthdate, &class, &email, &fundsRaised, &createdAt, &updatedAt, &organizationID)
 		if err != nil {
-			log.Fatal(err)
+			log.Printf("Unable to retrieve member: %s", err.Error())
+			return Member{}, err
 		}
 
 		member.ID = id
@@ -123,7 +126,7 @@ func (memberTable *MemberTable) MemberGetter(memberID string) (Member, error) {
 		member.UpdatedAt = updatedAt
 		member.OrganizationID = organizationID
 	}
-	return member, err
+	return member, nil
 }
 
 //Model.create
@@ -132,14 +135,20 @@ func (memberTable *MemberTable) MemberAdder(member Member) (Member, error) {
 		INSERT INTO member (name, birthdate, class, email, funds_raised, created_at, updated_at, organization_id) VALUES (?,?,?,?,?,?,?,?)
 	`)
 
-	stmt.Exec(member.Name, member.Birthdate, member.Class, member.Email, member.FundsRaised, member.CreatedAt, member.UpdatedAt, member.OrganizationID)
+	if err != nil {
+		log.Printf("Bad Query: %s", err.Error())
+		return Member{}, err
+	}
+
+	_, err = stmt.Exec(member.Name, member.Birthdate, member.Class, member.Email, member.FundsRaised, member.CreatedAt, member.UpdatedAt, member.OrganizationID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to create member: %s", err.Error())
+		return Member{}, err
 	}
 	defer stmt.Close()
 
-	return member, err
+	return member, nil
 }
 
 //Model.update
@@ -148,16 +157,18 @@ func (memberTable *MemberTable) MemberUpdater(member Member) (Member, error) {
 	UPDATE member SET class = ?, email = ?, funds_raised = ?, updated_at = ? WHERE member.id = ?
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Bad Query: %s", err.Error())
+		return Member{}, err
 	}
 	defer stmt.Close()
 
 	_, err = stmt.Exec(member.Class, member.Email, member.FundsRaised, member.UpdatedAt, member.ID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to update member: %s", err.Error())
+		return Member{}, err
 	}
-	return member, err
+	return member, nil
 }
 
 //Model.delete
@@ -166,15 +177,17 @@ func (memberTable *MemberTable) MemberDeleter(memberID string) error {
 		DELETE FROM member WHERE member.id = ?
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Bad Query: %s", err.Error())
+		return err
 	}
 	defer stmt.Close()
 
 	_, err = stmt.Exec(memberID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to delete: %s", err.Error())
+		return err
 	}
 
-	return err
+	return nil
 }
