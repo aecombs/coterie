@@ -54,7 +54,7 @@ func LoadEnv() http.HandlerFunc {
 // 	tokenString, err := token.SignedString(mySigningKey)
 
 // 	if err != nil {
-// 		fmt.Errorf("Something went wrong: %s", err.Error())
+// 		log.Errorf("Something went wrong: %s", err.Error())
 // 		return "", err
 // 	}
 // 	return tokenString, nil
@@ -102,7 +102,7 @@ func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 		res, _ := yin.Event(w, r)
 		response, err := getUserInfo(r.FormValue("state"), r.FormValue("code"))
 		if err != nil {
-			fmt.Println(err.Error())
+			log.Println(err.Error())
 			res.SendStatus(400)
 			// http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 			return
@@ -110,7 +110,7 @@ func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 		//logic to check if they exit in database.
 		user, err := AddUser(userTable, response)
 		if err != nil {
-			fmt.Println(err.Error())
+			log.Println(err.Error())
 			res.SendStatus(404)
 			// http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 			return
@@ -128,17 +128,17 @@ func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 
 func getUserInfo(state string, code string) (Data, error) {
 	if state != oauthStateString {
-		fmt.Errorf("invalid oauth state")
+		log.Println("invalid oauth state")
 	}
 
 	token, err := googleOauthConfig.Exchange(oauth2.NoContext, code)
 	if err != nil {
-		fmt.Errorf("code exchange failed: %s", err.Error())
+		log.Println("code exchange failed: %s", err.Error())
 	}
 
 	response, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
 	if err != nil {
-		fmt.Errorf("failed getting user info: %s", err.Error())
+		log.Println("failed getting user info: %s", err.Error())
 	}
 
 	defer response.Body.Close()
@@ -155,7 +155,6 @@ func getUserInfo(state string, code string) (Data, error) {
 
 //Create New User
 func AddUser(userTable *models.UserTable, content Data) (models.User, error) {
-	//logic to part content
 	userBefore := models.User{
 		GoogleID:  content.ID,
 		Name:      content.Name,
@@ -166,18 +165,23 @@ func AddUser(userTable *models.UserTable, content Data) (models.User, error) {
 		UpdatedAt: time.Now().String(),
 	}
 
-	_, err := userTable.RegisterUser(userBefore)
+	existingUser, err := userTable.UserGetter(userBefore.GoogleID)
 	if err != nil {
-		fmt.Errorf("Unable to add user to database")
+		log.Println("Unable to retrieve user from database")
+		log.Fatal(err)
 	}
 
-	userAfter, err := userTable.UserGetter("email", userBefore.Email)
-	if err != nil {
-		fmt.Errorf("Something went wrong")
+	if existingUser.Name == userBefore.Name {
+		return existingUser, nil
 	}
-	// userID := strconv.Itoa(userAfter.ID)
+	newUser, err := userTable.RegisterUser(userBefore)
+	if err != nil {
+		log.Println("Unable to add user to database")
+		log.Fatal(err)
+	}
 
-	return userBefore, nil
+	fmt.Printf("FUCK YOU, %s", newUser.Name)
+	return existingUser, err
 }
 
 //Logout
@@ -197,7 +201,7 @@ func GetUser(userTable *models.UserTable) http.HandlerFunc {
 		//TODO: update this to use session
 		userID := chi.URLParam(r, "userID")
 
-		user, err := userTable.UserGetter("id", userID)
+		user, err := userTable.UserGetter(userID)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return

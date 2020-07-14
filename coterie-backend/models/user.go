@@ -3,6 +3,7 @@ package models
 import (
 	"database/sql"
 	"log"
+	"strconv"
 )
 
 type User struct {
@@ -45,15 +46,21 @@ func NewUserTable(db *sql.DB) *UserTable {
 }
 
 //Model.where(id: "")
-func (userTable *UserTable) UserGetter(option string, userID string) (User, error) {
+func (userTable *UserTable) UserGetter(googleID string) (User, error) {
 	var user User
 
-	stmt, err := userTable.DB.Prepare(`
-		SELECT * FROM user WHERE ? = ?
-	`)
-	if err != nil {
-		log.Fatal(err)
+	var existsID string
+	err := userTable.DB.QueryRow("SELECT google_id FROM user WHERE google_id = ?", googleID).Scan(&existsID)
+	if err == sql.ErrNoRows {
+		return User{}, nil
+	} else if err != nil {
+		return User{}, err
 	}
+
+	stmt, err := userTable.DB.Prepare(`
+			SELECT * FROM user WHERE google_id = ?
+		`)
+
 	defer stmt.Close()
 
 	if stmt != nil {
@@ -66,7 +73,7 @@ func (userTable *UserTable) UserGetter(option string, userID string) (User, erro
 		var createdAt string
 		var updatedAt string
 
-		err = stmt.QueryRow(option, userID).Scan(&id, &googleID, &name, &email, &bio, &avatar, &createdAt, &updatedAt)
+		err = stmt.QueryRow(googleID).Scan(&id, &googleID, &name, &email, &bio, &avatar, &createdAt, &updatedAt)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -83,19 +90,25 @@ func (userTable *UserTable) UserGetter(option string, userID string) (User, erro
 	return user, err
 }
 
-//Model.create...only used when user is new
+//Model.create. Used when the user is logging in.
 func (userTable *UserTable) RegisterUser(user User) (User, error) {
 	stmt, err := userTable.DB.Prepare(`
 		INSERT INTO user (google_id,name,email,bio,avatar,created_at,updated_at) VALUES (?,?,?,?,?,?,?)
 	`)
 
 	stmt.Exec(user.GoogleID, user.Name, user.Email, user.Bio, user.Avatar, user.CreatedAt, user.UpdatedAt)
-
 	if err != nil {
+		log.Println("Unable to retrieve user from database")
 		log.Fatal(err)
 	}
-	defer stmt.Close()
+	var id string
+	err = userTable.DB.QueryRow("SELECT id FROM user WHERE google_id = ?", user.GoogleID).Scan(&id)
+	if err != nil {
+		// log.Fatal(err)
+	}
 
+	defer stmt.Close()
+	user.ID, err = strconv.Atoi(id)
 	return user, err
 }
 
