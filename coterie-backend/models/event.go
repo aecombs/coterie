@@ -129,7 +129,12 @@ func (eventTable *EventTable) EventAdder(event Event) (Event, error) {
 		INSERT INTO event (name,occasion,date,description,created_at,updated_at,organization_id) VALUES (?,?,?,?,?,?,?)
 	`)
 
-	stmt.Exec(event.Name, event.Occasion, event.Date, event.Description, event.CreatedAt, event.UpdatedAt, event.OrganizationID)
+	if err != nil {
+		log.Printf("Bad Query: %s", err.Error())
+		return Event{}, err
+	}
+
+	_, err = stmt.Exec(event.Name, event.Occasion, event.Date, event.Description, event.CreatedAt, event.UpdatedAt, event.OrganizationID)
 
 	if err != nil {
 		log.Printf("Unable to add event: %s", err.Error())

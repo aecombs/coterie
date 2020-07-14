@@ -116,8 +116,12 @@ func (announcementTable *AnnouncementTable) AnnouncementAdder(announcement Annou
 	stmt, err := announcementTable.DB.Prepare(`
 		INSERT INTO announcement (date,text,created_at,updated_at,organization_id) VALUES (?,?,?,?,?)
 	`)
+	if err != nil {
+		log.Printf("Bad Query: %s", err.Error())
+		return Announcement{}, err
+	}
 
-	stmt.Exec(announcement.Date, announcement.Text, announcement.CreatedAt, announcement.UpdatedAt, announcement.OrganizationID)
+	_, err = stmt.Exec(announcement.Date, announcement.Text, announcement.CreatedAt, announcement.UpdatedAt, announcement.OrganizationID)
 
 	if err != nil {
 		log.Printf("Unable to create announcement: %s", err.Error())

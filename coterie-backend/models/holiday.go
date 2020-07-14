@@ -50,7 +50,8 @@ func (holidayTable *HolidayTable) HolidaysLister() ([]Holiday, error) {
 		SELECT * FROM holiday
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to retrieve holidays: %s", err.Error())
+		return nil, err
 	}
 	defer rows.Close()
 
@@ -74,7 +75,7 @@ func (holidayTable *HolidayTable) HolidaysLister() ([]Holiday, error) {
 		}
 		holidays = append(holidays, holiday)
 	}
-	return holidays, err
+	return holidays, nil
 }
 
 //Model.where(id: "")
@@ -85,7 +86,8 @@ func (holidayTable *HolidayTable) HolidayGetter(holidayID string) (Holiday, erro
 		SELECT * FROM holiday WHERE id = ?
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Bad Query: %s", err.Error())
+		return Holiday{}, err
 	}
 	defer stmt.Close()
 
@@ -100,7 +102,8 @@ func (holidayTable *HolidayTable) HolidayGetter(holidayID string) (Holiday, erro
 
 		err = stmt.QueryRow(holidayID).Scan(&id, &name, &date, &description, &createdAt, &updatedAt, &organizationID)
 		if err != nil {
-			log.Fatal(err)
+			log.Printf("Unable to retrieve holiday: %s", err.Error())
+			return Holiday{}, err
 		}
 
 		holiday.ID = id
@@ -111,7 +114,7 @@ func (holidayTable *HolidayTable) HolidayGetter(holidayID string) (Holiday, erro
 		holiday.UpdatedAt = updatedAt
 		holiday.OrganizationID = organizationID
 	}
-	return holiday, err
+	return holiday, nil
 }
 
 //Model.create
@@ -120,14 +123,20 @@ func (holidayTable *HolidayTable) HolidayAdder(holiday Holiday) (Holiday, error)
 		INSERT INTO holiday (name,date,description,created_at,updated_at,organization_id) VALUES (?,?,?,?,?,?)
 	`)
 
-	stmt.Exec(holiday.Name, holiday.Date, holiday.Description, holiday.CreatedAt, holiday.UpdatedAt, holiday.OrganizationID)
+	if err != nil {
+		log.Printf("Bad Query: %s", err.Error())
+		return Holiday{}, err
+	}
+
+	_, err = stmt.Exec(holiday.Name, holiday.Date, holiday.Description, holiday.CreatedAt, holiday.UpdatedAt, holiday.OrganizationID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to create holiday: %s", err.Error())
+		return Holiday{}, err
 	}
 	defer stmt.Close()
 
-	return holiday, err
+	return holiday, nil
 }
 
 //Model.update
@@ -136,16 +145,18 @@ func (holidayTable *HolidayTable) HolidayUpdater(holiday Holiday) (Holiday, erro
 	UPDATE holiday SET name = ?, date = ?, description = ?, updated_at = ? WHERE holiday.id = ?
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Bad Query: %s", err.Error())
+		return Holiday{}, err
 	}
 	defer stmt.Close()
 
 	_, err = stmt.Exec(holiday.Name, holiday.Date, holiday.Description, holiday.UpdatedAt, holiday.ID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to update holiday: %s", err.Error())
+		return Holiday{}, err
 	}
-	return holiday, err
+	return holiday, nil
 }
 
 //Model.delete
@@ -154,15 +165,17 @@ func (holidayTable *HolidayTable) HolidayDeleter(holidayID string) error {
 		DELETE FROM holiday WHERE holiday.id = ?
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Bad Query: %s", err.Error())
+		return err
 	}
 	defer stmt.Close()
 
 	_, err = stmt.Exec(holidayID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to delete holiday: %s", err.Error())
+		return err
 	}
 
-	return err
+	return nil
 }

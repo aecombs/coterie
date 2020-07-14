@@ -124,7 +124,12 @@ func (chapterTable *ChapterTable) ChapterAdder(chapter Chapter) (Chapter, error)
 		INSERT INTO chapter (name,text,position,created_at,updated_at,scripture_id) VALUES (?,?,?,?,?,?)
 	`)
 
-	stmt.Exec(chapter.Name, chapter.Text, chapter.Position, chapter.CreatedAt, chapter.UpdatedAt, chapter.ScriptureID)
+	if err != nil {
+		log.Printf("Bad Query: %s", err.Error())
+		return Chapter{}, err
+	}
+
+	_, err = stmt.Exec(chapter.Name, chapter.Text, chapter.Position, chapter.CreatedAt, chapter.UpdatedAt, chapter.ScriptureID)
 
 	if err != nil {
 		log.Printf("Unable to create chapter: %s", err.Error())
