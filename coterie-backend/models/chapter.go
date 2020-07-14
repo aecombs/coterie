@@ -52,7 +52,6 @@ func (chapterTable *ChapterTable) ChaptersLister(scripID string) ([]Chapter, err
 	if err != nil {
 		log.Printf("Unable to retrieve chapters: %s", err.Error())
 		return nil, err
-		// log.Fatal(err)
 	}
 	defer rows.Close()
 
@@ -77,7 +76,7 @@ func (chapterTable *ChapterTable) ChaptersLister(scripID string) ([]Chapter, err
 		}
 		chapters = append(chapters, chapter)
 	}
-	return chapters, err
+	return chapters, nil
 }
 
 //Model.where(id: "")
@@ -88,7 +87,8 @@ func (chapterTable *ChapterTable) ChapterGetter(chapterID string) (Chapter, erro
 		SELECT * FROM chapter WHERE id = ?
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Bad Query: %s", err.Error())
+		return Chapter{}, err
 	}
 	defer stmt.Close()
 
@@ -103,7 +103,8 @@ func (chapterTable *ChapterTable) ChapterGetter(chapterID string) (Chapter, erro
 
 		err = stmt.QueryRow(chapterID).Scan(&id, &name, &text, &position, &createdAt, &updatedAt, &scriptureID)
 		if err != nil {
-			log.Fatal(err)
+			log.Printf("Unable to retrieve chapter: %s", err.Error())
+			return Chapter{}, err
 		}
 
 		chapter.ID = id
@@ -114,7 +115,7 @@ func (chapterTable *ChapterTable) ChapterGetter(chapterID string) (Chapter, erro
 		chapter.UpdatedAt = updatedAt
 		chapter.ScriptureID = scriptureID
 	}
-	return chapter, err
+	return chapter, nil
 }
 
 //Model.create
@@ -126,11 +127,12 @@ func (chapterTable *ChapterTable) ChapterAdder(chapter Chapter) (Chapter, error)
 	stmt.Exec(chapter.Name, chapter.Text, chapter.Position, chapter.CreatedAt, chapter.UpdatedAt, chapter.ScriptureID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to create chapter: %s", err.Error())
+		return Chapter{}, err
 	}
 	defer stmt.Close()
 
-	return chapter, err
+	return chapter, nil
 }
 
 //Model.update
@@ -139,16 +141,18 @@ func (chapterTable *ChapterTable) ChapterUpdater(chapter Chapter) (Chapter, erro
 	UPDATE chapter SET name = ?, text = ?, position = ?, updated_at = ? WHERE chapter.id = ?
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Bad Query: %s", err.Error())
+		return Chapter{}, err
 	}
 	defer stmt.Close()
 
 	_, err = stmt.Exec(chapter.Name, chapter.Text, chapter.Position, chapter.UpdatedAt, chapter.ID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to update chapter: %s", err.Error())
+		return Chapter{}, err
 	}
-	return chapter, err
+	return chapter, nil
 }
 
 //Model.delete
@@ -157,15 +161,17 @@ func (chapterTable *ChapterTable) ChapterDeleter(chapterID string) error {
 		DELETE FROM chapter WHERE chapter.id = ?
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Bad Query: %s", err.Error())
+		return err
 	}
 	defer stmt.Close()
 
 	_, err = stmt.Exec(chapterID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to delete chapter: %s", err.Error())
+		return err
 	}
 
-	return err
+	return nil
 }
