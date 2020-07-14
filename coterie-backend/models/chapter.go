@@ -50,7 +50,9 @@ func (chapterTable *ChapterTable) ChaptersLister(scripID string) ([]Chapter, err
 		SELECT * FROM chapter WHERE chapter.scripture_id = ?
 	`, scripID)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to retrieve chapters: %s", err.Error())
+		return nil, err
+		// log.Fatal(err)
 	}
 	defer rows.Close()
 

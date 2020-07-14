@@ -48,8 +48,8 @@ func (announcementTable *AnnouncementTable) AnnouncementsLister() ([]Announcemen
 		SELECT * FROM announcement
 	`)
 	if err != nil {
-		log.Printf("Unable to access database: %s", err.Error())
-		log.Fatal(err)
+		log.Printf("Unable to retrieve announcements: %s", err.Error())
+		return nil, err
 	}
 	defer rows.Close()
 
@@ -71,7 +71,7 @@ func (announcementTable *AnnouncementTable) AnnouncementsLister() ([]Announcemen
 		}
 		announcements = append(announcements, announcement)
 	}
-	return announcements, err
+	return announcements, nil
 }
 
 //Model.where(id: "")
@@ -83,7 +83,7 @@ func (announcementTable *AnnouncementTable) AnnouncementGetter(announcementID st
 	`)
 	if err != nil {
 		log.Printf("Invalid sql query: %s", err.Error())
-		log.Fatal(err)
+		return Announcement{}, err
 	}
 	defer stmt.Close()
 
@@ -122,7 +122,6 @@ func (announcementTable *AnnouncementTable) AnnouncementAdder(announcement Annou
 	if err != nil {
 		log.Printf("Unable to create announcement: %s", err.Error())
 		return Announcement{}, err
-		// log.Fatal(err)
 	}
 	defer stmt.Close()
 
@@ -136,7 +135,7 @@ func (announcementTable *AnnouncementTable) AnnouncementUpdater(announcement Ann
 	`)
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())
-		log.Fatal(err)
+		return Announcement{}, err
 	}
 	defer stmt.Close()
 
@@ -145,7 +144,6 @@ func (announcementTable *AnnouncementTable) AnnouncementUpdater(announcement Ann
 	if err != nil {
 		log.Printf("Unable to update announcement: %s", err.Error())
 		return Announcement{}, err
-		// log.Fatal(err)
 	}
 	return announcement, nil
 }
@@ -157,7 +155,7 @@ func (announcementTable *AnnouncementTable) AnnouncementDeleter(announcementID s
 	`)
 	if err != nil {
 		log.Printf("Bad query: %s", err.Error())
-		log.Fatal(err)
+		return err
 	}
 	defer stmt.Close()
 
@@ -165,8 +163,8 @@ func (announcementTable *AnnouncementTable) AnnouncementDeleter(announcementID s
 
 	if err != nil {
 		log.Printf("Unable to delete announcement: %s", err.Error())
-		// log.Fatal(err)
+		return err
 	}
 
-	return err
+	return nil
 }
