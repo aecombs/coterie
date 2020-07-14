@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"coterie/models"
+	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
@@ -30,6 +30,16 @@ func goDotEnvVariable(key string) string {
 	return os.Getenv(key)
 }
 
+func LoadEnv() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		res, _ := yin.Event(w, r)
+		//TODO: update this to use session
+		data := goDotEnvVariable("GOOGLE_CLIENT_SECRET")
+
+		res.SendJSON(data)
+	}
+}
+
 // var mySigningKey = goDotEnvVariable("MY_JWT_TOKEN")
 
 // func GenerateJWT() (string, error) {
@@ -49,6 +59,14 @@ func goDotEnvVariable(key string) string {
 // 	}
 // 	return tokenString, nil
 // }
+type Data struct {
+	ID       string
+	Name     string
+	Email    string
+	Picture  string
+	Verified bool
+	Primary  bool
+}
 
 var (
 	googleOauthConfig *oauth2.Config
@@ -62,10 +80,10 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 
 	googleOauthConfig = &oauth2.Config{
-		RedirectURL:  "http://localhost:8080/auth/google/callback",
-		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
-		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
-		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
+		RedirectURL:  "http://localhost:3000/auth/google/callback",
+		ClientID:     goDotEnvVariable("GOOGLE_CLIENT_ID"),
+		ClientSecret: goDotEnvVariable("GOOGLE_CLIENT_SECRET"),
+		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"},
 		Endpoint:     google.Endpoint,
 	}
 }
@@ -81,70 +99,86 @@ func GoogleLogin() http.HandlerFunc {
 //Google Callback
 func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		content, err := getUserInfo(r.FormValue("state"), r.FormValue("code"))
+		res, _ := yin.Event(w, r)
+		response, err := getUserInfo(r.FormValue("state"), r.FormValue("code"))
 		if err != nil {
 			fmt.Println(err.Error())
-			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+			res.SendStatus(400)
+			// http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 			return
 		}
 		//logic to check if they exit in database.
+		user, err := AddUser(userTable, response)
+		if err != nil {
+			fmt.Println(err.Error())
+			res.SendStatus(404)
+			// http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+			return
+		}
+		//send content
 		// if they do, return the info that react needs.
 		// if they don't, create a new user and return the info react needs.
 		//Note: React might only need the userID to store in it's session
 
-		fmt.Fprintf(w, "Content: %s\n", content)
+		fmt.Fprintf(w, "Responded with: %s\n", response)
+
+		res.SendJSON(user)
 	}
 }
 
-func getUserInfo(state string, code string) ([]byte, error) {
+func getUserInfo(state string, code string) (Data, error) {
 	if state != oauthStateString {
-		return nil, fmt.Errorf("invalid oauth state")
+		fmt.Errorf("invalid oauth state")
 	}
 
 	token, err := googleOauthConfig.Exchange(oauth2.NoContext, code)
 	if err != nil {
-		return nil, fmt.Errorf("code exchange failed: %s", err.Error())
+		fmt.Errorf("code exchange failed: %s", err.Error())
 	}
 
 	response, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
 	if err != nil {
-		return nil, fmt.Errorf("failed getting user info: %s", err.Error())
+		fmt.Errorf("failed getting user info: %s", err.Error())
 	}
 
 	defer response.Body.Close()
-	contents, err := ioutil.ReadAll(response.Body)
+
+	data := Data{}
+
+	err = json.NewDecoder(response.Body).Decode(&data)
 	if err != nil {
-		return nil, fmt.Errorf("failed reading response body: %s", err.Error())
+		log.Fatal(err)
 	}
 
-	return contents, nil
+	return data, nil
 }
 
 //Create New User
-func AddUser(userTable *models.UserTable, content []byte) string {
+func AddUser(userTable *models.UserTable, content Data) (models.User, error) {
 	//logic to part content
 	userBefore := models.User{
-		Name:      body["name"],
-		Email:     body["email"],
-		Avatar:    body["avatar"],
+		GoogleID:  content.ID,
+		Name:      content.Name,
+		Email:     content.Email,
+		Avatar:    content.Picture,
 		CreatedAt: time.Now().String(),
 		UpdatedAt: time.Now().String(),
 	}
 
-	result, err := userTable.UserAdder(userBefore)
-	if err != nil {
-		fmt.Errorf("Unable to add user to database")
-		return ""
-	}
+	// _, err := userTable.RegisterUser(userBefore)
+	// if err != nil {
+	// 	fmt.Errorf("Unable to add user to database")
+	// 	return "", err
+	// }
 
-	userAfter, err := userTable.UserGetter("email", userBefore.Email)
-	if err != nil {
-		fmt.Errorf("Something went wrong")
-		return ""
-	}
-	userID := strconv.Itoa(userAfter.ID)
+	// userAfter, err := userTable.UserGetter("email", userBefore.Email)
+	// if err != nil {
+	// 	fmt.Errorf("Something went wrong")
+	// 	return "", err
+	// }
+	// userID := strconv.Itoa(userAfter.ID)
 
-	return userID
+	return userBefore, nil
 }
 
 //Logout

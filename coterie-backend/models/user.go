@@ -7,6 +7,7 @@ import (
 
 type User struct {
 	ID        int    `json:"id,omitempty"`
+	GoogleID  string `json:"google_id,omitempty"`
 	Name      string `json:"name,omitempty"`
 	Email     string `json:"email,omitempty"`
 	Bio       string `json:"bio,omitempty"`
@@ -23,6 +24,7 @@ func NewUserTable(db *sql.DB) *UserTable {
 	stmt, _ := db.Prepare(`
 		CREATE TABLE IF NOT EXISTS "user" (
 			"ID"	INTEGER NOT NULL UNIQUE,
+			"GoogleID" TEXT,
 			"name"	TEXT,
 			"email"  TEXT,
 			"bio"  TEXT,
@@ -56,6 +58,7 @@ func (userTable *UserTable) UserGetter(option string, userID string) (User, erro
 
 	if stmt != nil {
 		var id int
+		var googleID string
 		var name string
 		var email string
 		var bio string
@@ -63,12 +66,13 @@ func (userTable *UserTable) UserGetter(option string, userID string) (User, erro
 		var createdAt string
 		var updatedAt string
 
-		err = stmt.QueryRow(option, userID).Scan(&id, &name, &email, &bio, &avatar, &createdAt, &updatedAt)
+		err = stmt.QueryRow(option, userID).Scan(&id, &googleID, &name, &email, &bio, &avatar, &createdAt, &updatedAt)
 		if err != nil {
 			log.Fatal(err)
 		}
 
 		user.ID = id
+		user.GoogleID = googleID
 		user.Name = name
 		user.Email = email
 		user.Bio = bio
@@ -80,12 +84,12 @@ func (userTable *UserTable) UserGetter(option string, userID string) (User, erro
 }
 
 //Model.create...only used when user is new
-func (userTable *UserTable) UserAdder(user User) (User, error) {
+func (userTable *UserTable) RegisterUser(user User) (User, error) {
 	stmt, err := userTable.DB.Prepare(`
-		INSERT INTO user (name,email,bio,avatar,created_at,updated_at) VALUES (?,?,?,?,?,?)
+		INSERT INTO user (google_id,name,email,bio,avatar,created_at,updated_at) VALUES (?,?,?,?,?,?,?)
 	`)
 
-	stmt.Exec(user.Name, user.Email, user.Bio, user.Avatar, user.CreatedAt, user.UpdatedAt)
+	stmt.Exec(user.GoogleID, user.Name, user.Email, "", user.Avatar, user.CreatedAt, user.UpdatedAt)
 
 	if err != nil {
 		log.Fatal(err)

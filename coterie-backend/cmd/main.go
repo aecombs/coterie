@@ -87,6 +87,7 @@ func main() {
 
 	//Users
 	r.Route("/", func(r chi.Router) {
+		r.Get("/env", controllers.LoadEnv())
 		// 	r.Get("/dashboard", controllers.Dashboard(users))
 		r.Get("/auth/google", controllers.GoogleLogin())
 		r.Get("/auth/google/callback", controllers.GoogleCallback(users))
