@@ -90,6 +90,51 @@ func (userTable *UserTable) UserGetterByID(userID string) (User, error) {
 	return user, nil
 }
 
+func (userTable *UserTable) UserGetterByGoogleID(googleID string) (User, error) {
+	var user User
+
+	stmt, err := userTable.DB.Prepare(`
+			SELECT * FROM user WHERE google_id = ?
+	`)
+
+	if err != nil {
+		log.Printf("Bad Query: %s", err.Error())
+		return User{}, err
+	}
+	defer stmt.Close()
+
+	if stmt != nil {
+		var id int
+		var googleID string
+		var name string
+		var email string
+		var bio string
+		var avatar string
+		var createdAt string
+		var updatedAt string
+
+		err = stmt.QueryRow(googleID).Scan(&id, &googleID, &name, &email, &bio, &avatar, &createdAt, &updatedAt)
+
+		if err == sql.ErrNoRows {
+			log.Printf("User does not exist: %s", err.Error())
+			return User{}, nil
+		} else if err != nil {
+			log.Printf("Unable to retrieve user: %s", err.Error())
+			return User{}, err
+		}
+
+		user.ID = id
+		user.GoogleID = googleID
+		user.Name = name
+		user.Email = email
+		user.Bio = bio
+		user.Avatar = avatar
+		user.CreatedAt = createdAt
+		user.UpdatedAt = updatedAt
+	}
+	return user, nil
+}
+
 //Model.create. Used when the user is logging in.
 func (userTable *UserTable) RegisterUser(user User) (User, error) {
 	stmt, err := userTable.DB.Prepare(`

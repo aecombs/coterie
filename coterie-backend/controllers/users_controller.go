@@ -3,7 +3,7 @@ package controllers
 import (
 	"coterie/models"
 	"encoding/json"
-	"fmt"
+	"errors"
 	"log"
 	"math/rand"
 	"net/http"
@@ -73,7 +73,7 @@ func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 		res, _ := yin.Event(w, r)
 		response, err := getUserInfo(r.FormValue("state"), r.FormValue("code"))
 		if err != nil {
-			log.Println(err.Error())
+			log.Printf("Unable to retrieve user info: %s", err.Error())
 			res.SendStatus(400)
 			// http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 			return
@@ -81,34 +81,30 @@ func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 		//logic to check if they exit in database.
 		user, err := AddUser(userTable, response)
 		if err != nil {
-			log.Println(err.Error())
+			log.Printf("Unable to register user: %s", err.Error())
 			res.SendStatus(404)
-			// http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 			return
 		}
-		// return the info that react needs.
-
-		//Note: React might only need the userID to store in it's session
-
-		fmt.Fprintf(w, "Responded with: %s\n", response)
-
 		res.SendJSON(user)
 	}
 }
 
 func getUserInfo(state string, code string) (Data, error) {
 	if state != oauthStateString {
-		log.Println("invalid oauth state")
+		log.Println("Invalid oauth state")
+		return Data{}, errors.New("Invalid Oauth State")
 	}
 
 	token, err := googleOauthConfig.Exchange(oauth2.NoContext, code)
 	if err != nil {
-		log.Printf("code exchange failed: %s", err.Error())
+		log.Printf("Code exchange failed: %s", err.Error())
+		return Data{}, err
 	}
 
 	response, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
 	if err != nil {
 		log.Printf("Failed getting user info: %s", err.Error())
+		return Data{}, err
 	}
 
 	defer response.Body.Close()
@@ -135,32 +131,34 @@ func AddUser(userTable *models.UserTable, content Data) (models.User, error) {
 		CreatedAt: time.Now().String(),
 		UpdatedAt: time.Now().String(),
 	}
-
-	existingUser, err := userTable.UserGetter(userBefore.GoogleID)
+	//check google_id against db
+	existingUser, err := userTable.UserGetterByGoogleID(userBefore.GoogleID)
+	//if err is nil, that means we either retrieved the user or they do not exist in the database
 	if err != nil {
 		log.Printf("Unable to retrieve existing user from database: %s", err.Error())
+		return models.User{}, err
 	}
 	if existingUser.Name == userBefore.Name {
 		return existingUser, nil
 	}
-
+	//if we get here, that means this is the first time the user has logged in and we need to save their info
 	newUser, err := userTable.RegisterUser(userBefore)
 	if err != nil {
 		log.Printf("Unable to add user to database: %s", err.Error())
-		log.Fatal(err)
+		return models.User{}, err
 	}
 	return newUser, nil
 }
 
-//Logout
-func LogoutUser() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		//TODO: reset session...Or is that React's job?
-		url := "/"
-		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
-		return
-	}
-}
+// //Logout
+// func LogoutUser() http.HandlerFunc {
+// 	return func(w http.ResponseWriter, r *http.Request) {
+// 		//TODO: reset session...Or is that React's job?
+// 		url := "/"
+// 		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
+// 		return
+// 	}
+// }
 
 //Show
 func GetUser(userTable *models.UserTable) http.HandlerFunc {
