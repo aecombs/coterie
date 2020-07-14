@@ -50,7 +50,8 @@ func (organizationTable *OrganizationTable) OrganizationsLister() ([]Organizatio
 		SELECT * FROM organization
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to retrieve members: %s", err.Error())
+		return nil, err
 	}
 	defer rows.Close()
 
@@ -75,7 +76,7 @@ func (organizationTable *OrganizationTable) OrganizationsLister() ([]Organizatio
 		}
 		organizations = append(organizations, organization)
 	}
-	return organizations, err
+	return organizations, nil
 }
 
 //Model.where(id: "")
@@ -86,7 +87,8 @@ func (organizationTable *OrganizationTable) OrganizationGetter(organizationID st
 		SELECT * FROM organization WHERE id = ?
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Bad Query: %s", err.Error())
+		return Organization{}, err
 	}
 	defer stmt.Close()
 
@@ -101,7 +103,8 @@ func (organizationTable *OrganizationTable) OrganizationGetter(organizationID st
 
 		err = stmt.QueryRow(organizationID).Scan(&id, &name, &missionStatement, &totalFunds, &createdAt, &updatedAt, &userID)
 		if err != nil {
-			log.Fatal(err)
+			log.Printf("Unable to retrieve organization: %s", err.Error())
+			return Organization{}, err
 		}
 
 		organization.ID = id
@@ -112,7 +115,7 @@ func (organizationTable *OrganizationTable) OrganizationGetter(organizationID st
 		organization.UpdatedAt = updatedAt
 		organization.UserID = userID
 	}
-	return organization, err
+	return organization, nil
 }
 
 //Model.create
@@ -121,14 +124,20 @@ func (organizationTable *OrganizationTable) OrganizationAdder(organization Organ
 		INSERT INTO organization (name,mission_statement,total_funds,created_at,updated_at,user_id) VALUES (?,?,?,?,?,?)
 	`)
 
+	if err != nil {
+		log.Printf("Bad Query: %s", err.Error())
+		return Organization{}, err
+	}
+
 	stmt.Exec(organization.Name, organization.MissionStatement, organization.TotalFunds, organization.CreatedAt, organization.UpdatedAt, organization.UserID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to create org: %s", err.Error())
+		return Organization{}, err
 	}
 	defer stmt.Close()
 
-	return organization, err
+	return organization, nil
 }
 
 //Model.update
@@ -137,16 +146,18 @@ func (organizationTable *OrganizationTable) OrganizationUpdater(organization Org
 	UPDATE organization SET name = ?, mission_statement = ?, total_funds = ?, updated_at = ? WHERE organization.id = ?
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Bad Query: %s", err.Error())
+		return Organization{}, err
 	}
 	defer stmt.Close()
 
 	_, err = stmt.Exec(organization.Name, organization.MissionStatement, organization.TotalFunds, organization.UpdatedAt, organization.ID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to update org: %s", err.Error())
+		return Organization{}, err
 	}
-	return organization, err
+	return organization, nil
 }
 
 //Model.delete
@@ -155,15 +166,17 @@ func (organizationTable *OrganizationTable) OrganizationDeleter(organizationID s
 		DELETE FROM organization WHERE organization.id = ?
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Bad Query: %s", err.Error())
+		return err
 	}
 	defer stmt.Close()
 
 	_, err = stmt.Exec(organizationID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to delete org: %s", err.Error())
+		return err
 	}
 
-	return err
+	return nil
 }
