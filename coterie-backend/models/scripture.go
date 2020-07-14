@@ -46,7 +46,8 @@ func (scriptureTable *ScriptureTable) ScripturesLister() ([]Scripture, error) {
 		SELECT * FROM scripture
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to retrieve scriptures: %s", err.Error())
+		return nil, err
 	}
 	defer rows.Close()
 
@@ -66,7 +67,7 @@ func (scriptureTable *ScriptureTable) ScripturesLister() ([]Scripture, error) {
 		}
 		scriptures = append(scriptures, scripture)
 	}
-	return scriptures, err
+	return scriptures, nil
 }
 
 //Model.where(id: "")
@@ -77,7 +78,8 @@ func (scriptureTable *ScriptureTable) ScriptureGetter(scriptureID string) (Scrip
 		SELECT * FROM scripture WHERE id = ?
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Bad Query: %s", err.Error())
+		return Scripture{}, err
 	}
 	defer stmt.Close()
 
@@ -90,7 +92,8 @@ func (scriptureTable *ScriptureTable) ScriptureGetter(scriptureID string) (Scrip
 
 		err = stmt.QueryRow(scriptureID).Scan(&id, &name, &createdAt, &updatedAt, &organizationID)
 		if err != nil {
-			log.Fatal(err)
+			log.Printf("Unable to retrieve scripture: %s", err.Error())
+			return Scripture{}, err
 		}
 
 		scripture.ID = id
@@ -99,7 +102,7 @@ func (scriptureTable *ScriptureTable) ScriptureGetter(scriptureID string) (Scrip
 		scripture.UpdatedAt = updatedAt
 		scripture.OrganizationID = organizationID
 	}
-	return scripture, err
+	return scripture, nil
 }
 
 //Model.create
@@ -108,14 +111,19 @@ func (scriptureTable *ScriptureTable) ScriptureAdder(scripture Scripture) (Scrip
 		INSERT INTO scripture (name,created_at,updated_at,organization_id) VALUES (?,?,?,?)
 	`)
 
-	stmt.Exec(scripture.Name, scripture.CreatedAt, scripture.UpdatedAt, scripture.OrganizationID)
+	if err != nil {
+		log.Printf("Bad Query: %s", err.Error())
+		return Scripture{}, err
+	}
+	_, err = stmt.Exec(scripture.Name, scripture.CreatedAt, scripture.UpdatedAt, scripture.OrganizationID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to create scripture: %s", err.Error())
+		return Scripture{}, err
 	}
 	defer stmt.Close()
 
-	return scripture, err
+	return scripture, nil
 }
 
 //Model.update
@@ -124,16 +132,18 @@ func (scriptureTable *ScriptureTable) ScriptureUpdater(scripture Scripture) (Scr
 	UPDATE scripture SET name = ?, updated_at = ? WHERE scripture.id = ?
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Bad Query: %s", err.Error())
+		return Scripture{}, err
 	}
 	defer stmt.Close()
 
 	_, err = stmt.Exec(scripture.Name, scripture.UpdatedAt, scripture.ID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to update scripture: %s", err.Error())
+		return Scripture{}, err
 	}
-	return scripture, err
+	return scripture, nil
 }
 
 //Model.delete
@@ -142,15 +152,17 @@ func (scriptureTable *ScriptureTable) ScriptureDeleter(scriptureID string) error
 		DELETE FROM scripture WHERE scripture.id = ?
 	`)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Bad Query: %s", err.Error())
+		return err
 	}
 	defer stmt.Close()
 
 	_, err = stmt.Exec(scriptureID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Unable to delete scripture: %s", err.Error())
+		return err
 	}
 
-	return err
+	return nil
 }
