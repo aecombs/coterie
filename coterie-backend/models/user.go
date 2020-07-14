@@ -45,24 +45,17 @@ func NewUserTable(db *sql.DB) *UserTable {
 	}
 }
 
-//Model.where(google_id: "")
+//Model.where(user_id: "")
 func (userTable *UserTable) UserGetterByID(userID string) (User, error) {
 	var user User
 
-	var existsID string
-	err := userTable.DB.QueryRow("SELECT user_id FROM user WHERE user_id = ?", userID).Scan(&existsID)
-	if err == sql.ErrNoRows {
-		log.Printf("Unable to find user: %s", err.Error())
-		return User{}, nil
-	} else if err != nil {
-		log.Printf("Unable to find user: %s", err.Error())
-		return User{}, err
-	}
-
 	stmt, err := userTable.DB.Prepare(`
 			SELECT * FROM user WHERE user_id = ?
-		`)
-
+	`)
+	if err != nil {
+		log.Printf("Bad Query: %s", err.Error())
+		return User{}, err
+	}
 	defer stmt.Close()
 
 	if stmt != nil {
@@ -76,11 +69,12 @@ func (userTable *UserTable) UserGetterByID(userID string) (User, error) {
 		var updatedAt string
 
 		err = stmt.QueryRow(userID).Scan(&id, &googleID, &name, &email, &bio, &avatar, &createdAt, &updatedAt)
+
 		if err == sql.ErrNoRows {
-			log.Printf("Unable to find user: %s", err.Error())
+			log.Printf("User does not exist: %s", err.Error())
 			return User{}, nil
 		} else if err != nil {
-			log.Printf("Unable to find user: %s", err.Error())
+			log.Printf("Unable to retrieve user: %s", err.Error())
 			return User{}, err
 		}
 
@@ -93,7 +87,7 @@ func (userTable *UserTable) UserGetterByID(userID string) (User, error) {
 		user.CreatedAt = createdAt
 		user.UpdatedAt = updatedAt
 	}
-	return user, err
+	return user, nil
 }
 
 //Model.create. Used when the user is logging in.
@@ -102,20 +96,31 @@ func (userTable *UserTable) RegisterUser(user User) (User, error) {
 		INSERT INTO user (google_id,name,email,bio,avatar,created_at,updated_at) VALUES (?,?,?,?,?,?,?)
 	`)
 
-	stmt.Exec(user.GoogleID, user.Name, user.Email, user.Bio, user.Avatar, user.CreatedAt, user.UpdatedAt)
+	if err != nil {
+		log.Printf("Bad Query: %s", err.Error())
+		return User{}, err
+	}
+
+	_, err = stmt.Exec(user.GoogleID, user.Name, user.Email, user.Bio, user.Avatar, user.CreatedAt, user.UpdatedAt)
+
 	if err != nil {
 		log.Printf("Unable to create user: %s", err.Error())
-		log.Fatal(err)
+		return User{}, err
 	}
+
 	var id string
+
 	err = userTable.DB.QueryRow("SELECT id FROM user WHERE google_id = ?", user.GoogleID).Scan(&id)
+
 	if err != nil {
 		log.Printf("Unable to retrieve user ID from database: %s", err.Error())
-		log.Fatal(err)
+		return User{}, err
 	}
 
 	defer stmt.Close()
+
 	user.ID, err = strconv.Atoi(id)
+
 	return user, nil
 }
 
@@ -125,8 +130,8 @@ func (userTable *UserTable) UserUpdater(user User) (User, error) {
 	UPDATE user SET name = ?, email = ?, bio = ?, updated_at = ? WHERE user.id = ?
 	`)
 	if err != nil {
-		log.Printf("Invalid query: %s", err.Error())
-		log.Fatal(err)
+		log.Printf("Bad Query: %s", err.Error())
+		return User{}, err
 	}
 	defer stmt.Close()
 
@@ -134,7 +139,7 @@ func (userTable *UserTable) UserUpdater(user User) (User, error) {
 
 	if err != nil {
 		log.Printf("Unable to update user: %s", err.Error())
-		log.Fatal(err)
+		return User{}, err
 	}
-	return user, err
+	return user, nil
 }
