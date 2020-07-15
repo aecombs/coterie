@@ -197,8 +197,14 @@ func LogoutUser() http.HandlerFunc {
 func GetUser(userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		userID := chi.URLParam(r, "userID")
+		cookie, err := r.Cookie("session")
+		if err != nil {
+			log.Printf("User not logged in: %s", err.Error())
+			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+			return
+		}
 
+		userID := cookie.Value
 		user, err := userTable.UserGetterByID(userID)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
