@@ -10,6 +10,8 @@ import (
 	"github.com/qkgo/yin"
 )
 
+//NESTED
+
 //GetMembers will retrieve all members for an org
 func GetMembers(memberTable *models.MemberTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -23,22 +25,6 @@ func GetMembers(memberTable *models.MemberTable) http.HandlerFunc {
 		}
 
 		res.SendJSON(members)
-	}
-}
-
-//Show
-func GetMember(memberTable *models.MemberTable) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		res, _ := yin.Event(w, r)
-		memberID := chi.URLParam(r, "memberID")
-
-		member, err := memberTable.MemberGetter(memberID)
-		if err != nil {
-			http.Error(w, http.StatusText(404), 404)
-			return
-		}
-
-		res.SendJSON(member)
 	}
 }
 
@@ -73,7 +59,25 @@ func AddMember(memberTable *models.MemberTable) http.HandlerFunc {
 	}
 }
 
-//Update
+//UNNESTED
+
+//GetMember is show action
+func GetMember(memberTable *models.MemberTable) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		res, _ := yin.Event(w, r)
+		memberID := chi.URLParam(r, "memberID")
+
+		member, err := memberTable.MemberGetter(memberID)
+		if err != nil {
+			http.Error(w, http.StatusText(404), 404)
+			return
+		}
+
+		res.SendJSON(member)
+	}
+}
+
+//UpdateMember is update action
 func UpdateMember(memberTable *models.MemberTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
@@ -101,7 +105,7 @@ func UpdateMember(memberTable *models.MemberTable) http.HandlerFunc {
 	}
 }
 
-//Delete
+//DeleteMember is destroy action
 func DeleteMember(memberTable *models.MemberTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)

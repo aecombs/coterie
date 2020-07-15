@@ -10,6 +10,8 @@ import (
 	"github.com/qkgo/yin"
 )
 
+//NESTED
+
 //GetOrganizations retrieves all the orgs (should be one...maybe more in the future) for a given user
 func GetOrganizations(organizationTable *models.OrganizationTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -26,30 +28,15 @@ func GetOrganizations(organizationTable *models.OrganizationTable) http.HandlerF
 	}
 }
 
-//Show
-func GetOrganization(organizationTable *models.OrganizationTable) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		res, _ := yin.Event(w, r)
-		organizationID := chi.URLParam(r, "organizationID")
-
-		organization, err := organizationTable.OrganizationGetter(organizationID)
-		if err != nil {
-			http.Error(w, http.StatusText(404), 404)
-			return
-		}
-
-		res.SendJSON(organization)
-	}
-}
-
-//Create
+//AddOrganization is create action to a given user
 func AddOrganization(organizationTable *models.OrganizationTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
 		body := map[string]string{}
 		req.BindBody(&body)
+		userIDInt := chi.URLParam(r, "userID")
 
-		userID, _ := strconv.Atoi(body["user_id"])
+		userID, _ := strconv.Atoi(userIDInt)
 		tFunds, _ := strconv.Atoi(body["total_funds"])
 		organization := models.Organization{
 			Name:             body["name"],
@@ -70,7 +57,25 @@ func AddOrganization(organizationTable *models.OrganizationTable) http.HandlerFu
 	}
 }
 
-//Update
+//UNNESTED
+
+//GetOrganization is show action
+func GetOrganization(organizationTable *models.OrganizationTable) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		res, _ := yin.Event(w, r)
+		organizationID := chi.URLParam(r, "organizationID")
+
+		organization, err := organizationTable.OrganizationGetter(organizationID)
+		if err != nil {
+			http.Error(w, http.StatusText(404), 404)
+			return
+		}
+
+		res.SendJSON(organization)
+	}
+}
+
+//UpdateOrganization is update action
 func UpdateOrganization(organizationTable *models.OrganizationTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
@@ -98,7 +103,7 @@ func UpdateOrganization(organizationTable *models.OrganizationTable) http.Handle
 	}
 }
 
-//Delete
+//DeleteOrganization is destroy action
 func DeleteOrganization(organizationTable *models.OrganizationTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)

@@ -10,6 +10,8 @@ import (
 	"github.com/qkgo/yin"
 )
 
+//NESTED
+
 //GetHolidays will get all the holidays for a given org
 func GetHolidays(holidayTable *models.HolidayTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -26,30 +28,15 @@ func GetHolidays(holidayTable *models.HolidayTable) http.HandlerFunc {
 	}
 }
 
-//Show
-func GetHoliday(holidayTable *models.HolidayTable) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		res, _ := yin.Event(w, r)
-		holidayID := chi.URLParam(r, "holidayID")
-
-		holiday, err := holidayTable.HolidayGetter(holidayID)
-		if err != nil {
-			http.Error(w, http.StatusText(404), 404)
-			return
-		}
-
-		res.SendJSON(holiday)
-	}
-}
-
-//Create
+//AddHoliday is create action for a specific org
 func AddHoliday(holidayTable *models.HolidayTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
 		body := map[string]string{}
 		req.BindBody(&body)
+		organizationID := chi.URLParam(r, "organizationID")
 
-		orgID, _ := strconv.Atoi(body["organization_id"])
+		orgID, _ := strconv.Atoi(organizationID)
 		holiday := models.Holiday{
 			Name:           body["name"],
 			Date:           body["date"],
@@ -69,7 +56,25 @@ func AddHoliday(holidayTable *models.HolidayTable) http.HandlerFunc {
 	}
 }
 
-//Update
+//UNNESTED
+
+//GetHoliday is show action
+func GetHoliday(holidayTable *models.HolidayTable) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		res, _ := yin.Event(w, r)
+		holidayID := chi.URLParam(r, "holidayID")
+
+		holiday, err := holidayTable.HolidayGetter(holidayID)
+		if err != nil {
+			http.Error(w, http.StatusText(404), 404)
+			return
+		}
+
+		res.SendJSON(holiday)
+	}
+}
+
+//UpdateHoliday is update action
 func UpdateHoliday(holidayTable *models.HolidayTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
@@ -96,7 +101,7 @@ func UpdateHoliday(holidayTable *models.HolidayTable) http.HandlerFunc {
 	}
 }
 
-//Delete
+//DeleteHoliday is destroy action
 func DeleteHoliday(holidayTable *models.HolidayTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)

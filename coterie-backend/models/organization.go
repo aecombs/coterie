@@ -50,7 +50,7 @@ func (organizationTable *OrganizationTable) OrganizationsLister(usID string) ([]
 		SELECT * FROM organization WHERE organization.user_id = ?
 	`, usID)
 	if err != nil {
-		log.Printf("Unable to retrieve members: %s", err.Error())
+		log.Printf("Unable to retrieve organizations: %s", err.Error())
 		return nil, err
 	}
 	defer rows.Close()

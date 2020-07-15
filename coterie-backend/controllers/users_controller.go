@@ -7,28 +7,17 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
-	"os"
 	"strconv"
 	"time"
 
-	"github.com/joho/godotenv"
 	"github.com/qkgo/yin"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 )
 
-func goDotEnvVariable(key string) string {
+//AUTH HANDLING
 
-	// load .env file
-	err := godotenv.Load(".env")
-
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
-
-	return os.Getenv(key)
-}
-
+//Data struct to handle JSON data
 type Data struct {
 	ID       string
 	Name     string
@@ -58,7 +47,7 @@ func init() {
 	}
 }
 
-//Google Login
+//GoogleLogin to send user to get authenticated by Google
 func GoogleLogin() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		url := googleOauthConfig.AuthCodeURL(oauthStateString)
@@ -84,9 +73,8 @@ func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 			res.SendStatus(404)
 			return
 		}
-		log.Printf("%s", user)
 
-		//request cookie:
+		//request session cookie:
 		cookie, err := r.Cookie("session")
 		//it it doesn't exist, we receive an err. Set the cookie!
 		if err != nil {
@@ -191,6 +179,8 @@ func LogoutUser() http.HandlerFunc {
 		return
 	}
 }
+
+//RESTful ACTIONS
 
 //GetUser returns a single instance of User
 func GetUser(userTable *models.UserTable) http.HandlerFunc {

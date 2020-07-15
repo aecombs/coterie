@@ -26,30 +26,15 @@ func GetEvents(eventTable *models.EventTable) http.HandlerFunc {
 	}
 }
 
-//Show
-func GetEvent(eventTable *models.EventTable) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		res, _ := yin.Event(w, r)
-		eventID := chi.URLParam(r, "eventID")
-
-		event, err := eventTable.EventGetter(eventID)
-		if err != nil {
-			http.Error(w, http.StatusText(404), 404)
-			return
-		}
-
-		res.SendJSON(event)
-	}
-}
-
-//Create
+//AddEvent is create action
 func AddEvent(eventTable *models.EventTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
 		body := map[string]string{}
 		req.BindBody(&body)
+		organizationID := chi.URLParam(r, "organizationID")
 
-		orgID, _ := strconv.Atoi(body["organization_id"])
+		orgID, _ := strconv.Atoi(organizationID)
 		event := models.Event{
 			Name:           body["name"],
 			Occasion:       body["occasion"],
@@ -70,7 +55,25 @@ func AddEvent(eventTable *models.EventTable) http.HandlerFunc {
 	}
 }
 
-//Update
+//UNNESTED
+
+//GetEvent is show action
+func GetEvent(eventTable *models.EventTable) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		res, _ := yin.Event(w, r)
+		eventID := chi.URLParam(r, "eventID")
+
+		event, err := eventTable.EventGetter(eventID)
+		if err != nil {
+			http.Error(w, http.StatusText(404), 404)
+			return
+		}
+
+		res.SendJSON(event)
+	}
+}
+
+//UpdateEvent is update action
 func UpdateEvent(eventTable *models.EventTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
@@ -98,7 +101,7 @@ func UpdateEvent(eventTable *models.EventTable) http.HandlerFunc {
 	}
 }
 
-//Delete
+//DeleteEvent is destroy action
 func DeleteEvent(eventTable *models.EventTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)

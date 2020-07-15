@@ -124,7 +124,6 @@ func main() {
 	})
 
 	//Scriptures
-
 	r.Route("/scriptures/{scriptureID}", func(r chi.Router) {
 		r.Get("/", controllers.GetScripture(scriptures))
 		r.Put("/", controllers.UpdateScripture(scriptures))
@@ -137,6 +136,7 @@ func main() {
 		})
 	})
 
+	//Chapters
 	r.Route("/chapters/{chapterID}", func(r chi.Router) {
 		r.Get("/", controllers.GetChapter(chapters))
 		r.Put("/", controllers.UpdateChapter(chapters))

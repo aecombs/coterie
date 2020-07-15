@@ -10,6 +10,8 @@ import (
 	"github.com/qkgo/yin"
 )
 
+//NESTED
+
 //GetChapters returns all the chapters for a scripture
 func GetChapters(chapterTable *models.ChapterTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -26,23 +28,7 @@ func GetChapters(chapterTable *models.ChapterTable) http.HandlerFunc {
 	}
 }
 
-//Show
-func GetChapter(chapterTable *models.ChapterTable) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		res, _ := yin.Event(w, r)
-		chapterID := chi.URLParam(r, "chapterID")
-
-		chapter, err := chapterTable.ChapterGetter(chapterID)
-		if err != nil {
-			http.Error(w, http.StatusText(404), 404)
-			return
-		}
-
-		res.SendJSON(chapter)
-	}
-}
-
-//Create
+//AddChapter adds an instance of chapter to a scrip
 func AddChapter(chapterTable *models.ChapterTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
@@ -71,7 +57,25 @@ func AddChapter(chapterTable *models.ChapterTable) http.HandlerFunc {
 	}
 }
 
-//Update
+//UNNESTED
+
+//GetChapter retrieves single instance of chapter
+func GetChapter(chapterTable *models.ChapterTable) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		res, _ := yin.Event(w, r)
+		chapterID := chi.URLParam(r, "chapterID")
+
+		chapter, err := chapterTable.ChapterGetter(chapterID)
+		if err != nil {
+			http.Error(w, http.StatusText(404), 404)
+			return
+		}
+
+		res.SendJSON(chapter)
+	}
+}
+
+//UpdateChapter will update an instance of chapter in DB
 func UpdateChapter(chapterTable *models.ChapterTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
@@ -99,7 +103,7 @@ func UpdateChapter(chapterTable *models.ChapterTable) http.HandlerFunc {
 	}
 }
 
-//Delete
+//DeleteChapter removes a chapter from the DB
 func DeleteChapter(chapterTable *models.ChapterTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
