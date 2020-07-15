@@ -98,6 +98,7 @@ func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 				Value:    sessionID,
 				HttpOnly: true,
 				Path:     "/",
+				Expires:  time.Now().Add(time.Hour * 24 * 14),
 			}
 			http.SetCookie(w, cookie)
 		}
@@ -178,12 +179,10 @@ func LogoutUser() http.HandlerFunc {
 		cookie, err := r.Cookie("session")
 		//it it doesn't exist, we receive an err. No need to delete anything.
 		if err == nil {
-			//reset the cookie to have a "deleted" value
+			//reset the cookie to have a "deleted" value and to expire immediately
 			cookie = &http.Cookie{
-				Name:     "session",
-				Value:    "deleted",
-				HttpOnly: true,
-				Path:     "/",
+				Value:   "deleted",
+				Expires: time.Now(),
 			}
 			http.SetCookie(w, cookie)
 		}
