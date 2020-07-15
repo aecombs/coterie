@@ -14,8 +14,6 @@ import (
 	"github.com/qkgo/yin"
 )
 
-// var mySigningKey = goDotEnvVariable("MY_JWT_TOKEN")
-
 // func isAuthorized(endpoint func(w http.ResponseWriter, r *http.Request)) http.HandlerFunc {
 // 	return func(w http.ResponseWriter, r *http.Request) {
 // 		if r.Header["Token"] != nil {
@@ -37,6 +35,7 @@ import (
 // 		}
 // 	}
 // }
+
 
 func main() {
 	flag.Parse()
@@ -65,10 +64,6 @@ func main() {
 	r.Use(middleware.RealIP)
 	r.Use(yin.SimpleLogger)
 	r.Use(middleware.Recoverer)
-
-	// r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-	// 	w.Write([]byte("."))
-	// })
 
 	//Users
 	r.Route("/", func(r chi.Router) {
