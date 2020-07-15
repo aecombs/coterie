@@ -10,7 +10,9 @@ import (
 	"github.com/qkgo/yin"
 )
 
-//GetAnnouncements for the logged-in user
+//NESTED
+
+//GetAnnouncements retrieves all announcements from the DB for a given org
 func GetAnnouncements(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
@@ -26,23 +28,7 @@ func GetAnnouncements(announcementTable *models.AnnouncementTable) http.HandlerF
 	}
 }
 
-//GetAnnouncement retrieves a single instance of announcement and is not nested
-func GetAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		res, _ := yin.Event(w, r)
-		announcementID := chi.URLParam(r, "announcementID")
-
-		announcement, err := announcementTable.AnnouncementGetter(announcementID)
-		if err != nil {
-			http.Error(w, http.StatusText(404), 404)
-			return
-		}
-
-		res.SendJSON(announcement)
-	}
-}
-
-//AddAnnouncement adds a new announcement and is nested
+//AddAnnouncement adds a new announcement to the DB for the appropriate org
 func AddAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
@@ -69,7 +55,25 @@ func AddAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFu
 	}
 }
 
-//UpdateAnnouncement updates an announcement and is not nested
+//UNNESTED ROUTES
+
+//GetAnnouncement retrieves a single instance of announcement from the DB
+func GetAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		res, _ := yin.Event(w, r)
+		announcementID := chi.URLParam(r, "announcementID")
+
+		announcement, err := announcementTable.AnnouncementGetter(announcementID)
+		if err != nil {
+			http.Error(w, http.StatusText(404), 404)
+			return
+		}
+
+		res.SendJSON(announcement)
+	}
+}
+
+//UpdateAnnouncement updates an announcement in the DB
 func UpdateAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
@@ -95,7 +99,7 @@ func UpdateAnnouncement(announcementTable *models.AnnouncementTable) http.Handle
 	}
 }
 
-//DeleteAnnouncement deletes an announcement and is not nested
+//DeleteAnnouncement removes an announcement from the DB
 func DeleteAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
