@@ -45,12 +45,12 @@ func NewEventTable(db *sql.DB) *EventTable {
 	}
 }
 
-//Model.All
-func (eventTable *EventTable) EventsLister() ([]Event, error) {
+//EventsLister grabs all the events for an org
+func (eventTable *EventTable) EventsLister(orgID string) ([]Event, error) {
 	events := []Event{}
 	rows, err := eventTable.DB.Query(`
-		SELECT * FROM event
-	`)
+		SELECT * FROM event WHERE event.organization_id = ?
+	`, orgID)
 	if err != nil {
 		log.Printf("Unable to retrieve events: %s", err.Error())
 		return nil, err

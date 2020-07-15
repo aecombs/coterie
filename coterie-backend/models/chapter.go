@@ -43,7 +43,7 @@ func NewChapterTable(db *sql.DB) *ChapterTable {
 	}
 }
 
-//Model.All
+//ChaptersLister grabs all the chapters for a scripture
 func (chapterTable *ChapterTable) ChaptersLister(scripID string) ([]Chapter, error) {
 	chapters := []Chapter{}
 	rows, err := chapterTable.DB.Query(`

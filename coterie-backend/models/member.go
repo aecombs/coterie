@@ -47,12 +47,12 @@ func NewMemberTable(db *sql.DB) *MemberTable {
 	}
 }
 
-//Model.All
-func (memberTable *MemberTable) MembersLister() ([]Member, error) {
+//MembersLister grabs all the members for an org
+func (memberTable *MemberTable) MembersLister(orgID string) ([]Member, error) {
 	members := []Member{}
 	rows, err := memberTable.DB.Query(`
-		SELECT * FROM member
-	`)
+		SELECT * FROM member WHERE member.organization_id = ?
+	`, orgID)
 	if err != nil {
 		log.Printf("Unable to retrieve members: %s", err.Error())
 		return nil, err

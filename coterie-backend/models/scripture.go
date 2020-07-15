@@ -39,12 +39,12 @@ func NewScriptureTable(db *sql.DB) *ScriptureTable {
 	}
 }
 
-//Model.All
-func (scriptureTable *ScriptureTable) ScripturesLister() ([]Scripture, error) {
+//ScripturesLister grabs all the Scriptures for an org
+func (scriptureTable *ScriptureTable) ScripturesLister(orgID string) ([]Scripture, error) {
 	scriptures := []Scripture{}
 	rows, err := scriptureTable.DB.Query(`
-		SELECT * FROM scripture
-	`)
+		SELECT * FROM scripture WHERE scripture.organization_id = ?
+	`, orgID)
 	if err != nil {
 		log.Printf("Unable to retrieve scriptures: %s", err.Error())
 		return nil, err

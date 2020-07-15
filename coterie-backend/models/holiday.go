@@ -43,12 +43,12 @@ func NewHolidayTable(db *sql.DB) *HolidayTable {
 	}
 }
 
-//Model.All
-func (holidayTable *HolidayTable) HolidaysLister() ([]Holiday, error) {
+//HolidaysLister grabs all the holidays for an org
+func (holidayTable *HolidayTable) HolidaysLister(orgID string) ([]Holiday, error) {
 	holidays := []Holiday{}
 	rows, err := holidayTable.DB.Query(`
-		SELECT * FROM holiday
-	`)
+		SELECT * FROM holiday WHERE holiday.organization_id = ?
+	`, orgID)
 	if err != nil {
 		log.Printf("Unable to retrieve holidays: %s", err.Error())
 		return nil, err

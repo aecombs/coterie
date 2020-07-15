@@ -43,12 +43,12 @@ func NewOrganizationTable(db *sql.DB) *OrganizationTable {
 	}
 }
 
-//Model.All
-func (organizationTable *OrganizationTable) OrganizationsLister() ([]Organization, error) {
+//OrganizationsLister grabs all the Organizations for a user
+func (organizationTable *OrganizationTable) OrganizationsLister(usID string) ([]Organization, error) {
 	organizations := []Organization{}
 	rows, err := organizationTable.DB.Query(`
-		SELECT * FROM organization
-	`)
+		SELECT * FROM organization WHERE organization.user_id = ?
+	`, usID)
 	if err != nil {
 		log.Printf("Unable to retrieve members: %s", err.Error())
 		return nil, err

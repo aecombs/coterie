@@ -45,12 +45,12 @@ func NewUserTable(db *sql.DB) *UserTable {
 	}
 }
 
-//Model.where(user_id: "")
+//UserGetterByID will retrieve a single instance of user by their user_id
 func (userTable *UserTable) UserGetterByID(userID string) (User, error) {
 	var user User
 
 	stmt, err := userTable.DB.Prepare(`
-			SELECT * FROM user WHERE user_id = ?
+			SELECT * FROM user WHERE user.id = ?
 	`)
 
 	if err != nil {
@@ -92,11 +92,12 @@ func (userTable *UserTable) UserGetterByID(userID string) (User, error) {
 	return user, nil
 }
 
+//UserGetterByGoogleID will retrieve a single instance of user by their google_id
 func (userTable *UserTable) UserGetterByGoogleID(googleID string) (User, error) {
 	var user User
 
 	stmt, err := userTable.DB.Prepare(`
-			SELECT * FROM user WHERE google_id = ?
+			SELECT * FROM user WHERE user.google_id = ?
 	`)
 
 	if err != nil {
@@ -137,7 +138,7 @@ func (userTable *UserTable) UserGetterByGoogleID(googleID string) (User, error) 
 	return user, nil
 }
 
-//Model.create. Used when the user is logging in.
+//RegisterUser will create a new user when they log in for the first time
 func (userTable *UserTable) RegisterUser(user User) (User, error) {
 	stmt, err := userTable.DB.Prepare(`
 		INSERT INTO user (google_id,name,email,bio,avatar,created_at,updated_at) VALUES (?,?,?,?,?,?,?)
@@ -155,6 +156,7 @@ func (userTable *UserTable) RegisterUser(user User) (User, error) {
 		return User{}, err
 	}
 
+	//retrieve their newly created ID from DB
 	var id string
 
 	err = userTable.DB.QueryRow("SELECT id FROM user WHERE google_id = ?", user.GoogleID).Scan(&id)
@@ -171,7 +173,7 @@ func (userTable *UserTable) RegisterUser(user User) (User, error) {
 	return user, nil
 }
 
-//Model.update
+//UserUpdater will update a single instance of user in the database
 func (userTable *UserTable) UserUpdater(user User) (User, error) {
 	stmt, err := userTable.DB.Prepare(`
 	UPDATE user SET name = ?, email = ?, bio = ?, updated_at = ? WHERE user.id = ?
