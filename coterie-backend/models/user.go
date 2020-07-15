@@ -52,10 +52,12 @@ func (userTable *UserTable) UserGetterByID(userID string) (User, error) {
 	stmt, err := userTable.DB.Prepare(`
 			SELECT * FROM user WHERE user_id = ?
 	`)
+
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())
 		return User{}, err
 	}
+
 	defer stmt.Close()
 
 	if stmt != nil {
@@ -105,7 +107,7 @@ func (userTable *UserTable) UserGetterByGoogleID(googleID string) (User, error) 
 
 	if stmt != nil {
 		var id int
-		var googleID string
+		var gID string
 		var name string
 		var email string
 		var bio string
@@ -113,7 +115,7 @@ func (userTable *UserTable) UserGetterByGoogleID(googleID string) (User, error) 
 		var createdAt string
 		var updatedAt string
 
-		err = stmt.QueryRow(googleID).Scan(&id, &googleID, &name, &email, &bio, &avatar, &createdAt, &updatedAt)
+		err = stmt.QueryRow(googleID).Scan(&id, &gID, &name, &email, &bio, &avatar, &createdAt, &updatedAt)
 
 		if err == sql.ErrNoRows {
 			log.Printf("User does not exist: %s", err.Error())
@@ -124,7 +126,7 @@ func (userTable *UserTable) UserGetterByGoogleID(googleID string) (User, error) 
 		}
 
 		user.ID = id
-		user.GoogleID = googleID
+		user.GoogleID = gID
 		user.Name = name
 		user.Email = email
 		user.Bio = bio

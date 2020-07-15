@@ -73,7 +73,7 @@ func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 		res, _ := yin.Event(w, r)
 		response, err := getUserInfo(r.FormValue("state"), r.FormValue("code"))
 		if err != nil {
-			log.Printf("Unable to retrieve user info: %s", err.Error())
+			log.Printf("Unable to retrieve user info from Google: %s", err.Error())
 			res.SendStatus(400)
 			// http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 			return
@@ -85,7 +85,10 @@ func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 			res.SendStatus(404)
 			return
 		}
-		res.SendJSON(user)
+		log.Printf("%s", user)
+		// res.SendJSON(user)
+		http.Redirect(w, r, "http://localhost:3001/dashboard", http.StatusTemporaryRedirect)
+
 	}
 }
 
@@ -133,6 +136,8 @@ func AddUser(userTable *models.UserTable, content Data) (models.User, error) {
 	}
 	//check google_id against db
 	existingUser, err := userTable.UserGetterByGoogleID(userBefore.GoogleID)
+	log.Printf("My userBefore: %s.", userBefore)
+	log.Printf("My existingUser: %s.", existingUser)
 	//if err is nil, that means we either retrieved the user or they do not exist in the database
 	if err != nil {
 		log.Printf("Unable to retrieve existing user from database: %s", err.Error())
