@@ -67,7 +67,7 @@ func GoogleLogin() http.HandlerFunc {
 	}
 }
 
-//Google Callback
+//GoogleCallback is the callback func that receives Google's data after an Oauth request is approved. It will then add a new user if they did not already exist in the system and redirects the user to their dashboard.
 func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
@@ -86,13 +86,43 @@ func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 			return
 		}
 		log.Printf("%s", user)
-		// res.SendJSON(user)
+
+		// w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		// w.Header().Set("user_id", strconv.Itoa(user.ID))
+
+		//set the session
+		// store, err := session.Start(context.Background(), w, r)
+		// if err != nil {
+		// 	log.Printf("There was an error in starting context: %s", err.Error())
+		// 	return
+		// }
+
+		// store.Set("user_id", strconv.Itoa(user.ID))
+		// err = store.Save()
+		// if err != nil {
+		// 	log.Printf("There was an error in setting the session: %s", err.Error())
+		// }
+
+		cookie, err := r.Cookie("session")
+		if err != nil {
+			//opt: refactor to use uuid
+			sessionID := strconv.Itoa(user.ID)
+			cookie = &http.Cookie{
+				Name:     "session",
+				Value:    sessionID,
+				HttpOnly: true,
+				Path:     "/",
+			}
+			http.SetCookie(w, cookie)
+		}
+
 		url := "http://localhost:3001/dashboard"
 		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 
 	}
 }
 
+//GetUserInfo is a helper func for GoogleCallback. It parses the info and returns it as a Data struct
 func getUserInfo(state string, code string) (Data, error) {
 	if state != oauthStateString {
 		log.Println("Invalid oauth state")
@@ -124,7 +154,8 @@ func getUserInfo(state string, code string) (Data, error) {
 	return data, nil
 }
 
-//Create New User
+//AddUser Checks if a user exists in system, creating one if it doesn't already exist
+//Returns User instance
 func AddUser(userTable *models.UserTable, content Data) (models.User, error) {
 	userBefore := models.User{
 		GoogleID:  content.ID,
@@ -155,21 +186,32 @@ func AddUser(userTable *models.UserTable, content Data) (models.User, error) {
 	return newUser, nil
 }
 
-//Logout
+//LogoutUser will remove the header...?or session? bah!
 func LogoutUser() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		//TODO: reset session...Or is that React's job?
+		// store, err := session.Start(context.Background(), w, r)
+		// if err != nil {
+		// 	log.Printf("There was an error in starting context: %s", err.Error())
+		// 	return
+		// }
+
+		// _ = store.Delete("user_id")
+
+		// store.Save()
+		// if err != nil {
+		// 	log.Printf("There was an error in reseting the session: %s", err.Error())
+		// }
+
 		url := "/"
 		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 		return
 	}
 }
 
-//Show
+//GetUser returns a single instance of User
 func GetUser(userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		//TODO: update this to use session
 		userID := chi.URLParam(r, "userID")
 
 		user, err := userTable.UserGetterByID(userID)
@@ -182,7 +224,7 @@ func GetUser(userTable *models.UserTable) http.HandlerFunc {
 	}
 }
 
-//Update
+//UpdateUser will update the name, email, and bio
 func UpdateUser(userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)

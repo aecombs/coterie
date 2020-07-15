@@ -76,7 +76,7 @@ func main() {
 		r.Get("/auth/google/callback", controllers.GoogleCallback(users))
 		r.Delete("/logout", controllers.LogoutUser())
 
-		r.Route("/profile", func(r chi.Router) {
+		r.Route("/users/{userID}", func(r chi.Router) {
 			r.Get("/", controllers.GetUser(users))
 			r.Put("/", controllers.UpdateUser(users))
 		})
