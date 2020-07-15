@@ -10,7 +10,7 @@ import (
 	"github.com/qkgo/yin"
 )
 
-//Index
+//GetAnnouncements for the logged-in user
 func GetAnnouncements(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)

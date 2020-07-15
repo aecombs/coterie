@@ -45,7 +45,7 @@ func NewAnnouncementTable(db *sql.DB) *AnnouncementTable {
 func (announcementTable *AnnouncementTable) AnnouncementsLister() ([]Announcement, error) {
 	announcements := []Announcement{}
 	rows, err := announcementTable.DB.Query(`
-		SELECT * FROM announcement
+		SELECT * FROM announcement WHERE user_id = ?
 	`)
 	if err != nil {
 		log.Printf("Unable to retrieve announcements: %s", err.Error())

@@ -54,54 +54,6 @@ func main() {
 		})
 	})
 
-	//Announcements
-	r.Route("/announcements", func(r chi.Router) {
-		r.Get("/", controllers.GetAnnouncements(announcements))
-		r.Post("/", controllers.AddAnnouncement(announcements))
-
-		r.Route("/{announcementID}", func(r chi.Router) {
-			r.Get("/", controllers.GetAnnouncement(announcements))
-			r.Put("/", controllers.UpdateAnnouncement(announcements))
-			r.Delete("/", controllers.DeleteAnnouncement(announcements))
-		})
-	})
-
-	//Events
-	r.Route("/events", func(r chi.Router) {
-		r.Get("/", controllers.GetEvents(events))
-		r.Post("/", controllers.AddEvent(events))
-
-		r.Route("/{eventID}", func(r chi.Router) {
-			r.Get("/", controllers.GetEvent(events))
-			r.Put("/", controllers.UpdateEvent(events))
-			r.Delete("/", controllers.DeleteEvent(events))
-		})
-	})
-
-	//Holidays
-	r.Route("/holidays", func(r chi.Router) {
-		r.Get("/", controllers.GetHolidays(holidays))
-		r.Post("/", controllers.AddHoliday(holidays))
-
-		r.Route("/{holidayID}", func(r chi.Router) {
-			r.Get("/", controllers.GetHoliday(holidays))
-			r.Put("/", controllers.UpdateHoliday(holidays))
-			r.Delete("/", controllers.DeleteHoliday(holidays))
-		})
-	})
-
-	//Members
-	r.Route("/members", func(r chi.Router) {
-		r.Get("/", controllers.GetMembers(members))
-		r.Post("/", controllers.AddMember(members))
-
-		r.Route("/{memberID}", func(r chi.Router) {
-			r.Get("/", controllers.GetMember(members))
-			r.Put("/", controllers.UpdateMember(members))
-			r.Delete("/", controllers.DeleteMember(members))
-		})
-	})
-
 	//Organizations
 	r.Route("/organizations", func(r chi.Router) {
 		r.Get("/", controllers.GetOrganizations(organizations))
@@ -111,31 +63,84 @@ func main() {
 			r.Get("/", controllers.GetOrganization(organizations))
 			r.Put("/", controllers.UpdateOrganization(organizations))
 			r.Delete("/", controllers.DeleteOrganization(organizations))
+
+			//nested announcements
+			r.Route("/announcements", func(r chi.Router) {
+				r.Get("/", controllers.GetAnnouncements(announcements))
+				r.Post("/", controllers.AddAnnouncement(announcements))
+			})
+
+			//nested events
+			r.Route("/events", func(r chi.Router) {
+				r.Get("/", controllers.GetEvents(events))
+				r.Post("/", controllers.AddEvent(events))
+			})
+
+			//nested holidays
+			r.Route("/holidays", func(r chi.Router) {
+				r.Get("/", controllers.GetHolidays(holidays))
+				r.Post("/", controllers.AddHoliday(holidays))
+			})
+
+			//nested scriptures
+			r.Route("/scriptures", func(r chi.Router) {
+				r.Get("/", controllers.GetScriptures(scriptures))
+				r.Post("/", controllers.AddScripture(scriptures))
+			})
+			//nested members
+			r.Route("/members", func(r chi.Router) {
+				r.Get("/", controllers.GetMembers(members))
+				r.Post("/", controllers.AddMember(members))
+			})
 		})
 	})
 
+	//Announcements
+	r.Route("/announcements/{announcementID}", func(r chi.Router) {
+		r.Get("/", controllers.GetAnnouncement(announcements))
+		r.Put("/", controllers.UpdateAnnouncement(announcements))
+		r.Delete("/", controllers.DeleteAnnouncement(announcements))
+	})
+
+	//Events
+	r.Route("/events/{eventID}", func(r chi.Router) {
+		r.Get("/", controllers.GetEvent(events))
+		r.Put("/", controllers.UpdateEvent(events))
+		r.Delete("/", controllers.DeleteEvent(events))
+	})
+
+	//Holidays
+	r.Route("/holiday/{holidayID}", func(r chi.Router) {
+		r.Get("/", controllers.GetHoliday(holidays))
+		r.Put("/", controllers.UpdateHoliday(holidays))
+		r.Delete("/", controllers.DeleteHoliday(holidays))
+	})
+
+	//Members
+	r.Route("/members/{memberID}", func(r chi.Router) {
+		r.Get("/", controllers.GetMember(members))
+		r.Put("/", controllers.UpdateMember(members))
+		r.Delete("/", controllers.DeleteMember(members))
+	})
+
 	//Scriptures
-	r.Route("/scriptures", func(r chi.Router) {
-		r.Get("/", controllers.GetScriptures(scriptures))
-		r.Post("/", controllers.AddScripture(scriptures))
 
-		r.Route("/{scriptureID}", func(r chi.Router) {
-			r.Get("/", controllers.GetScripture(scriptures))
-			r.Put("/", controllers.UpdateScripture(scriptures))
-			r.Delete("/", controllers.DeleteScripture(scriptures))
+	r.Route("/scriptures/{scriptureID}", func(r chi.Router) {
+		r.Get("/", controllers.GetScripture(scriptures))
+		r.Put("/", controllers.UpdateScripture(scriptures))
+		r.Delete("/", controllers.DeleteScripture(scriptures))
 
-			//Nested Chapters
-			r.Route("/chapters", func(r chi.Router) {
-				r.Get("/", controllers.GetChapters(chapters))
-				r.Post("/", controllers.AddChapter(chapters))
-
-				r.Route("/{chapterID}", func(r chi.Router) {
-					r.Get("/", controllers.GetChapter(chapters))
-					r.Put("/", controllers.UpdateChapter(chapters))
-					r.Delete("/", controllers.DeleteChapter(chapters))
-				})
-			})
+		//Nested Chapters
+		r.Route("/chapters", func(r chi.Router) {
+			r.Get("/", controllers.GetChapters(chapters))
+			r.Post("/", controllers.AddChapter(chapters))
 		})
+	})
+
+	r.Route("/chapters/{chapterID}", func(r chi.Router) {
+		r.Get("/", controllers.GetChapter(chapters))
+		r.Put("/", controllers.UpdateChapter(chapters))
+		r.Delete("/", controllers.DeleteChapter(chapters))
 	})
 
 	http.ListenAndServe(":3000", r)
