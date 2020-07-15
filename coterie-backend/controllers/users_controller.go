@@ -87,7 +87,8 @@ func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 		}
 		log.Printf("%s", user)
 		// res.SendJSON(user)
-		http.Redirect(w, r, "http://localhost:3001/dashboard", http.StatusTemporaryRedirect)
+		url := "http://localhost:3001/dashboard"
+		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 
 	}
 }
@@ -136,8 +137,7 @@ func AddUser(userTable *models.UserTable, content Data) (models.User, error) {
 	}
 	//check google_id against db
 	existingUser, err := userTable.UserGetterByGoogleID(userBefore.GoogleID)
-	log.Printf("My userBefore: %s.", userBefore)
-	log.Printf("My existingUser: %s.", existingUser)
+
 	//if err is nil, that means we either retrieved the user or they do not exist in the database
 	if err != nil {
 		log.Printf("Unable to retrieve existing user from database: %s", err.Error())
@@ -155,15 +155,15 @@ func AddUser(userTable *models.UserTable, content Data) (models.User, error) {
 	return newUser, nil
 }
 
-// //Logout
-// func LogoutUser() http.HandlerFunc {
-// 	return func(w http.ResponseWriter, r *http.Request) {
-// 		//TODO: reset session...Or is that React's job?
-// 		url := "/"
-// 		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
-// 		return
-// 	}
-// }
+//Logout
+func LogoutUser() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		//TODO: reset session...Or is that React's job?
+		url := "/"
+		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
+		return
+	}
+}
 
 //Show
 func GetUser(userTable *models.UserTable) http.HandlerFunc {
