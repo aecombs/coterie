@@ -14,29 +14,6 @@ import (
 	"github.com/qkgo/yin"
 )
 
-// func isAuthorized(endpoint func(w http.ResponseWriter, r *http.Request)) http.HandlerFunc {
-// 	return func(w http.ResponseWriter, r *http.Request) {
-// 		if r.Header["Token"] != nil {
-// 			token, err := jwt.Parse(r.Header["Token"][0], func(token *jwt.Token) (interface{}, error) {
-// 				if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-// 					return nil, fmt.Errorf("There was an error")
-// 				}
-// 				return mySigningKey, nil
-// 			})
-// 			if err != nil {
-// 				fmt.Fprintf(w, err.Error())
-// 			}
-
-// 			if token.Valid {
-// 				endpoint(w, r)
-// 			}
-// 		} else {
-// 			fmt.Fprintf(w, "Not Authorized")
-// 		}
-// 	}
-// }
-
-
 func main() {
 	flag.Parse()
 	//open the database!
@@ -161,35 +138,5 @@ func main() {
 		})
 	})
 
-	// Mount the admin sub-router, which btw is the same as:
-	// r.Mount("/admin", adminRouter())
-
 	http.ListenAndServe(":3000", r)
 }
-
-// A completely separate router for administrator routes
-// func adminRouter() chi.Router {
-// 	r := chi.NewRouter()
-// 	r.Use(AdminOnly)
-// 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-// 		w.Write([]byte("admin: dashboard"))
-// 	})
-// 	r.Get("/account", func(w http.ResponseWriter, r *http.Request) {
-// 		w.Write([]byte("admin: show account."))
-// 	})
-// 	r.Get("/users/{userId}", func(w http.ResponseWriter, r *http.Request) {
-// 		w.Write([]byte(fmt.Sprintf("admin: view user id %v", chi.URLParam(r, "userId"))))
-// 	})
-// 	return r
-// }
-
-// func AdminOnly(next http.Handler) http.Handler {
-// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-// 		isAdmin, ok := r.Context().Value("acl.admin").(bool)
-// 		if !ok || !isAdmin {
-// 			http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
-// 			return
-// 		}
-// 		next.ServeHTTP(w, r)
-// 	})
-// }
