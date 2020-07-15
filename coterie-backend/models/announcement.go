@@ -41,12 +41,12 @@ func NewAnnouncementTable(db *sql.DB) *AnnouncementTable {
 	}
 }
 
-//Model.All
-func (announcementTable *AnnouncementTable) AnnouncementsLister() ([]Announcement, error) {
+//AnnouncementsLister grabs all the announcements for an org.
+func (announcementTable *AnnouncementTable) AnnouncementsLister(orgID string) ([]Announcement, error) {
 	announcements := []Announcement{}
 	rows, err := announcementTable.DB.Query(`
-		SELECT * FROM announcement WHERE user_id = ?
-	`)
+		SELECT * FROM announcement WHERE organization_id = ?
+	`, orgID)
 	if err != nil {
 		log.Printf("Unable to retrieve announcements: %s", err.Error())
 		return nil, err

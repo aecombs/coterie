@@ -14,8 +14,9 @@ import (
 func GetAnnouncements(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
+		organizationID := chi.URLParam(r, "organizationID")
 
-		announcements, err := announcementTable.AnnouncementsLister()
+		announcements, err := announcementTable.AnnouncementsLister(organizationID)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
@@ -25,7 +26,7 @@ func GetAnnouncements(announcementTable *models.AnnouncementTable) http.HandlerF
 	}
 }
 
-//Show
+//GetAnnouncement retrieves a single instance of announcement and is not nested
 func GetAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
@@ -41,14 +42,15 @@ func GetAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFu
 	}
 }
 
-//Create
+//AddAnnouncement adds a new announcement and is nested
 func AddAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
+		organizationID := chi.URLParam(r, "organizationID")
 		body := map[string]string{}
 		req.BindBody(&body)
 
-		orgID, _ := strconv.Atoi(body["organization_id"])
+		orgID, _ := strconv.Atoi(organizationID)
 		announcement := models.Announcement{
 			Text:           body["text"],
 			Date:           body["date"],
@@ -67,7 +69,7 @@ func AddAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFu
 	}
 }
 
-//Update
+//UpdateAnnouncement updates an announcement and is not nested
 func UpdateAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
@@ -93,7 +95,7 @@ func UpdateAnnouncement(announcementTable *models.AnnouncementTable) http.Handle
 	}
 }
 
-//Delete
+//DeleteAnnouncement deletes an announcement and is not nested
 func DeleteAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
