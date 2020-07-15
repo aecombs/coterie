@@ -7,7 +7,7 @@ import (
 )
 
 //LoggedInUser checks the cookie key Session to see if it's valid and exists. If it does, it returns the user associated with it.
-func LoggedInUser(userTable *models.UserTable, r *http.Request) (models.User, error) {
+func GrabLoggedInUser(userTable *models.UserTable, r *http.Request) (models.User, error) {
 	cookie, err := r.Cookie("session")
 	if err != nil {
 		log.Printf("No session cookie stored in cookies: %s", err.Error())
