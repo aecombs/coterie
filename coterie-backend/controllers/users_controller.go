@@ -87,22 +87,6 @@ func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 		}
 		log.Printf("%s", user)
 
-		// w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		// w.Header().Set("user_id", strconv.Itoa(user.ID))
-
-		//set the session
-		// store, err := session.Start(context.Background(), w, r)
-		// if err != nil {
-		// 	log.Printf("There was an error in starting context: %s", err.Error())
-		// 	return
-		// }
-
-		// store.Set("user_id", strconv.Itoa(user.ID))
-		// err = store.Save()
-		// if err != nil {
-		// 	log.Printf("There was an error in setting the session: %s", err.Error())
-		// }
-
 		//request cookie:
 		cookie, err := r.Cookie("session")
 		//it it doesn't exist, we receive an err. Set the cookie!
@@ -188,21 +172,21 @@ func AddUser(userTable *models.UserTable, content Data) (models.User, error) {
 	return newUser, nil
 }
 
-//LogoutUser will remove the header...?or session? bah!
+//LogoutUser will change the session cookie so that it no longer contains the userID.
 func LogoutUser() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// store, err := session.Start(context.Background(), w, r)
-		// if err != nil {
-		// 	log.Printf("There was an error in starting context: %s", err.Error())
-		// 	return
-		// }
-
-		// _ = store.Delete("user_id")
-
-		// store.Save()
-		// if err != nil {
-		// 	log.Printf("There was an error in reseting the session: %s", err.Error())
-		// }
+		cookie, err := r.Cookie("session")
+		//it it doesn't exist, we receive an err. No need to delete anything.
+		if err == nil {
+			//reset the cookie to have a "deleted" value
+			cookie = &http.Cookie{
+				Name:     "session",
+				Value:    "deleted",
+				HttpOnly: true,
+				Path:     "/",
+			}
+			http.SetCookie(w, cookie)
+		}
 
 		url := "/"
 		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
