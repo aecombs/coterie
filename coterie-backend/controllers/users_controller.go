@@ -11,7 +11,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/go-chi/chi"
 	"github.com/joho/godotenv"
 	"github.com/qkgo/yin"
 	"golang.org/x/oauth2"
@@ -197,16 +196,9 @@ func LogoutUser() http.HandlerFunc {
 func GetUser(userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		cookie, err := r.Cookie("session")
+		user, err := GrabLoggedInUser(userTable, r)
 		if err != nil {
-			log.Printf("User not logged in: %s", err.Error())
-			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
-			return
-		}
-
-		userID := cookie.Value
-		user, err := userTable.UserGetterByID(userID)
-		if err != nil {
+			log.Printf("Unable to grab user: %s", err.Error())
 			http.Error(w, http.StatusText(404), 404)
 			return
 		}
@@ -219,23 +211,24 @@ func GetUser(userTable *models.UserTable) http.HandlerFunc {
 func UpdateUser(userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
-		//TODO: Update this to use session
-		userID := chi.URLParam(r, "userID")
+		user, err := GrabLoggedInUser(userTable, r)
+		if err != nil {
+			log.Printf("Unable to grab user: %s", err.Error())
+		}
 		body := map[string]string{}
 		req.BindBody(&body)
 
-		IntUserID, _ := strconv.Atoi(userID)
-		user := models.User{
-			ID:        IntUserID,
+		updatedUser := models.User{
+			ID:        user.ID,
 			Name:      body["name"],
 			Email:     body["email"],
 			Bio:       body["bio"],
 			UpdatedAt: time.Now().String(),
 		}
 
-		result, err := userTable.UserUpdater(user)
+		result, err := userTable.UserUpdater(updatedUser)
 		if err != nil {
-			http.Error(w, http.StatusText(404), 404)
+			http.Error(w, http.StatusText(400), 400)
 			return
 		}
 
