@@ -107,7 +107,7 @@ func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 		cookie, err := r.Cookie("session")
 		//it it doesn't exist, we receive an err. Set the cookie!
 		if err != nil {
-			//opt: refactor to use uuid
+			//TODO: refactor to use uuid
 			sessionID := strconv.Itoa(user.ID)
 			cookie = &http.Cookie{
 				Name:     "session",
