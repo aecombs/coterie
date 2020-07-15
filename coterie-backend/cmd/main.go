@@ -44,9 +44,11 @@ func main() {
 
 	//Users
 	r.Route("/", func(r chi.Router) {
+		//auth handling
 		r.Get("/auth/google", controllers.GoogleLogin())
 		r.Get("/auth/google/callback", controllers.GoogleCallback(users))
 		r.Delete("/logout", controllers.LogoutUser())
+		//
 
 		r.Route("/profile", func(r chi.Router) {
 			r.Get("/", controllers.GetUser(users))
@@ -56,8 +58,8 @@ func main() {
 
 	//Organizations
 	r.Route("/organizations", func(r chi.Router) {
-		r.Get("/", controllers.GetOrganizations(organizations))
-		r.Post("/", controllers.AddOrganization(organizations))
+		r.Get("/", controllers.GetOrganizations(organizations, users))
+		r.Post("/", controllers.AddOrganization(organizations, users))
 
 		r.Route("/{organizationID}", func(r chi.Router) {
 			r.Get("/", controllers.GetOrganization(organizations))

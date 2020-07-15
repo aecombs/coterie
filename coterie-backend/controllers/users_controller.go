@@ -180,7 +180,7 @@ func LogoutUser() http.HandlerFunc {
 	}
 }
 
-//RESTful ACTIONS
+//OTHER ACTIONS
 
 //GetUser returns a single instance of User
 func GetUser(userTable *models.UserTable) http.HandlerFunc {
