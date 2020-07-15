@@ -10,7 +10,7 @@ import (
 	"github.com/qkgo/yin"
 )
 
-//Index
+//GetChapters returns all the chapters for a scripture
 func GetChapters(chapterTable *models.ChapterTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)

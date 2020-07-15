@@ -10,12 +10,13 @@ import (
 	"github.com/qkgo/yin"
 )
 
-//Index
+//GetScriptures gets all the scrips for an org
 func GetScriptures(scriptureTable *models.ScriptureTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
+		organizationID := chi.URLParam(r, "organizationID")
 
-		scriptures, err := scriptureTable.ScripturesLister()
+		scriptures, err := scriptureTable.ScripturesLister(organizationID)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return

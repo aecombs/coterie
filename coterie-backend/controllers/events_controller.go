@@ -10,12 +10,13 @@ import (
 	"github.com/qkgo/yin"
 )
 
-//Index
+//GetEvents returns all the events for an org
 func GetEvents(eventTable *models.EventTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
+		organizationID := chi.URLParam(r, "organizationID")
 
-		events, err := eventTable.EventsLister()
+		events, err := eventTable.EventsLister(organizationID)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return

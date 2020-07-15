@@ -6,6 +6,7 @@ import (
 	"strconv"
 )
 
+//User struct
 type User struct {
 	ID        int    `json:"id,omitempty"`
 	GoogleID  string `json:"google_id,omitempty"`
@@ -17,10 +18,12 @@ type User struct {
 	UpdatedAt string `json:"updated_at,omitempty"`
 }
 
+//UserTable struct will be all the users in the DB
 type UserTable struct {
 	DB *sql.DB
 }
 
+//NewUserTable creates a new table when there isn't one that exists already
 func NewUserTable(db *sql.DB) *UserTable {
 	stmt, _ := db.Prepare(`
 		CREATE TABLE IF NOT EXISTS "user" (

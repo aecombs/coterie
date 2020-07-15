@@ -10,12 +10,13 @@ import (
 	"github.com/qkgo/yin"
 )
 
-//Index
+//GetHolidays will get all the holidays for a given org
 func GetHolidays(holidayTable *models.HolidayTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
+		organizationID := chi.URLParam(r, "organizationID")
 
-		holidays, err := holidayTable.HolidaysLister()
+		holidays, err := holidayTable.HolidaysLister(organizationID)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return

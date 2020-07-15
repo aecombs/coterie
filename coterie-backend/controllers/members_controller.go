@@ -10,12 +10,13 @@ import (
 	"github.com/qkgo/yin"
 )
 
-//Index
+//GetMembers will retrieve all members for an org
 func GetMembers(memberTable *models.MemberTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
+		organizationID := chi.URLParam(r, "organizationID")
 
-		members, err := memberTable.MembersLister()
+		members, err := memberTable.MembersLister(organizationID)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
@@ -41,14 +42,15 @@ func GetMember(memberTable *models.MemberTable) http.HandlerFunc {
 	}
 }
 
-//Create
+//AddMember adds new member for a given org
 func AddMember(memberTable *models.MemberTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
 		body := map[string]string{}
 		req.BindBody(&body)
+		organizationID := chi.URLParam(r, "organizationID")
 
-		orgID, _ := strconv.Atoi(body["organization_id"])
+		orgID, _ := strconv.Atoi(organizationID)
 		funds, _ := strconv.Atoi(body["funds_raised"])
 		member := models.Member{
 			Name:           body["name"],

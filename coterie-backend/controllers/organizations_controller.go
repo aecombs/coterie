@@ -10,12 +10,13 @@ import (
 	"github.com/qkgo/yin"
 )
 
-//Index
+//GetOrganizations retrieves all the orgs (should be one...maybe more in the future) for a given user
 func GetOrganizations(organizationTable *models.OrganizationTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
+		userID := chi.URLParam(r, "userID")
 
-		organizations, err := organizationTable.OrganizationsLister()
+		organizations, err := organizationTable.OrganizationsLister(userID)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
