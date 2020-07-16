@@ -3,7 +3,7 @@ import React from 'react';
 const Holiday = () => {
   return (
     <div>
-      <p className="baloo-da">Holiday</p>
+      <p className="open-sans">Holiday</p>
     </div>
   )
 }

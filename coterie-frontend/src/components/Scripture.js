@@ -4,7 +4,7 @@ import Collection from './Collection';
 const Scripture = () => {
   return (
     <div>
-      <p className="baloo-da">Scripture</p>
+      <p className="open-sans">Scripture</p>
       
       <Collection 
       selection="Chapters"/>

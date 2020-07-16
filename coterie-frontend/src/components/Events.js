@@ -5,7 +5,7 @@ import Collection from './Collection';
 const Events = () => {
   return (
     <div>
-      <p className="baloo-da">Events</p>
+      <p className="open-sans">Events</p>
     </div>
   )
 }

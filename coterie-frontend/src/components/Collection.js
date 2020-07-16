@@ -6,9 +6,22 @@ import Scripture from './Scripture';
 import Member from './Member';
 
 const Collection = (props) => {
+  let element = ""
+  if (props.selection === "announcement")
+  {
+    //TODO: add logic to get only some text from the announcement
+  element = <div className="list-group-item">
+    <p className="">{props.date}{props.text}</p>
+  </div>
+  } else if (props.selection === "member") {
+  element = <div className="list-group-item">
+    <p className="">{props.name}{props.class}</p>
+  </div>
+  }
+
   return (
     <div>
-      <p className="baloo-da">{props.selection}</p>
+      {element}
     </div>
   )
 }

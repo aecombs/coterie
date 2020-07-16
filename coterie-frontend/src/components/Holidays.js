@@ -5,7 +5,7 @@ import Collection from './Collection';
 const Holidays = () => {
   return (
     <div>
-      <p className="baloo-da">Holidays</p>
+      <p className="open-sans">Holidays</p>
     </div>
   )
 }

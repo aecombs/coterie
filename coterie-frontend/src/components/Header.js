@@ -1,15 +1,18 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import logo from '../logo.png';
 import Homepage from './Homepage';
 import Login from './Login';
 import Dashboard from './Dashboard';
-import ProtectedRoute from '../ProtectedRoute';
+// import ProtectedRoute from '../ProtectedRoute';
 // import auth from './Auth';
 // import axios from 'axios'
 
 const Header = (props) => {
+
+  
+
   return (
   <Router>
     <div className="">
@@ -22,8 +25,8 @@ const Header = (props) => {
           <li><Link to={'/dashboard'} className="nav-link float-right">Dashboard</Link></li>
 
 
-          {/* <li><Link to={'/login'} className={ loginButtonText === "Login" ? "nav-link float-right" : "hidden"}>Login</Link></li>
-          <li><Link to={'/'} className={ loginButtonText === "Logout" ? "nav-link float-right" : "hidden"}>Logout</Link></li> */}
+          <li><Link to={'/login'} className="nav-link float-right">Login</Link></li>
+          <li><Link to={'http://localhost:3000/logout'} className="nav-link float-right">Logout</Link></li>
 
           {/* using props */}
           {/* <li><Link to={'/'+props.buttonText.toLowerCase()} className="nav-link float-right">{props.buttonText}</Link></li> */}
@@ -38,7 +41,7 @@ const Header = (props) => {
         <Route exact path='/' component={Homepage} />
         <Route path='/dashboard' component={Dashboard} />
 
-        {/* <Route path='/login' component={Login} /> */}
+        <Route path='/login' component={Login} />
         
         {/* <Route 
           path={'/'+loginButtonText.toLowerCase()}

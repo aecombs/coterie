@@ -5,7 +5,7 @@ import Collection from './Collection';
 const Announcements = () => {
   return (
     <div>
-      <p className="baloo-da">Announcements</p>
+      <p className="open-sans">Announcements</p>
     </div>
   )
 }

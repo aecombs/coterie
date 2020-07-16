@@ -3,7 +3,7 @@ import React from 'react';
 const Chapter = () => {
   return (
     <div>
-      <p className="baloo-da">Chapter</p>
+      <p className="open-sans">Chapter</p>
     </div>
   )
 }

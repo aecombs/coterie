@@ -11,13 +11,7 @@ const Login = (props) => {
 
   return (
     <div>
-      <p className="baloo-da">Login</p>
-      <div className="card">
-        <button className="btn btn-primary" onClick={loginCallback}>
-        Login Here!
-        </button>
-
-      </div>
+        <a href="http://localhost:3000/auth/google"><button className="btn btn-light">Google Login</button></a>
     </div>
   )
 }
