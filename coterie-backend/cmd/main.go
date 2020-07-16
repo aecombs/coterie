@@ -57,12 +57,12 @@ func main() {
 	})
 
 	//Organizations
-	r.Route("/organizations", func(r chi.Router) {
-		r.Get("/", controllers.GetOrganizations(organizations, users))
+	r.Route("/organization", func(r chi.Router) {
+		r.Get("/", controllers.GetOrganization(organizations, users))
 		r.Post("/", controllers.AddOrganization(organizations, users))
 
 		r.Route("/{organizationID}", func(r chi.Router) {
-			r.Get("/", controllers.GetOrganization(organizations))
+			// r.Get("/", controllers.GetOrganization(organizations))
 			r.Put("/", controllers.UpdateOrganization(organizations))
 			r.Delete("/", controllers.DeleteOrganization(organizations))
 

@@ -38,6 +38,7 @@ func AddAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFu
 
 		orgID, _ := strconv.Atoi(organizationID)
 		announcement := models.Announcement{
+			Header:         body["header"],
 			Text:           body["text"],
 			Date:           body["date"],
 			OrganizationID: orgID,
@@ -84,6 +85,7 @@ func UpdateAnnouncement(announcementTable *models.AnnouncementTable) http.Handle
 		annID, _ := strconv.Atoi(announcementID)
 		announcement := models.Announcement{
 			ID:        annID,
+			Header:    body["header"],
 			Text:      body["text"],
 			Date:      body["date"],
 			UpdatedAt: time.Now().String(),

@@ -10,11 +10,11 @@ import (
 	"github.com/qkgo/yin"
 )
 
-//GetOrganizations retrieves all the orgs (should be one...maybe more in the future) for a given user
-func GetOrganizations(organizationTable *models.OrganizationTable, userTable *models.UserTable) http.HandlerFunc {
+//GetOrganization retrieves the org for a given user
+func GetOrganization(organizationTable *models.OrganizationTable, userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		// userID := chi.URLParam(r, "userID")
+
 		user, err := GrabLoggedInUser(userTable, r)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
@@ -39,8 +39,6 @@ func AddOrganization(organizationTable *models.OrganizationTable, userTable *mod
 		res, req := yin.Event(w, r)
 		body := map[string]string{}
 		req.BindBody(&body)
-		// userIDInt := chi.URLParam(r, "userID")
-		// userID, _ := strconv.Atoi(userIDInt)
 
 		user, err := GrabLoggedInUser(userTable, r)
 		if err != nil {
@@ -69,20 +67,20 @@ func AddOrganization(organizationTable *models.OrganizationTable, userTable *mod
 }
 
 //GetOrganization is show action
-func GetOrganization(organizationTable *models.OrganizationTable) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		res, _ := yin.Event(w, r)
-		organizationID := chi.URLParam(r, "organizationID")
+// func GetOrganization(organizationTable *models.OrganizationTable) http.HandlerFunc {
+// 	return func(w http.ResponseWriter, r *http.Request) {
+// 		res, _ := yin.Event(w, r)
+// 		organizationID := chi.URLParam(r, "organizationID")
 
-		organization, err := organizationTable.OrganizationGetter(organizationID)
-		if err != nil {
-			http.Error(w, http.StatusText(404), 404)
-			return
-		}
+// 		organization, err := organizationTable.OrganizationGetter(organizationID)
+// 		if err != nil {
+// 			http.Error(w, http.StatusText(404), 404)
+// 			return
+// 		}
 
-		res.SendJSON(organization)
-	}
-}
+// 		res.SendJSON(organization)
+// 	}
+// }
 
 //UpdateOrganization is update action
 func UpdateOrganization(organizationTable *models.OrganizationTable) http.HandlerFunc {
