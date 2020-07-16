@@ -11,7 +11,7 @@ const Collection = (props) => {
   {
     //TODO: add logic to get only some text from the announcement
   element = <div className="list-group-item">
-    <p className="">{props.date}{props.text}</p>
+    <p className="">{props.header}{props.text}</p>
   </div>
   } else if (props.selection === "member") {
   element = <div className="list-group-item">

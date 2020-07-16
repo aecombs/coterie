@@ -13,7 +13,7 @@ body {
   margin: 0;
 }
 
-p.open-sans {
+* .open-sans {
   /* font-family: 'Baloo Da 2', cursive; */
   font-family: 'Open Sans', sans-serif;
 }
@@ -56,7 +56,20 @@ div.dashboard-display {
 }
 
 
+img.favicon {
+  margin: auto;
+  width: 15vw;
+}
 
+div.login-page {
+  min-height: 80vh;
+}
+
+div.login-card {
+  width: 30vw;
+  margin: 10vh auto;
+  padding-top: 1rem;
+}
 
 footer.footer {
   background-color: #44A1A0;

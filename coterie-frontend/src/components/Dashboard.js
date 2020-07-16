@@ -40,7 +40,8 @@ const Dashboard = () => {
     <div className="d-flex">
       
       <div className="">
-        <SideNav />
+        <SideNav 
+        organization=""/>
         {orgComponent}
         
       </div>

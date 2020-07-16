@@ -26,7 +26,7 @@ const Header = (props) => {
 
 
           <li><Link to={'/login'} className="nav-link float-right">Login</Link></li>
-          <li><Link to={'http://localhost:3000/logout'} className="nav-link float-right">Logout</Link></li>
+          <li><a href="http://localhost:3000/logout" className="nav-link float-right">Logout</a></li>
 
           {/* using props */}
           {/* <li><Link to={'/'+props.buttonText.toLowerCase()} className="nav-link float-right">{props.buttonText}</Link></li> */}
@@ -42,6 +42,7 @@ const Header = (props) => {
         <Route path='/dashboard' component={Dashboard} />
 
         <Route path='/login' component={Login} />
+        <Route path='http://localhost:3000/logout' component={Homepage} />
         
         {/* <Route 
           path={'/'+loginButtonText.toLowerCase()}

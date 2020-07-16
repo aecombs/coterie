@@ -7,7 +7,8 @@ import Events from './Events';
 import Holidays from './Holidays';
 import Scriptures from './Scriptures';
 
-const SideNav = () => {
+const SideNav = (props) => {
+  
   return (
     <Router>
     <div className="d-flex side-nav">
