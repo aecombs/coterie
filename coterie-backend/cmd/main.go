@@ -47,8 +47,7 @@ func main() {
 		//auth handling
 		r.Get("/auth/google", controllers.GoogleLogin())
 		r.Get("/auth/google/callback", controllers.GoogleCallback(users))
-		r.Delete("/logout", controllers.LogoutUser())
-		//
+		r.Get("/logout", controllers.LogoutUser())
 
 		r.Route("/profile", func(r chi.Router) {
 			r.Get("/", controllers.GetUser(users))
