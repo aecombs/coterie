@@ -63,6 +63,7 @@ img.favicon {
 
 div.login-page {
   min-height: 80vh;
+  background-color: #44a19f19;
 }
 
 div.login-card {
