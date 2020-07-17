@@ -16,8 +16,10 @@ func GetOrganization(organizationTable *models.OrganizationTable, userTable *mod
 		res, _ := yin.Event(w, r)
 
 		user, err := GrabLoggedInUser(userTable, r)
+		//if user isn't logged in
 		if err != nil {
-			http.Error(w, http.StatusText(404), 404)
+			url := "http://localhost:3001/"
+			http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 			return
 		}
 

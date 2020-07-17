@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"coterie/models"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -25,7 +26,8 @@ func goDotEnvVariable(key string) string {
 //GrabLoggedInUser checks the cookie key Session to see if it's valid and exists. If it does, it returns the user associated with it.
 func GrabLoggedInUser(userTable *models.UserTable, r *http.Request) (models.User, error) {
 	cookie, err := r.Cookie("session")
-	if err != nil && cookie.Value == "deleted" {
+
+	if err == nil && (fmt.Sprintf("%T", cookie.Value) != "int") || err != nil {
 		log.Printf("User is not logged in: %s", err.Error())
 		return models.User{}, err
 	}
@@ -34,5 +36,6 @@ func GrabLoggedInUser(userTable *models.UserTable, r *http.Request) (models.User
 		log.Printf("Unable to retrieve user: %s", err.Error())
 		return models.User{}, err
 	}
+
 	return user, nil
 }
