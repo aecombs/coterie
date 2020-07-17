@@ -23,9 +23,11 @@ code {
     monospace;
 }
 
-/* .hidden {
+.hidden {
   visibility: hidden;
-} */
+  width: 0;
+  height: 0;
+}
 
 div.side-nav {
   min-height: 80vh;

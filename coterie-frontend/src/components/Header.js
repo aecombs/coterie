@@ -1,17 +1,27 @@
 
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import logo from '../logo.png';
+import logo from '../images/logo.png';
 import Homepage from './Homepage';
 import Login from './Login';
 import Dashboard from './Dashboard';
-// import ProtectedRoute from '../ProtectedRoute';
-// import auth from './Auth';
-// import axios from 'axios'
+import ProtectedRoute from '../ProtectedRoute';
 
 const Header = (props) => {
 
-  
+  const grabSessionValue = () => {
+    const sessionCookie = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('session'))
+    console.log(sessionCookie)
+    if (sessionCookie) {
+      return sessionCookie.split('=')[1];
+    } else {
+      return undefined
+    }
+  }
+
+  const userID = grabSessionValue()
 
   return (
   <Router>
@@ -20,30 +30,30 @@ const Header = (props) => {
         <div className=" navbar-brand float-left w-50">
           <a href="/"><img className="w-25" alt="logo" src={logo}/></a>
         </div>
-        <ul className=" navbar-nav mr-auto justify-content-end w-75">
+        <ul className="navbar-nav mr-auto justify-content-end w-75">
           {/* TODO: Make dashboard only visible to auth'd users */}
-          <li><Link to={'/dashboard'} className="nav-link float-right">Dashboard</Link></li>
+          <li><Link to={'/dashboard'} className={userID ? "nav-link float-right" : "hidden"}>Dashboard</Link></li>
 
 
-          <li><Link to={'/login'} className="nav-link float-right">Login</Link></li>
-          <li><a href="http://localhost:3000/logout" className="nav-link float-right">Logout</a></li>
-
-          {/* using props */}
-          {/* <li><Link to={'/'+props.buttonText.toLowerCase()} className="nav-link float-right">{props.buttonText}</Link></li> */}
-
-          {/* Not using the fucking router holy fuck */}
-          {/* <li><button className="nav-link float-right btn btn-info" onClick={props.buttonTextCallback}><a className="text-white text-decoration-none" href={props.buttonText === "Login" ? "/login" : "/logout"}>{props.buttonText}</a></button></li> */}
-
+          <li><Link to={'/login'} className={userID ? "hidden" : "nav-link float-right"}>Login</Link></li>
+          <li><a href="http://localhost:3000/logout" className={userID ? "nav-link float-right" : "hidden"}>Logout</a></li>
         </ul>
       </nav>
       
       <Switch> 
         <Route exact path='/' component={Homepage} />
-        <Route path='/dashboard' component={Dashboard} />
+
+        <ProtectedRoute 
+        exact path="/dashboard"
+        component={Dashboard}/>
+        {/* <Route path='/dashboard' component={Dashboard} /> */}
 
         <Route path='/login' component={Login} />
-        <Route path='http://localhost:3000/logout' component={Homepage} />
-        
+        {/* <Route path='http://localhost:3000/logout' component={Homepage} /> */}
+        <ProtectedRoute 
+        exact path='http://localhost:3000/logout'
+        component={Homepage}/>
+
         {/* <Route 
           path={'/'+loginButtonText.toLowerCase()}
           component=

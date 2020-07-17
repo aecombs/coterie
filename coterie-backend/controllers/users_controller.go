@@ -81,11 +81,10 @@ func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 			//TODO: refactor to use uuid
 			sessionID := strconv.Itoa(user.ID)
 			cookie = &http.Cookie{
-				Name:     "session",
-				Value:    sessionID,
-				HttpOnly: true,
-				Path:     "/",
-				Expires:  time.Now().Add(time.Hour * 24 * 14),
+				Name:    "session",
+				Value:   sessionID,
+				Path:    "/",
+				Expires: time.Now().Add(time.Hour * 24 * 14),
 			}
 			http.SetCookie(w, cookie)
 		}
@@ -172,11 +171,10 @@ func LogoutUser() http.HandlerFunc {
 		}
 		//reset the cookie to have a "deleted" value and to expire immediately
 		cookie = &http.Cookie{
-			Name:     "session",
-			Value:    "deleted",
-			HttpOnly: true,
-			Path:     "/",
-			Expires:  time.Now(),
+			Name:    "session",
+			Value:   "deleted",
+			Path:    "/",
+			Expires: time.Now(),
 		}
 		http.SetCookie(w, cookie)
 
