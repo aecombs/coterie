@@ -21,15 +21,15 @@ const Announcements = (props) => {
 
   let announcementComponents = undefined
   if (announcementsList !== null && announcementsList.length > 0) {
-    announcementComponents = announcementsList.map((e) => {
+    announcementComponents = announcementsList.map((ann) => {
     return(
       <Announcement
-      key={e.id}
-      id={e.id}
-      header={e.header}
-      text={e.text}
-      date={e.date}
-      orgID={e.organization_id}
+      key={ann.id}
+      id={ann.id}
+      header={ann.header}
+      text={ann.text}
+      date={ann.date}
+      orgID={ann.organization_id}
       />
     )
   })

@@ -14,28 +14,31 @@ const Scriptures = (props) => {
         setScripturesList(list);
       })
       .catch((error) => {
-        console.log(`There was an retrieving scriptures: ${error}`)
+        console.log(`There was an error retrieving scriptures: ${error}`)
       });
   },[url])
   
   let scriptureComponents = undefined
   if (scripturesList !== null && scripturesList.length > 0) {
     scriptureComponents = scripturesList.map((scrip) => {
-    return (<Scripture 
-          key={scrip.id}
-          id={scrip.id}
-          name={scrip.name}
-          orgID={scrip.organization_id}
-        />)
+    return (
+      <Scripture 
+      key={scrip.id}
+      id={scrip.id}
+      name={scrip.name}
+      orgID={scrip.organization_id}
+      />)
     })
   } else {
-    scriptureComponents = <p className="open-sans">It looks like you don't have any scriptures, yet!</p>
+    scriptureComponents = <p className="open-sans">Add your important scriptures here!</p>
   };
 
   return (
-    <div className="">
-      <p className="open-sans">Scriptures</p>
-      {scriptureComponents}
+    <div className="container">
+      <h4 className="text-left w-100">All Scriptures</h4>
+      <div className="d-flex list-group">
+        {scriptureComponents}
+      </div>
     </div>
   )
 }

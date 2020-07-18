@@ -47,7 +47,7 @@ func NewChapterTable(db *sql.DB) *ChapterTable {
 func (chapterTable *ChapterTable) ChaptersLister(scripID string) ([]Chapter, error) {
 	chapters := []Chapter{}
 	rows, err := chapterTable.DB.Query(`
-		SELECT * FROM chapter WHERE chapter.scripture_id = ?
+		SELECT * FROM chapter WHERE chapter.scripture_id = ? ORDER BY chapter.position ASC;
 	`, scripID)
 	if err != nil {
 		log.Printf("Unable to retrieve chapters: %s", err.Error())

@@ -6,10 +6,10 @@ const Announcement = (props) => {
     <div className="list-group-item card">
       <div className="card-body">
         <p className="open-sans card-title">{props.header}</p>
-      
         <p className="open-sans card-text">{props.date}</p>
-        <p className="open-sans card-text">{props.text}</p>
-        <p className="open-sans card-text hidden-until-hover">{props.description}</p>
+      </div>
+      <div className="card-body">
+        <p className="open-sans card-text hidden-until-hover">{props.text}</p>
       </div>
     </div>
   )
