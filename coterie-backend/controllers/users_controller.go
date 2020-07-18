@@ -209,13 +209,13 @@ func GetUser(userTable *models.UserTable) http.HandlerFunc {
 func UpdateUser(userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
-		userIDInt := chi.URLParam(r, "userID")
-
 		// user, err := GrabLoggedInUser(userTable, r)
 		// if err != nil {
 		// 	log.Printf("Unable to grab user: %s", err.Error())
 		// }
-		userID, err := strconv.Atoi(userIDInt)
+		userIDStr := chi.URLParam(r, "userID")
+		userID, err := strconv.Atoi(userIDStr)
+
 		body := map[string]string{}
 		req.BindBody(&body)
 

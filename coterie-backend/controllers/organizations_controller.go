@@ -15,15 +15,14 @@ func GetOrganizations(organizationTable *models.OrganizationTable, userTable *mo
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
 
-		user, err := GrabLoggedInUser(userTable, r)
-		//if user isn't logged in
-		if err != nil {
-			url := "http://localhost:3001/"
-			http.Redirect(w, r, url, http.StatusTemporaryRedirect)
-			return
-		}
-
-		userID := strconv.Itoa(user.ID)
+		// user, err := GrabLoggedInUser(userTable, r)
+		// //if user isn't logged in
+		// if err != nil {
+		// 	url := "http://localhost:3001/"
+		// 	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
+		// 	return
+		// }
+		userID := chi.URLParam(r, "userID")
 
 		organizations, err := organizationTable.OrganizationsLister(userID)
 		if err != nil {
@@ -42,18 +41,15 @@ func AddOrganization(organizationTable *models.OrganizationTable, userTable *mod
 		body := map[string]string{}
 		req.BindBody(&body)
 
-		user, err := GrabLoggedInUser(userTable, r)
-		if err != nil {
-			http.Error(w, http.StatusText(404), 404)
-			return
-		}
+		userIDStr := chi.URLParam(r, "userID")
 
+		userID, err := strconv.Atoi(userIDStr)
 		tFunds, _ := strconv.Atoi(body["total_funds"])
 		organization := models.Organization{
 			Name:             body["name"],
 			MissionStatement: body["mission_statement"],
 			TotalFunds:       tFunds,
-			UserID:           user.ID,
+			UserID:           userID,
 			CreatedAt:        time.Now().String(),
 			UpdatedAt:        time.Now().String(),
 		}
