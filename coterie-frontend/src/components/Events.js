@@ -30,7 +30,6 @@ const Events = (props) => {
       occasion={e.occasion}
       date={e.date}
       description={e.description}
-      createdAt={e.created_at}
       orgID={e.organization_id}
       />
     )
