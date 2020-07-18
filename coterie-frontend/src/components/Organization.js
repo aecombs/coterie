@@ -7,13 +7,13 @@ const Organization = (props) => {
     const month = date.substring(5, 7)
     const day = date.substring(8, 10)
     const year = date.substring(0, 4)
-    const formatedDate = `${month}/${day}/${year}`
+    const formatedDate = `${month}-${day}-${year}`
     return formatedDate
   }
 
   return (
     <div className="w-100">
-      <h2 className="open-sans">{props.name}</h2>
+      <h4>{props.name}</h4>
       <p className="open-sans">{props.missionStatement}</p>
       <p className="open-sans">Established {formatDate(props.createdAt)}</p>
       <p className="open-sans">Current Funds: ${props.totalFunds/100}</p>

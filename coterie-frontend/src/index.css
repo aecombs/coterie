@@ -75,6 +75,15 @@ div.login-card {
   padding-top: 1rem;
 }
 
+p.hidden-until-hover {
+  visibility: hidden;
+}
+
+p.hidden-until-hover:hover {
+  visibility: visible;
+}
+
+
 footer.footer {
   background-color: #44A1A0;
   position: absolute;

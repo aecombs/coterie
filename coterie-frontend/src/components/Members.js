@@ -14,7 +14,7 @@ const Members = (props) => {
         setMembersList(list);
       })
       .catch((error) => {
-        console.log(`There was an retrieving members: ${error}`)
+        console.log(`There was an error retrieving members: ${error}`)
       });
   },[url])
 
@@ -41,7 +41,7 @@ const Members = (props) => {
 
   return (
     <div className="">
-      <h6 className="text-left w-100">Members</h6>
+      <h6 className="text-left w-100">Followers</h6>
       <table className="table table-hover table-light">
         <thead className="thead-light text-center">
           <tr>
