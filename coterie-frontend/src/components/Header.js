@@ -7,7 +7,7 @@ import Login from './Login';
 import Dashboard from './Dashboard';
 import ProtectedRoute from '../ProtectedRoute';
 
-const Header = (props) => {
+const Header = () => {
 
   const grabSessionValue = () => {
     const sessionCookie = document.cookie
@@ -21,7 +21,7 @@ const Header = (props) => {
     }
   }
 
-  const userID = grabSessionValue()
+  const sessionID = grabSessionValue()
 
   return (
   <Router>
@@ -32,28 +32,27 @@ const Header = (props) => {
         </div>
         <ul className="navbar-nav mr-auto justify-content-end w-75">
           {/* TODO: Make dashboard only visible to auth'd users */}
-          <li><Link to={'/dashboard'} className={userID ? "nav-link float-right" : "hidden"}>Dashboard</Link></li>
+          <li><Link to={'/dashboard'} className={sessionID ? "nav-link float-right" : "hidden"}>Dashboard</Link></li>
 
 
-          <li><Link to={'/login'} className={userID ? "hidden" : "nav-link float-right"}>Login</Link></li>
-          <li><a href="http://localhost:3000/logout" className={userID ? "nav-link float-right" : "hidden"}>Logout</a></li>
+          <li><Link to={'/login'} className={sessionID ? "hidden" : "nav-link float-right"}>Login</Link></li>
+          <li><a href="http://localhost:3000/logout" className={sessionID ? "nav-link float-right" : "hidden"}>Logout</a></li>
         </ul>
       </nav>
       
       <Switch> 
         <Route exact path='/' component={Homepage} />
-
+{/* 
         <ProtectedRoute 
         exact path="/dashboard"
-        component={Dashboard}/>
-        {/* <Route path='/dashboard' component={Dashboard} /> */}
+        component={Dashboard}/> */}
+        <Route path='/dashboard' component={Dashboard} />
 
         <Route path='/login' component={Login} />
-        {/* <Route path='http://localhost:3000/logout' component={Homepage} /> */}
-        <ProtectedRoute 
+        {/* <ProtectedRoute 
         exact path='http://localhost:3000/logout'
-        component={Homepage}/>
-
+        component={Homepage}/> */}
+        <Route exact path='http://localhost:3000/logout' component={Homepage} />
         {/* <Route 
           path={'/'+loginButtonText.toLowerCase()}
           component=

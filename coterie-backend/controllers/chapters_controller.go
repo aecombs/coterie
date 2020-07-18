@@ -16,6 +16,7 @@ import (
 func GetChapters(chapterTable *models.ChapterTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
+		EnableCors(&w)
 		scriptureID := chi.URLParam(r, "scriptureID")
 
 		chapters, err := chapterTable.ChaptersLister(scriptureID)
@@ -32,6 +33,7 @@ func GetChapters(chapterTable *models.ChapterTable) http.HandlerFunc {
 func AddChapter(chapterTable *models.ChapterTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
+		EnableCors(&w)
 		scriptureID := chi.URLParam(r, "scriptureID")
 		body := map[string]string{}
 		req.BindBody(&body)
@@ -63,6 +65,7 @@ func AddChapter(chapterTable *models.ChapterTable) http.HandlerFunc {
 func GetChapter(chapterTable *models.ChapterTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
+		EnableCors(&w)
 		chapterID := chi.URLParam(r, "chapterID")
 
 		chapter, err := chapterTable.ChapterGetter(chapterID)
@@ -79,6 +82,7 @@ func GetChapter(chapterTable *models.ChapterTable) http.HandlerFunc {
 func UpdateChapter(chapterTable *models.ChapterTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
+		EnableCors(&w)
 		chapterID := chi.URLParam(r, "chapterID")
 		body := map[string]string{}
 		req.BindBody(&body)
@@ -107,6 +111,7 @@ func UpdateChapter(chapterTable *models.ChapterTable) http.HandlerFunc {
 func DeleteChapter(chapterTable *models.ChapterTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
+		EnableCors(&w)
 		chapterID := chi.URLParam(r, "chapterID")
 
 		err := chapterTable.ChapterDeleter(chapterID)

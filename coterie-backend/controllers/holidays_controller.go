@@ -16,6 +16,7 @@ import (
 func GetHolidays(holidayTable *models.HolidayTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
+		EnableCors(&w)
 		organizationID := chi.URLParam(r, "organizationID")
 
 		holidays, err := holidayTable.HolidaysLister(organizationID)
@@ -32,6 +33,7 @@ func GetHolidays(holidayTable *models.HolidayTable) http.HandlerFunc {
 func AddHoliday(holidayTable *models.HolidayTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
+		EnableCors(&w)
 		body := map[string]string{}
 		req.BindBody(&body)
 		organizationID := chi.URLParam(r, "organizationID")
@@ -62,6 +64,7 @@ func AddHoliday(holidayTable *models.HolidayTable) http.HandlerFunc {
 func GetHoliday(holidayTable *models.HolidayTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
+		EnableCors(&w)
 		holidayID := chi.URLParam(r, "holidayID")
 
 		holiday, err := holidayTable.HolidayGetter(holidayID)
@@ -78,6 +81,7 @@ func GetHoliday(holidayTable *models.HolidayTable) http.HandlerFunc {
 func UpdateHoliday(holidayTable *models.HolidayTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
+		EnableCors(&w)
 		holidayID := chi.URLParam(r, "holidayID")
 		body := map[string]string{}
 		req.BindBody(&body)
@@ -105,6 +109,7 @@ func UpdateHoliday(holidayTable *models.HolidayTable) http.HandlerFunc {
 func DeleteHoliday(holidayTable *models.HolidayTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
+		EnableCors(&w)
 		holidayID := chi.URLParam(r, "holidayID")
 
 		err := holidayTable.HolidayDeleter(holidayID)

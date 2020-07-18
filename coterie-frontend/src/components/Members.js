@@ -5,12 +5,12 @@ import axios from 'axios';
 const Members = (props) => {
   const [membersList, setMembersList] = useState(null);
 
-  const url = "http://localhost.com/3000/organization/members"
+  const url = `http://localhost:3000/users/${props.userID}/organizations/${props.orgID}/members`
 
   useEffect(() => {
     axios.get(url)
       .then( (response) => {
-        const list = response.headers;
+        const list = response.data;
         setMembersList(list);
       })
       .catch((error) => {
@@ -40,8 +40,7 @@ const Members = (props) => {
 
 
   return (
-    <div>
-      <p className="open-sans">Members</p>
+    <div className="">
       <div className="">{memberComponents}</div>
     </div>
   )

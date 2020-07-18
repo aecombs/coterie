@@ -3,14 +3,15 @@ import Members from './Members';
 import PropTypes from 'prop-types';
 
 const Organization = (props) => {
+
   return (
-    <div className="">
+    <div className="w-100">
       <h2 className="open-sans">{props.name}</h2>
-      <p className="open-sans">{props.mission_statement}</p>
-      {/* <Collection
-      selection="member" /> */}
+      <p className="open-sans">{props.missionStatement}</p>
       <Members 
-      org_id={props.id}/>
+      orgID={props.id}
+      userID={props.userID}
+      />
     </div>
   )
 }
@@ -18,9 +19,9 @@ const Organization = (props) => {
 Organization.propTypes = {
   id: PropTypes.number,
   name: PropTypes.string,
-  mission_statement: PropTypes.string,
-  total_funds: PropTypes.number,
-  user_id: PropTypes.number
+  missionStatement: PropTypes.string,
+  totalFunds: PropTypes.number,
+  user: PropTypes.number
 };
 
 export default Organization;
