@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/go-chi/chi"
 	"github.com/qkgo/yin"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -190,7 +191,10 @@ func LogoutUser() http.HandlerFunc {
 func GetUser(userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		user, err := GrabLoggedInUser(userTable, r)
+		userID := chi.URLParam(r, "userID")
+
+		user, err := userTable.UserGetterByID(userID)
+		// user, err := GrabLoggedInUser(userTable, r)
 		if err != nil {
 			log.Printf("Unable to grab user: %s", err.Error())
 			http.Error(w, http.StatusText(404), 404)
@@ -205,15 +209,18 @@ func GetUser(userTable *models.UserTable) http.HandlerFunc {
 func UpdateUser(userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
-		user, err := GrabLoggedInUser(userTable, r)
-		if err != nil {
-			log.Printf("Unable to grab user: %s", err.Error())
-		}
+		userIDInt := chi.URLParam(r, "userID")
+
+		// user, err := GrabLoggedInUser(userTable, r)
+		// if err != nil {
+		// 	log.Printf("Unable to grab user: %s", err.Error())
+		// }
+		userID, err := strconv.Atoi(userIDInt)
 		body := map[string]string{}
 		req.BindBody(&body)
 
 		updatedUser := models.User{
-			ID:        user.ID,
+			ID:        userID,
 			Name:      body["name"],
 			Email:     body["email"],
 			Bio:       body["bio"],
