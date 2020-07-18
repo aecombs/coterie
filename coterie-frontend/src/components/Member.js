@@ -3,17 +3,13 @@ import PropTypes from 'prop-types';
 
 const Member = (props) => {
   return (
-    <div className="card">
-      <div className="mx-2 card-body row justify-content-between">
-        <p className="card-title">Name: {props.name}</p>
-        <p className="card-title">Class: {props.class}</p>
-      </div>
-      <div className="mx-2 card-body row justify-content-between">
-        <p className="card-text">${props.fundsRaised}</p>
-        <p className="card-text">{props.birthdate}</p>
-        <p className="card-text">{props.email}</p>
-      </div>
-    </div>
+    <tr className="text-center">
+      <td><p className="card-title">{props.name}</p></td> 
+      <td><p className="card-title">{props.class}</p></td>
+      <td><p className="card-text">${props.fundsRaised/100}</p></td>
+      <td><p className="card-text">{props.email}</p></td>
+      <td><p className="card-text">{props.birthdate}</p></td>
+    </tr>
   )
 }
 

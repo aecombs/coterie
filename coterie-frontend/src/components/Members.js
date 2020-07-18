@@ -41,7 +41,21 @@ const Members = (props) => {
 
   return (
     <div className="">
-      <div className="">{memberComponents}</div>
+      <h6 className="text-left w-100">Members</h6>
+      <table className="table table-hover table-light">
+        <thead className="thead-light text-center">
+          <tr>
+            <th>Name</th>
+            <th>Class</th>
+            <th>Raised</th>
+            <th>Email</th>
+            <th>Birthdate</th>
+          </tr>
+        </thead>
+        <tbody>
+          {memberComponents}
+        </tbody>
+      </table>
     </div>
   )
 }

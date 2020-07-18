@@ -30,6 +30,7 @@ const OrganizationContainer = (props) => {
       name = {org.name}
       missionStatement = {org.mission_statement}
       totalFunds = {org.total_funds}
+      createdAt = {org.created_at}
       userID = "1"
     />) })} else {
     orgComponents = <p className="open-sans">It looks like you haven't added an org yet!</p>
