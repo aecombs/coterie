@@ -10,8 +10,8 @@ import (
 	"github.com/qkgo/yin"
 )
 
-//GetOrganization retrieves the org for a given user
-func GetOrganization(organizationTable *models.OrganizationTable, userTable *models.UserTable) http.HandlerFunc {
+// GetOrganization retrieves all orgs for a user
+func GetOrganizations(organizationTable *models.OrganizationTable, userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
 
@@ -68,21 +68,21 @@ func AddOrganization(organizationTable *models.OrganizationTable, userTable *mod
 	}
 }
 
-//GetOrganization is show action
-// func GetOrganization(organizationTable *models.OrganizationTable) http.HandlerFunc {
-// 	return func(w http.ResponseWriter, r *http.Request) {
-// 		res, _ := yin.Event(w, r)
-// 		organizationID := chi.URLParam(r, "organizationID")
+// GetOrganization is show action
+func GetOrganization(organizationTable *models.OrganizationTable) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		res, _ := yin.Event(w, r)
+		organizationID := chi.URLParam(r, "organizationID")
 
-// 		organization, err := organizationTable.OrganizationGetter(organizationID)
-// 		if err != nil {
-// 			http.Error(w, http.StatusText(404), 404)
-// 			return
-// 		}
+		organization, err := organizationTable.OrganizationGetter(organizationID)
+		if err != nil {
+			http.Error(w, http.StatusText(404), 404)
+			return
+		}
 
-// 		res.SendJSON(organization)
-// 	}
-// }
+		res.SendJSON(organization)
+	}
+}
 
 //UpdateOrganization is update action
 func UpdateOrganization(organizationTable *models.OrganizationTable) http.HandlerFunc {

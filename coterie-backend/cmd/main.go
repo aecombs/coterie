@@ -49,49 +49,49 @@ func main() {
 		r.Get("/auth/google/callback", controllers.GoogleCallback(users))
 		r.Get("/logout", controllers.LogoutUser())
 
-		r.Route("/profile", func(r chi.Router) {
+		r.Route("/users/{userID}", func(r chi.Router) {
 			r.Get("/", controllers.GetUser(users))
 			r.Put("/", controllers.UpdateUser(users))
-		})
-	})
 
-	//Organizations
-	r.Route("/organization", func(r chi.Router) {
-		r.Get("/", controllers.GetOrganization(organizations, users))
-		r.Post("/", controllers.AddOrganization(organizations, users))
+			//Organizations
+			r.Route("/organizations", func(r chi.Router) {
+				r.Get("/", controllers.GetOrganizations(organizations, users))
+				r.Post("/", controllers.AddOrganization(organizations, users))
 
-		r.Route("/{organizationID}", func(r chi.Router) {
-			// r.Get("/", controllers.GetOrganization(organizations))
-			r.Put("/", controllers.UpdateOrganization(organizations))
-			r.Delete("/", controllers.DeleteOrganization(organizations))
+				r.Route("/{organizationID}", func(r chi.Router) {
+					r.Get("/", controllers.GetOrganization(organizations))
+					r.Put("/", controllers.UpdateOrganization(organizations))
+					r.Delete("/", controllers.DeleteOrganization(organizations))
 
-			//nested announcements
-			r.Route("/announcements", func(r chi.Router) {
-				r.Get("/", controllers.GetAnnouncements(announcements))
-				r.Post("/", controllers.AddAnnouncement(announcements))
-			})
+					//nested announcements
+					r.Route("/announcements", func(r chi.Router) {
+						r.Get("/", controllers.GetAnnouncements(announcements))
+						r.Post("/", controllers.AddAnnouncement(announcements))
+					})
 
-			//nested events
-			r.Route("/events", func(r chi.Router) {
-				r.Get("/", controllers.GetEvents(events))
-				r.Post("/", controllers.AddEvent(events))
-			})
+					//nested events
+					r.Route("/events", func(r chi.Router) {
+						r.Get("/", controllers.GetEvents(events))
+						r.Post("/", controllers.AddEvent(events))
+					})
 
-			//nested holidays
-			r.Route("/holidays", func(r chi.Router) {
-				r.Get("/", controllers.GetHolidays(holidays))
-				r.Post("/", controllers.AddHoliday(holidays))
-			})
+					//nested holidays
+					r.Route("/holidays", func(r chi.Router) {
+						r.Get("/", controllers.GetHolidays(holidays))
+						r.Post("/", controllers.AddHoliday(holidays))
+					})
 
-			//nested scriptures
-			r.Route("/scriptures", func(r chi.Router) {
-				r.Get("/", controllers.GetScriptures(scriptures))
-				r.Post("/", controllers.AddScripture(scriptures))
-			})
-			//nested members
-			r.Route("/members", func(r chi.Router) {
-				r.Get("/", controllers.GetMembers(members))
-				r.Post("/", controllers.AddMember(members))
+					//nested scriptures
+					r.Route("/scriptures", func(r chi.Router) {
+						r.Get("/", controllers.GetScriptures(scriptures))
+						r.Post("/", controllers.AddScripture(scriptures))
+					})
+					//nested members
+					r.Route("/members", func(r chi.Router) {
+						r.Get("/", controllers.GetMembers(members))
+						r.Post("/", controllers.AddMember(members))
+					})
+				})
 			})
 		})
 	})

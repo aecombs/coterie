@@ -84,7 +84,7 @@ func (organizationTable *OrganizationTable) OrganizationGetter(organizationID st
 	var organization Organization
 
 	stmt, err := organizationTable.DB.Prepare(`
-		SELECT * FROM organization WHERE id = ?
+		SELECT * FROM organization WHERE organization.id = ?
 	`)
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())
