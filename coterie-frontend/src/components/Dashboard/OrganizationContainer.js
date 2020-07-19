@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Organization from './Organization';
+import OrgForm from './OrgForm';
 import axios from 'axios';
 
 
@@ -7,6 +8,7 @@ const OrganizationContainer = (props) => {
   //TODO: logic that checks the URL... is it just the dashboard? then show xyz stuff.
 
   const [organizationList, setOrganizationList] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const url = `http://localhost:3000/users/${props.userID}/organizations/`
   useEffect(() => {
@@ -19,6 +21,18 @@ const OrganizationContainer = (props) => {
         console.log(`There was an error: ${err["message"]}`)
       });
   },[url])
+
+  const addOrg = (org) => {
+    axios.post(url, org)
+    .then((response) => {
+      setErrorMessage(`Organization ${org} added`);
+    })
+    
+    .catch((error) => {
+      setErrorMessage(error.message);
+      console.log(`Unable to add org: ${errorMessage}`);
+    })
+  }
 
 
   let orgComponents = undefined
@@ -33,7 +47,7 @@ const OrganizationContainer = (props) => {
       createdAt = {org.created_at}
       userID = "1"
     />) })} else {
-    orgComponents = <p className="open-sans">It looks like you haven't added an org yet!</p>
+    orgComponents = <OrgForm callback={addOrg} />
   }
 
 

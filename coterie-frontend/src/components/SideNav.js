@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import OrganizationContainer from './OrganizationContainer';
-import Profile from './Profile';
-import Announcements from './Announcements';
-import Events from './Events';
-import Holidays from './Holidays';
-import Scriptures from './Scriptures';
+import OrganizationContainer from './Dashboard/OrganizationContainer';
+import Profile from './SideNavElements/Profile';
+import Announcements from './SideNavElements/Announcements';
+import Events from './SideNavElements/Events';
+import Holidays from './SideNavElements/Holidays';
+import Scriptures from './SideNavElements/Scriptures';
 
 const SideNav = (props) => {
   const organizationID = props.orgID

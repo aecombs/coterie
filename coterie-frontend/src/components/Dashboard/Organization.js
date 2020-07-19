@@ -13,8 +13,15 @@ const Organization = (props) => {
 
   return (
     <div className="w-100">
-      <h4>{props.name}</h4>
-      <p className="open-sans">{props.missionStatement}</p>
+      <div className="row justify-content-between">
+        <div>
+          <h4>{props.name}</h4>
+          <p className="open-sans">{props.missionStatement}</p>
+        </div>
+        <div>
+          <button onClick="" className="btn btn-secondary">+</button>
+        </div>
+      </div>
       <p className="open-sans">Established {formatDate(props.createdAt)}</p>
       <p className="open-sans">Current Funds: ${props.totalFunds/100}</p>
       <Members 

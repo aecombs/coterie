@@ -40,7 +40,7 @@ const Members = (props) => {
 
 
   return (
-    <div className="">
+    <section className="">
       <h6 className="text-left w-100">Followers</h6>
       <table className="table table-hover table-light">
         <thead className="thead-light text-center">
@@ -56,7 +56,7 @@ const Members = (props) => {
           {memberComponents}
         </tbody>
       </table>
-    </div>
+    </section>
   )
 }
 
