@@ -3,6 +3,7 @@ package models
 import (
 	"database/sql"
 	"log"
+	"strconv"
 )
 
 type Organization struct {
@@ -65,11 +66,18 @@ func (organizationTable *OrganizationTable) OrganizationsLister(usID string) ([]
 
 	for rows.Next() {
 		rows.Scan(&id, &name, &missionStatement, &totalFunds, &createdAt, &updatedAt, &userID)
+
+		updatedFunds, err := organizationTable.updateFunds(id)
+		if err != nil {
+			log.Printf("Bad Query: %s", err.Error())
+			return nil, err
+		}
+
 		organization := Organization{
 			ID:               id,
 			Name:             name,
 			MissionStatement: missionStatement,
-			TotalFunds:       totalFunds,
+			TotalFunds:       updatedFunds,
 			CreatedAt:        createdAt,
 			UpdatedAt:        updatedAt,
 			UserID:           userID,
@@ -107,10 +115,17 @@ func (organizationTable *OrganizationTable) OrganizationGetter(organizationID st
 			return Organization{}, err
 		}
 
+		updatedFunds, err := organizationTable.updateFunds(id)
+		if err != nil {
+			log.Printf("Bad Query: %s", err.Error())
+			return Organization{}, err
+		}
+		log.Printf("UpdatedFunds:: %s", strconv.Itoa(updatedFunds))
+
 		organization.ID = id
 		organization.Name = name
 		organization.MissionStatement = missionStatement
-		organization.TotalFunds = totalFunds
+		organization.TotalFunds = updatedFunds
 		organization.CreatedAt = createdAt
 		organization.UpdatedAt = updatedAt
 		organization.UserID = userID
@@ -179,4 +194,27 @@ func (organizationTable *OrganizationTable) OrganizationDeleter(organizationID s
 	}
 
 	return nil
+}
+
+func (organizationTable *OrganizationTable) updateFunds(orgID int) (int, error) {
+	var calculatedFunds int
+
+	rows, err := organizationTable.DB.Query(`
+		SELECT funds_raised FROM member WHERE member.organization_id = ?
+	`, strconv.Itoa(orgID))
+	if err != nil {
+		log.Printf("Unable to retrieve information: %s", err.Error())
+		return 0, err
+	}
+	defer rows.Close()
+
+	var fundsRaised int
+
+	for rows.Next() {
+		rows.Scan(&fundsRaised)
+		calculatedFunds += fundsRaised
+	}
+
+	return calculatedFunds, nil
+
 }
