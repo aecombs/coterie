@@ -106,6 +106,7 @@ const Scripture = (props) => {
         <ChapterForm 
         orgID={props.orgID}
         visibility={visibility}
+        scripLength={chapterComponents.length}
         addChapterCallback={addChapter}
         onSubmitCallback={toggleFormVisibility}
         />
