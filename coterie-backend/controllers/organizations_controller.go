@@ -14,7 +14,6 @@ import (
 func GetOrganizations(organizationTable *models.OrganizationTable, userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		
 
 		// user, err := GrabLoggedInUser(userTable, r)
 		// //if user isn't logged in
@@ -39,7 +38,7 @@ func GetOrganizations(organizationTable *models.OrganizationTable, userTable *mo
 func AddOrganization(organizationTable *models.OrganizationTable, userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
-		
+
 		body := map[string]string{}
 		req.BindBody(&body)
 
@@ -64,9 +63,9 @@ func AddOrganization(organizationTable *models.OrganizationTable, userTable *mod
 
 		res.SendJSON(result)
 
-		// url := "http://localhost:3001/dashboard"
-		// http.Redirect(w, r, url, http.StatusTemporaryRedirect)
-		// return
+		url := "http://localhost:3001/dashboard"
+		http.Redirect(w, r, url, http.StatusSeeOther)
+		return
 	}
 }
 
@@ -74,7 +73,7 @@ func AddOrganization(organizationTable *models.OrganizationTable, userTable *mod
 func GetOrganization(organizationTable *models.OrganizationTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		
+
 		organizationID := chi.URLParam(r, "organizationID")
 
 		organization, err := organizationTable.OrganizationGetter(organizationID)
@@ -91,7 +90,7 @@ func GetOrganization(organizationTable *models.OrganizationTable) http.HandlerFu
 func UpdateOrganization(organizationTable *models.OrganizationTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		_, req := yin.Event(w, r)
-		
+
 		organizationID := chi.URLParam(r, "organizationID")
 		body := map[string]string{}
 		req.BindBody(&body)
@@ -114,7 +113,7 @@ func UpdateOrganization(organizationTable *models.OrganizationTable) http.Handle
 
 		// res.SendJSON(result)
 		url := "http://localhost:3001/dashboard"
-		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
+		http.Redirect(w, r, url, http.StatusSeeOther)
 		return
 	}
 }
@@ -123,7 +122,7 @@ func UpdateOrganization(organizationTable *models.OrganizationTable) http.Handle
 func DeleteOrganization(organizationTable *models.OrganizationTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// _, _ := yin.Event(w, r)
-		
+
 		organizationID := chi.URLParam(r, "organizationID")
 
 		err := organizationTable.OrganizationDeleter(organizationID)
@@ -134,7 +133,7 @@ func DeleteOrganization(organizationTable *models.OrganizationTable) http.Handle
 
 		// res.SendStatus(200)
 		url := "http://localhost:3001/dashboard"
-		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
+		http.Redirect(w, r, url, http.StatusSeeOther)
 		return
 	}
 }

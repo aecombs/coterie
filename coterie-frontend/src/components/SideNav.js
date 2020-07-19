@@ -20,6 +20,8 @@ const SideNav = (props) => {
     axios.post(url, orgObj)
     .then((response) => {
       setErrorMessage(`organization ${orgObj["name"]} added`);
+      //TODO: Update to use intended redirect URL from response
+      window.location.assign("http://localhost:3001/dashboard");
     })
     
     .catch((error) => {
