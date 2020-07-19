@@ -126,7 +126,7 @@ func main() {
 	})
 
 	//Holidays
-	r.Route("/holiday/{holidayID}", func(r chi.Router) {
+	r.Route("/holidays/{holidayID}", func(r chi.Router) {
 		r.Get("/", controllers.GetHoliday(holidays))
 		r.Put("/", controllers.UpdateHoliday(holidays))
 		r.Delete("/", controllers.DeleteHoliday(holidays))

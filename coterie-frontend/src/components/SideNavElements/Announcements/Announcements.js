@@ -25,7 +25,7 @@ const Announcements = (props) => {
     
     .catch((error) => {
       setErrorMessage(error.message);
-      console.log(`Unable to add mem: ${errorMessage}`);
+      console.log(`Unable to add announcement: ${errorMessage}`);
     })
   }
 
@@ -38,7 +38,7 @@ const Announcements = (props) => {
     
     .catch((error) => {
       setErrorMessage(error.message);
-      console.log(`Unable to add mem: ${errorMessage}`);
+      console.log(`Unable to add announcement: ${errorMessage}`);
     })
   }
 

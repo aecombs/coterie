@@ -39,6 +39,7 @@ const Announcement = (props) => {
         orgID={props.orgID}
         visibility={updateMode}
         addAnnouncementCallback={updateAnnouncement}
+        updateAnnouncementCallback={updateAnnouncement}
         onSubmitCallback={setUpdate}
         />
     </section>

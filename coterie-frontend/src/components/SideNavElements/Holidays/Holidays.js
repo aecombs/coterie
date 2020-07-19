@@ -1,11 +1,53 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import Holiday from './Holiday';
+import HolidayForm from './HolidayForm';
 
 const Holidays = (props) => {
   const [holidaysList, setHolidaysList] = useState(null);
+  const [visibility, setVisibility] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const url = `http://localhost:3000/users/${props.userID}/organizations/${props.orgID}/holidays`
+
+  const updateURL = `http://localhost:3000/holidays`
+
+
+  const addHoliday = (holObj) => {
+    //remove unnecessary id property
+    delete holObj["id"];
+
+    axios.post(url, holObj)
+    .then((response) => {
+      setErrorMessage(`Holiday ${holObj["name"]} added`);
+      window.location.reload();
+    })
+    
+    .catch((error) => {
+      setErrorMessage(error.message);
+      console.log(`Unable to add holiday: ${errorMessage}`);
+    })
+  }
+
+  const updateHoliday = (holObj) => {
+    axios.put(`${updateURL}/${holObj.id}`, holObj)
+    .then((response) => {
+      setErrorMessage(`Holiday ${holObj["name"]} was updated`);
+      window.location.reload();
+    })
+    
+    .catch((error) => {
+      setErrorMessage(error.message);
+      console.log(`Unable to add holiday: ${errorMessage}`);
+    })
+  }
+
+   //toggle visibility of holiday form component
+   const toggleFormVisibility = () => {
+    setVisibility(!visibility);
+    return;
+  }
+
 
   useEffect(() => {
     axios.get(url)
@@ -29,18 +71,27 @@ const Holidays = (props) => {
       date={hol.date}
       description={hol.description}
       orgID={hol.organization_id}
+      updateHolidayCallback={updateHoliday}
       />
     )
   })
-} else {
-  holidayComponents = <p className="open-sans">Document your holidays here!</p>
 }
 
 
   return (
     <div className="container">
-      <h4 className="text-left w-100">All Holidays</h4>
       <div className="d-flex list-group">
+        <div className="d-flex py-2 justify-content-between">
+          <h4>Holidays</h4>
+          <button className="btn btn-secondary" onClick={toggleFormVisibility}>{ visibility ? "-" : "+"}</button>
+        </div>
+        <p className={ holidayComponents !== undefined ? "hidden" : "open-sans" }>You haven't created any holidays yet.</p>
+        <HolidayForm 
+        orgID={props.orgID}
+        visibility={visibility}
+        addHolidayCallback={addHoliday}
+        onSubmitCallback={toggleFormVisibility}
+        />
         {holidayComponents}
       </div>
     </div>

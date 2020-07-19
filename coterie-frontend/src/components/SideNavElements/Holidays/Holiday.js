@@ -40,6 +40,7 @@ const Holiday = (props) => {
         orgID={props.orgID}
         visibility={updateMode}
         addHolidayCallback={updateHoliday}
+        updateHolidayCallback={updateHoliday}
         onSubmitCallback={setUpdate}
         />
     </section>

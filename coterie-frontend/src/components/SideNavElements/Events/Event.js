@@ -40,7 +40,8 @@ const Event = (props) => {
         description={props.description}
         orgID={props.orgID}
         visibility={updateMode}
-        addEventCallback={updateEvent}
+        addAnnouncementCallback={updateEvent}
+        updateEventCallback={updateEvent}
         onSubmitCallback={setUpdate}
         />
     </section>
