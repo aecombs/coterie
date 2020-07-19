@@ -8,18 +8,18 @@ const Event = (props) => {
   }
 
   return (
-    <div className="list-group-item card">
+    <button className="btn list-group-item list-group-item-action">
       <div className="card-body row justify-content-between">
-        <div className="">
-          <p className="card-title font-weight-bolder">{props.name}</p>
-          <p className="open-sans card-text">{props.description}</p>
+        <div>
+          <p className="card-title font-weight-bolder text-left">{props.name}</p>
+          <p className="open-sans card-text text-left">{props.description}</p>
         </div>
         <div>
-          <p className="open-sans card-text">{formatDate(props.date)}</p>
-        <p className="open-sans card-text">{props.occasion}</p>
+          <p className="open-sans card-text text-right">{formatDate(props.date)}</p>
+        <p className="open-sans card-text text-right">{props.occasion}</p>
         </div>
       </div>
-    </div>
+    </button>
   )
 }
 
