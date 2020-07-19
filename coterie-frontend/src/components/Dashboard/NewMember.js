@@ -62,7 +62,7 @@ const NewMember = (props) => {
   };
 
   return (
-    <div className={ props.visibility ? "container" : "container hidden"}>
+    <div className={ props.visibility ? "container py-3" : "container hidden"}>
       <form className="" onSubmit={onFormSubmit}>
         <div className="form-group">
           <small className="open-sans form-text text-muted">Member's Name</small>
