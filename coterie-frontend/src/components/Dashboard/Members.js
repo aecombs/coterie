@@ -66,16 +66,16 @@ const addMember = (memObj) => {
 
   return (
     <section className="w-100">
-      <NewMember 
-      orgID={props.orgID}
-      visibility={visibility}
-      addMemberCallback={addMember}
-      onSubmitCallback={toggleFormVisibility}
-      />
-      <div className="d-flex py-2">
-        <h6 className="mt-2 w-100">Followers</h6>
-        <button className="btn btn-secondary" onClick={toggleFormVisibility}>{ visibility ? "-" : "+"}</button>
+      <div className="">
+        <button className="btn btn-secondary float-right mb-2" onClick={toggleFormVisibility}>{ visibility ? "-" : "+"}</button>
+        <NewMember 
+        orgID={props.orgID}
+        visibility={visibility}
+        addMemberCallback={addMember}
+        onSubmitCallback={toggleFormVisibility}
+        />
       </div>
+      <h6 className="mt-3 w-100">Followers</h6>
       <table className="table table-hover table-light">
         <thead className="thead-light text-left">
           <tr>
