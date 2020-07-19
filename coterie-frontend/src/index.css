@@ -83,6 +83,9 @@ p.hidden-until-hover:hover {
   visibility: visible;
 }
 
+h2.form-title {
+  height: 6.5vh;
+}
 
 footer.footer {
   background-color: #44A1A0;

@@ -11,6 +11,15 @@ const Organization = (props) => {
     return formatedDate
   }
 
+  const formatCurrency = (int) => {
+    let modInt = 0
+    if (int !== 0){
+      let modInt = int/100
+    }
+    const formattedInt = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(modInt)
+    return formattedInt
+  }
+
   return (
     <div className="w-100">
       <div className="row justify-content-between">
@@ -19,13 +28,13 @@ const Organization = (props) => {
           <p className="open-sans">{props.missionStatement}</p>
         </div>
         <div>
-          <a href="/dashboard/new" className="">
+          {/* <a href="/dashboard/new" className="">
           <button className="btn btn-secondary">+</button>
-          </a>
+          </a> */}
         </div>
       </div>
       <p className="open-sans">Established {formatDate(props.createdAt)}</p>
-      <p className="open-sans">Current Funds: ${props.totalFunds/100}</p>
+      <p className="open-sans">Current Funds: {formatCurrency(props.totalFunds)}</p>
       <Members 
       orgID={props.id}
       userID={props.userID}

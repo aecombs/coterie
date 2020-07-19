@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 const OrgForm = (props) => {
   //Form
   const [formFields, setFormFields] = useState({
-    "name": '',
-    "mission_statement": '',
-    "total_funds": '',
+    "name": 'Enter your organization\'s name',
+    "mission_statement": 'Enter you mission statement',
+    "total_funds": 'Enter the total amount of funds you have raised',
   });
 
   const onNameChange = (event) => {
@@ -44,9 +44,9 @@ const OrgForm = (props) => {
   return (
     <div className="container">
       <form className="" onSubmit={onFormSubmit}>
-        <h2 className="">New Organization</h2>
+        <h2 className="form-title">{formFields["name"]}</h2>
         <div className="form-group">
-            <label className="open-sans">Name</label>
+            {/* <label className="open-sans">Name</label> */}
             <input
               className="open-sans form-control"
               name="name"
@@ -56,7 +56,7 @@ const OrgForm = (props) => {
             />
         </div>
         <div className="form-group">
-          <label className="open-sans">Mission Statement</label>
+          {/* <label className="open-sans">Mission Statement</label> */}
           <input
             className="open-sans form-control"
             name="mission_statement"
@@ -66,7 +66,7 @@ const OrgForm = (props) => {
           />
         </div>
         <div className="form-group">
-          <label className="open-sans">Total Funds</label>
+          {/* <label className="open-sans">Total Funds</label> */}
           <input
             className="open-sans form-control"
             name="total_funds"
@@ -76,7 +76,7 @@ const OrgForm = (props) => {
           />
         </div>
         <input 
-          className="btn btn-light" 
+          className="btn btn-light w-100 text-center" 
           type="submit"
           value="Add Organization"
           onClick={onFormSubmit}
