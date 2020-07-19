@@ -7,8 +7,9 @@ const Organization = (props) => {
     const month = date.substring(5, 7)
     const day = date.substring(8, 10)
     const year = date.substring(0, 4)
-    const formatedDate = `${month}-${day}-${year}`
-    return formatedDate
+    const string = `${year}-${month}-${day}`
+    const formattedDate = new Date(string).toUTCString();
+    return formattedDate.substring(0, 17)
   }
 
   const formatCurrency = (int) => {
@@ -30,11 +31,6 @@ const Organization = (props) => {
           <h4>{props.name}</h4>
           <p className="open-sans">{props.missionStatement}</p>
         </div>
-        {/* <div>
-          <a href="/dashboard/new" className="">
-          <button className="btn btn-secondary">+</button>
-          </a>
-        </div> */}
       </div>
       <p className="open-sans">Established {formatDate(props.createdAt)}</p>
       <p className="open-sans">Current Funds: {formatCurrency(props.totalFunds)}</p>

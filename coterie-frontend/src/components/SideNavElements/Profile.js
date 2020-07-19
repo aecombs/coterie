@@ -59,7 +59,6 @@ const Profile = (props) => {
 
   return (
     <div className="container">
-      <h4 className=" w-100">Profile</h4>
       <div className="d-flex flex-wrap">
         {userComponent}
 

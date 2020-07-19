@@ -133,7 +133,8 @@ const NewMember = (props) => {
 }
 
 NewMember.propTypes = {
-  userID: PropTypes.number,
+  orgID: PropTypes.number,
+  visibility: PropTypes.bool,
 };
 
 export default NewMember;

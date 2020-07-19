@@ -15,7 +15,7 @@ const Member = (props) => {
   }
 
   return (
-    <tr className="text-center">
+    <tr className="text-left">
       <td className="card-title open-sans">{props.name}</td>
       <td className="card-title open-sans">{props.class}</td>
       <td className="card-text open-sans">{formatCurrency(props.fundsRaised)}</td>

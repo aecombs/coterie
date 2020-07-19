@@ -77,7 +77,7 @@ const addMember = (memObj) => {
         <button className="btn btn-secondary" onClick={toggleFormVisibility}>{ visibility ? "-" : "+"}</button>
       </div>
       <table className="table table-hover table-light">
-        <thead className="thead-light text-center">
+        <thead className="thead-light text-left">
           <tr>
             <th>Name</th>
             <th>Class</th>
