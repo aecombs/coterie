@@ -72,10 +72,9 @@ const Holidays = (props) => {
       description={hol.description}
       orgID={hol.organization_id}
       updateHolidayCallback={updateHoliday}
-      />
-    )
-  })
-}
+      />)
+    })
+  }
 
 
   return (
