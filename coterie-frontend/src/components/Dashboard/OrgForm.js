@@ -10,7 +10,7 @@ const OrgForm = (props) => {
   });
 
   const onNameChange = (event) => {
-    console.log(`Text field updated ${event.target.value}`);
+    console.log(`name field updated ${event.target.value}`);
     setFormFields({
       ...formFields,
       "name": event.target.value,

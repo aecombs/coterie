@@ -13,7 +13,7 @@ const NewMember = (props) => {
   });
 
   const onNameChange = (event) => {
-    console.log(`Text field updated ${event.target.value}`);
+    console.log(`name field updated ${event.target.value}`);
     setFormFields({
       ...formFields,
       "name": event.target.value,
@@ -28,7 +28,7 @@ const NewMember = (props) => {
     });
   };
   const onClassChange = (event) => {
-    console.log(`clCss field updated ${event.target.value}`);
+    console.log(`class field updated ${event.target.value}`);
     setFormFields({
       ...formFields,
       "class": event.target.value,
@@ -104,7 +104,7 @@ const NewMember = (props) => {
           <input
             className="open-sans form-control"
             name="email"
-            type="text"
+            type="email"
             placeholder="joe@shmoe.com"
             value={formFields["email"]}
             onChange={onEmailChange}

@@ -1,11 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import User from './User';
+
 import axios from 'axios';
 
 const Profile = (props) => {
   const [userData, setUserData] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+
+  //Updating a user
+  const updateUser = (userObj) => {
+    axios.post(url, userObj)
+    .then((response) => {
+      setErrorMessage(`User was updated`);
+      window.location.reload();
+    })
+    
+    .catch((error) => {
+      setErrorMessage(error.message);
+      console.log(`Unable to update user: ${errorMessage}`);
+    })
+  }
+
+    
 
   const url = `http://localhost:3000/users/${props.userID}`
+
+
 
   useEffect(() => {
     axios.get(url)
@@ -14,7 +35,8 @@ const Profile = (props) => {
         setUserData(userDataObj);
       })
       .catch((error) => {
-        console.log(`There was an error retrieving scriptures: ${error}`)
+        setErrorMessage(error);
+        console.log(`There was an error retrieving scriptures: ${errorMessage}`)
       });
   },[url])
   
@@ -28,16 +50,20 @@ const Profile = (props) => {
       email={userData["email"]}
       bio={userData["bio"]}
       avatar={userData["avatar"]}
+      updateUserCallback={updateUser}
       />
     } else {
     userComponent = <p className="open-sans">There was an error loading your profile...</p>
   };
+  
 
   return (
     <div className="container">
       <h4 className=" w-100">Profile</h4>
-      <div className="d-flex">{userComponent}</div>
-      
+      <div className="d-flex flex-wrap">
+        {userComponent}
+
+      </div>
     </div>
   )
 }

@@ -58,7 +58,7 @@ const addMember = (memObj) => {
 }
 
 
-  //toggle state new member
+  //toggle visibility of new member component
   const toggleFormVisibility = () => {
     setVisibility(!visibility);
     return;
