@@ -65,7 +65,7 @@ const addMember = (memObj) => {
   }
 
   return (
-    <section className="">
+    <section className="w-100">
       <NewMember 
       orgID={props.orgID}
       visibility={visibility}

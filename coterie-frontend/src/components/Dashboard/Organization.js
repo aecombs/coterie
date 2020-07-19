@@ -25,20 +25,24 @@ const Organization = (props) => {
   }
 
   return (
-    <div className="w-100">
-      <div className="row justify-content-between">
+    <section className="w-100 container py-2">
+      <div className="row">
         <div>
-          <h4>{props.name}</h4>
+          <h4 className="">{props.name}</h4>
           <p className="open-sans">{props.missionStatement}</p>
         </div>
       </div>
-      <p className="open-sans">Established {formatDate(props.createdAt)}</p>
-      <p className="open-sans">Current Funds: {formatCurrency(props.totalFunds)}</p>
-      <Members 
-      orgID={props.id}
-      userID={props.userID}
-      />
-    </div>
+      <div className="row justify-content-between">
+        <p className="open-sans">Current Funds: {formatCurrency(props.totalFunds)}</p>
+        <p className="open-sans">Established {formatDate(props.createdAt)}</p>
+      </div>
+      <div className="row">
+        <Members 
+        orgID={props.id}
+        userID={props.userID}
+        />
+      </div>
+    </section>
   )
 }
 
