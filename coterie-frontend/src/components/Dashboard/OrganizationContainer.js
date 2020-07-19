@@ -22,17 +22,17 @@ const OrganizationContainer = (props) => {
       });
   },[url])
 
-  const addOrg = (org) => {
-    axios.post(url, org)
-    .then((response) => {
-      setErrorMessage(`Organization ${org} added`);
-    })
+  // const addOrg = (org) => {
+  //   axios.post(url, org)
+  //   .then((response) => {
+  //     setErrorMessage(`Organization ${org} added`);
+  //   })
     
-    .catch((error) => {
-      setErrorMessage(error.message);
-      console.log(`Unable to add org: ${errorMessage}`);
-    })
-  }
+  //   .catch((error) => {
+  //     setErrorMessage(error.message);
+  //     console.log(`Unable to add org: ${errorMessage}`);
+  //   })
+  // }
 
 
   let orgComponents = undefined
@@ -47,13 +47,13 @@ const OrganizationContainer = (props) => {
       createdAt = {org.created_at}
       userID = "1"
     />) })} else {
-    orgComponents = <OrgForm callback={addOrg} />
+    orgComponents = <OrgForm addOrgCallback={props.addOrgCallback} />
   }
 
 
 
   return (
-    <div className="d-flex container">
+    <div className="d-flex container flex-wrap">
       {orgComponents}
     </div>
   )

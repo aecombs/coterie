@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import OrganizationContainer from './Dashboard/OrganizationContainer';
 import Profile from './SideNavElements/Profile';
@@ -6,9 +6,31 @@ import Announcements from './SideNavElements/Announcements';
 import Events from './SideNavElements/Events';
 import Holidays from './SideNavElements/Holidays';
 import Scriptures from './SideNavElements/Scriptures';
+import OrgForm from './Dashboard/OrgForm';
+import axios from 'axios';
 
 const SideNav = (props) => {
+  const [errorMessage, setErrorMessage] = useState(null);
+
   const organizationID = props.orgID
+
+  const url = `http://localhost:3000/users/${props.userID}/organizations/`
+
+  const addOrg = (orgObj) => {
+    axios.post(url, orgObj)
+    .then((response) => {
+      setErrorMessage(`organization ${orgObj["name"]} added`);
+    })
+    
+    .catch((error) => {
+      setErrorMessage(error.message);
+      console.log(`Unable to add org: ${errorMessage}`);
+    })
+  }
+
+
+
+
   return (
     <Router>
     <div className="d-flex">
@@ -32,6 +54,7 @@ const SideNav = (props) => {
             render={(props) => (
               <OrganizationContainer {...props}
               userID={"1"}
+              addOrgCallback={addOrg}
               />
             )}
           />
@@ -72,6 +95,15 @@ const SideNav = (props) => {
             render={(props) => (
               <Scriptures {...props} 
               orgID={"1"}
+              />
+            )}
+          />
+          <Route 
+            path='/dashboard/new'
+            render={(props) => (
+              <OrgForm {...props} 
+              addOrgCallback={addOrg}
+
               />
             )}
           />

@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 const OrgForm = (props) => {
   //Form
   const [formFields, setFormFields] = useState({
-    name: '',
-    mission_statement: '',
-    total_funds: '',
+    "name": '',
+    "mission_statement": '',
+    "total_funds": '',
   });
 
   const onNameChange = (event) => {
     console.log(`Text field updated ${event.target.value}`);
     setFormFields({
       ...formFields,
-      text: event.target.value,
+      "name": event.target.value,
     });
   };
 
@@ -21,7 +21,7 @@ const OrgForm = (props) => {
     console.log(`mission_statement field updated ${event.target.value}`);
     setFormFields({
       ...formFields,
-      mission_statement: event.target.value,
+      "mission_statement": event.target.value,
     });
   };
 
@@ -29,17 +29,9 @@ const OrgForm = (props) => {
     console.log(`total_funds field updated ${event.target.value}`);
     setFormFields({
       ...formFields,
-      total_funds: event.target.value,
+      "total_funds": event.target.value,
     });
   };
-
-
-  // const dataChanged = (data) => {
-  //   // data = { description: "New validated text comes here" }
-  //   // Update your model from here
-  //   console.log(data)
-  //   this.setState({...data})
-  // }
   
 //callback func to an http req for posting org.
   const onFormSubmit = (event) => {
@@ -47,49 +39,44 @@ const OrgForm = (props) => {
 
     props.addOrgCallback(formFields);
     
-    setFormFields({
-      name: '',
-      mission_statement: '',
-      total_funds: '',
-    });
   };
 
   return (
     <div className="container">
       <form className="" onSubmit={onFormSubmit}>
         <h2 className="">New Organization</h2>
-        <div>
-            <label className="">Name</label>
+        <div className="form-group">
+            <label className="open-sans">Name</label>
             <input
-              className=""
+              className="open-sans form-control"
               name="name"
               type="text"
-              value={formFields.name}
+              value={formFields["name"]}
               onChange={onNameChange}
             />
         </div>
-        <div>
-          <label className="">Mission Statement</label>
+        <div className="form-group">
+          <label className="open-sans">Mission Statement</label>
           <input
-            className=""
+            className="open-sans form-control"
             name="mission_statement"
             type="text"
-            value={formFields.name}
+            value={formFields["mission_statement"]}
             onChange={onMissionChange}
           />
         </div>
-        <div>
-          <label className="">Total Funds</label>
+        <div className="form-group">
+          <label className="open-sans">Total Funds</label>
           <input
-            className=""
+            className="open-sans form-control"
             name="total_funds"
             type="text"
-            value={formFields.name}
+            value={formFields["total_funds"]}
             onChange={onFundsChange}
           />
         </div>
         <input 
-          className="btn btn-dark" 
+          className="btn btn-light" 
           type="submit"
           value="Add Organization"
           onClick={onFormSubmit}

@@ -14,7 +14,7 @@ import (
 func GetEvents(eventTable *models.EventTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		EnableCors(&w)
+		
 		organizationID := chi.URLParam(r, "organizationID")
 
 		events, err := eventTable.EventsLister(organizationID)
@@ -31,7 +31,7 @@ func GetEvents(eventTable *models.EventTable) http.HandlerFunc {
 func AddEvent(eventTable *models.EventTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
-		EnableCors(&w)
+		
 		body := map[string]string{}
 		req.BindBody(&body)
 		organizationID := chi.URLParam(r, "organizationID")
@@ -63,7 +63,7 @@ func AddEvent(eventTable *models.EventTable) http.HandlerFunc {
 func GetEvent(eventTable *models.EventTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		EnableCors(&w)
+		
 		eventID := chi.URLParam(r, "eventID")
 
 		event, err := eventTable.EventGetter(eventID)
@@ -80,7 +80,7 @@ func GetEvent(eventTable *models.EventTable) http.HandlerFunc {
 func UpdateEvent(eventTable *models.EventTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
-		EnableCors(&w)
+		
 		eventID := chi.URLParam(r, "eventID")
 		body := map[string]string{}
 		req.BindBody(&body)
@@ -109,7 +109,7 @@ func UpdateEvent(eventTable *models.EventTable) http.HandlerFunc {
 func DeleteEvent(eventTable *models.EventTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		EnableCors(&w)
+		
 		eventID := chi.URLParam(r, "eventID")
 
 		err := eventTable.EventDeleter(eventID)

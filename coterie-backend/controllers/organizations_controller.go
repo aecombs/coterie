@@ -14,7 +14,7 @@ import (
 func GetOrganizations(organizationTable *models.OrganizationTable, userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		EnableCors(&w)
+		
 
 		// user, err := GrabLoggedInUser(userTable, r)
 		// //if user isn't logged in
@@ -39,7 +39,7 @@ func GetOrganizations(organizationTable *models.OrganizationTable, userTable *mo
 func AddOrganization(organizationTable *models.OrganizationTable, userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
-		EnableCors(&w)
+		
 		body := map[string]string{}
 		req.BindBody(&body)
 
@@ -63,6 +63,10 @@ func AddOrganization(organizationTable *models.OrganizationTable, userTable *mod
 		}
 
 		res.SendJSON(result)
+
+		// url := "http://localhost:3001/dashboard"
+		// http.Redirect(w, r, url, http.StatusTemporaryRedirect)
+		// return
 	}
 }
 
@@ -70,7 +74,7 @@ func AddOrganization(organizationTable *models.OrganizationTable, userTable *mod
 func GetOrganization(organizationTable *models.OrganizationTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		EnableCors(&w)
+		
 		organizationID := chi.URLParam(r, "organizationID")
 
 		organization, err := organizationTable.OrganizationGetter(organizationID)
@@ -86,8 +90,8 @@ func GetOrganization(organizationTable *models.OrganizationTable) http.HandlerFu
 //UpdateOrganization is update action
 func UpdateOrganization(organizationTable *models.OrganizationTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		res, req := yin.Event(w, r)
-		EnableCors(&w)
+		_, req := yin.Event(w, r)
+		
 		organizationID := chi.URLParam(r, "organizationID")
 		body := map[string]string{}
 		req.BindBody(&body)
@@ -102,21 +106,24 @@ func UpdateOrganization(organizationTable *models.OrganizationTable) http.Handle
 			UpdatedAt:        time.Now().String(),
 		}
 
-		result, err := organizationTable.OrganizationUpdater(organization)
+		_, err := organizationTable.OrganizationUpdater(organization)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
 		}
 
-		res.SendJSON(result)
+		// res.SendJSON(result)
+		url := "http://localhost:3001/dashboard"
+		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
+		return
 	}
 }
 
 //DeleteOrganization is destroy action
 func DeleteOrganization(organizationTable *models.OrganizationTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		res, _ := yin.Event(w, r)
-		EnableCors(&w)
+		// _, _ := yin.Event(w, r)
+		
 		organizationID := chi.URLParam(r, "organizationID")
 
 		err := organizationTable.OrganizationDeleter(organizationID)
@@ -125,6 +132,9 @@ func DeleteOrganization(organizationTable *models.OrganizationTable) http.Handle
 			return
 		}
 
-		res.SendStatus(200)
+		// res.SendStatus(200)
+		url := "http://localhost:3001/dashboard"
+		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
+		return
 	}
 }

@@ -16,7 +16,7 @@ import (
 func GetMembers(memberTable *models.MemberTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		EnableCors(&w)
+		
 		organizationID := chi.URLParam(r, "organizationID")
 
 		members, err := memberTable.MembersLister(organizationID)
@@ -33,7 +33,7 @@ func GetMembers(memberTable *models.MemberTable) http.HandlerFunc {
 func AddMember(memberTable *models.MemberTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
-		EnableCors(&w)
+		
 		body := map[string]string{}
 		req.BindBody(&body)
 		organizationID := chi.URLParam(r, "organizationID")
@@ -67,7 +67,7 @@ func AddMember(memberTable *models.MemberTable) http.HandlerFunc {
 func GetMember(memberTable *models.MemberTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		EnableCors(&w)
+		
 		memberID := chi.URLParam(r, "memberID")
 
 		member, err := memberTable.MemberGetter(memberID)
@@ -84,7 +84,7 @@ func GetMember(memberTable *models.MemberTable) http.HandlerFunc {
 func UpdateMember(memberTable *models.MemberTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
-		EnableCors(&w)
+		
 		memberID := chi.URLParam(r, "memberID")
 		body := map[string]string{}
 		req.BindBody(&body)
@@ -113,7 +113,7 @@ func UpdateMember(memberTable *models.MemberTable) http.HandlerFunc {
 func DeleteMember(memberTable *models.MemberTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		EnableCors(&w)
+		
 		memberID := chi.URLParam(r, "memberID")
 
 		err := memberTable.MemberDeleter(memberID)

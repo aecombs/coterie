@@ -19,7 +19,9 @@ const Organization = (props) => {
           <p className="open-sans">{props.missionStatement}</p>
         </div>
         <div>
-          <button onClick="" className="btn btn-secondary">+</button>
+          <a href="/dashboard/new" className="">
+          <button className="btn btn-secondary">+</button>
+          </a>
         </div>
       </div>
       <p className="open-sans">Established {formatDate(props.createdAt)}</p>

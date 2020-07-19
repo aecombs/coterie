@@ -16,7 +16,7 @@ import (
 func GetScriptures(scriptureTable *models.ScriptureTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		EnableCors(&w)
+		
 		organizationID := chi.URLParam(r, "organizationID")
 
 		scriptures, err := scriptureTable.ScripturesLister(organizationID)
@@ -33,7 +33,7 @@ func GetScriptures(scriptureTable *models.ScriptureTable) http.HandlerFunc {
 func AddScripture(scriptureTable *models.ScriptureTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
-		EnableCors(&w)
+		
 		body := map[string]string{}
 		req.BindBody(&body)
 		organizationID := chi.URLParam(r, "organizationID")
@@ -62,7 +62,7 @@ func AddScripture(scriptureTable *models.ScriptureTable) http.HandlerFunc {
 func GetScripture(scriptureTable *models.ScriptureTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		EnableCors(&w)
+		
 		scriptureID := chi.URLParam(r, "scriptureID")
 
 		scripture, err := scriptureTable.ScriptureGetter(scriptureID)
@@ -79,7 +79,7 @@ func GetScripture(scriptureTable *models.ScriptureTable) http.HandlerFunc {
 func UpdateScripture(scriptureTable *models.ScriptureTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
-		EnableCors(&w)
+		
 		scriptureID := chi.URLParam(r, "scriptureID")
 		body := map[string]string{}
 		req.BindBody(&body)
@@ -105,7 +105,7 @@ func UpdateScripture(scriptureTable *models.ScriptureTable) http.HandlerFunc {
 func DeleteScripture(scriptureTable *models.ScriptureTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		EnableCors(&w)
+		
 		scriptureID := chi.URLParam(r, "scriptureID")
 
 		err := scriptureTable.ScriptureDeleter(scriptureID)

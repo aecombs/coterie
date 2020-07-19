@@ -16,7 +16,7 @@ import (
 func GetAnnouncements(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		EnableCors(&w)
+		
 		organizationID := chi.URLParam(r, "organizationID")
 
 		announcements, err := announcementTable.AnnouncementsLister(organizationID)
@@ -33,7 +33,7 @@ func GetAnnouncements(announcementTable *models.AnnouncementTable) http.HandlerF
 func AddAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
-		EnableCors(&w)
+		
 		organizationID := chi.URLParam(r, "organizationID")
 		body := map[string]string{}
 		req.BindBody(&body)
@@ -64,7 +64,7 @@ func AddAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFu
 func GetAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		EnableCors(&w)
+		
 		announcementID := chi.URLParam(r, "announcementID")
 
 		announcement, err := announcementTable.AnnouncementGetter(announcementID)
@@ -81,7 +81,7 @@ func GetAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFu
 func UpdateAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
-		EnableCors(&w)
+		
 		announcementID := chi.URLParam(r, "announcementID")
 		body := map[string]string{}
 		req.BindBody(&body)
@@ -109,7 +109,7 @@ func UpdateAnnouncement(announcementTable *models.AnnouncementTable) http.Handle
 func DeleteAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		EnableCors(&w)
+		
 		announcementID := chi.URLParam(r, "announcementID")
 
 		err := announcementTable.AnnouncementDeleter(announcementID)

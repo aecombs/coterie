@@ -60,7 +60,7 @@ func GoogleLogin() http.HandlerFunc {
 func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		EnableCors(&w)
+		
 		response, err := getUserInfo(r.FormValue("state"), r.FormValue("code"))
 		if err != nil {
 			log.Printf("Unable to retrieve user info from Google: %s", err.Error())
@@ -192,7 +192,7 @@ func LogoutUser() http.HandlerFunc {
 func GetUser(userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		EnableCors(&w)
+		
 		userID := chi.URLParam(r, "userID")
 
 		user, err := userTable.UserGetterByID(userID)
@@ -211,7 +211,7 @@ func GetUser(userTable *models.UserTable) http.HandlerFunc {
 func UpdateUser(userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
-		EnableCors(&w)
+		
 		// user, err := GrabLoggedInUser(userTable, r)
 		// if err != nil {
 		// 	log.Printf("Unable to grab user: %s", err.Error())

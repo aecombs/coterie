@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 const Member = (props) => {
   return (
     <tr className="text-center">
-      <td><p className="card-title">{props.name}</p></td>
-      <td><p className="card-title">{props.class}</p></td>
-      <td><p className="card-text">${props.fundsRaised/100}</p></td>
-      <td><p className="card-text">{props.email}</p></td>
-      <td><p className="card-text">{props.birthdate}</p></td>
+      <td className="card-title">{props.name}</td>
+      <td className="card-title">{props.class}</td>
+      <td className="card-text">${props.fundsRaised/100}</td>
+      <td className="card-text">{props.email}</td>
+      <td className="card-text">{props.birthdate}</td>
     </tr>
   )
 }

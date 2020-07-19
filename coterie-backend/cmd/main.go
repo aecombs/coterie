@@ -10,6 +10,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/cors"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/qkgo/yin"
 )
@@ -42,9 +43,23 @@ func main() {
 	r.Use(yin.SimpleLogger)
 	r.Use(middleware.Recoverer)
 
+	// Basic CORS
+	// for more ideas, see: https://developer.github.com/v3/#cross-origin-resource-sharing
+	r.Use(cors.Handler(cors.Options{
+		// AllowedOrigins: []string{"https://foo.com"}, // Use this to allow specific origin hosts
+		AllowedOrigins: []string{"*"},
+		// AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: false,
+		MaxAge:           300, // Maximum value not ignored by any of major browsers
+	}))
+
 	//Users
 	r.Route("/", func(r chi.Router) {
 		//auth handling
+		// r.Options("/*", controllers.ApproveCors())
 		r.Get("/auth/google", controllers.GoogleLogin())
 		r.Get("/auth/google/callback", controllers.GoogleCallback(users))
 		r.Get("/logout", controllers.LogoutUser())
