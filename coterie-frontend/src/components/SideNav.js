@@ -71,6 +71,7 @@ const SideNav = (props) => {
             path='/dashboard/announcements' 
             render={(props) => (
               <Announcements {...props} 
+              userID={"1"}
               orgID={"1"}
               />
             )}
@@ -89,6 +90,7 @@ const SideNav = (props) => {
             path='/dashboard/holidays' 
             render={(props) => (
               <Holidays {...props} 
+              userID={"1"}
               orgID={"1"}
               />
             )}
@@ -97,6 +99,7 @@ const SideNav = (props) => {
             path='/dashboard/scriptures' 
             render={(props) => (
               <Scriptures {...props} 
+              userID={"1"}
               orgID={"1"}
               />
             )}
@@ -108,7 +111,6 @@ const SideNav = (props) => {
             render={(props) => (
               <OrgForm {...props} 
               addOrgCallback={addOrg}
-
               />
             )}
           />
