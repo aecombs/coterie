@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 const OrgForm = (props) => {
   //Form
   const [formFields, setFormFields] = useState({
-    "name": 'Enter your organization\'s name',
-    "mission_statement": 'Enter you mission statement',
+    "name": 'Your organization\'s name here!',
+    "mission_statement": '',
     "total_funds": '0',
   });
 
@@ -34,8 +34,8 @@ const OrgForm = (props) => {
   };
 
   return (
-    <div className="container">
-      <form className="" onSubmit={onFormSubmit}>
+    <div className="container row">
+      <form className="w-100" onSubmit={onFormSubmit}>
         <h2 className="form-title">{formFields["name"]}</h2>
         <div className="form-group">
             {/* <label className="open-sans">Name</label> */}
@@ -53,6 +53,7 @@ const OrgForm = (props) => {
             className="open-sans form-control"
             name="mission_statement"
             type="text"
+            placeholder="Enter you mission statement"
             value={formFields["mission_statement"]}
             onChange={onMissionChange}
           />

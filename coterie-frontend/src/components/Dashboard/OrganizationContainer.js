@@ -46,14 +46,15 @@ const OrganizationContainer = (props) => {
       totalFunds = {org.total_funds}
       createdAt = {org.created_at}
       userID = "1"
-    />) })} else {
-    orgComponents = <OrgForm addOrgCallback={props.addOrgCallback} />
+    />) 
+    })
   }
-
 
 
   return (
     <section className="d-flex container flex-wrap">
+       <p className={ orgComponents !== undefined ? "hidden" : "open-sans" }>It looks like you don't have an organization yet. Go ahead and make a new one!</p>
+       <OrgForm addOrgCallback={props.addOrgCallback} />
       {orgComponents}
     </section>
   )

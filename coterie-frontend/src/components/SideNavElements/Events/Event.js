@@ -43,9 +43,7 @@ const Event = (props) => {
         addEventCallback={updateEvent}
         onSubmitCallback={setUpdate}
         />
-
     </section>
-    
   )
 }
 

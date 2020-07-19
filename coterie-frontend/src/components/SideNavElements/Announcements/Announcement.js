@@ -1,24 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import AnnouncementForm from './AnnouncementForm';
 
 const Announcement = (props) => {
+  const [updateMode, setUpdateMode] = useState(false);
+
+  const formatDate = (dateStr) => {
+    const formattedDate = new Date(dateStr).toUTCString();
+    return formattedDate.substring(0,17)
+  }
+
+  const updateAnnouncement = (annObj) => {
+    props.updateAnnouncementCallback(annObj)
+  }
+
+  const setUpdate = () => {
+    setUpdateMode(!updateMode);
+  }
+
   return (
-    <div className="list-group-item card">
-      <div className="card-body">
-        <p className="open-sans card-title">{props.header}</p>
-        <p className="open-sans card-text">{props.date}</p>
-      </div>
-      <div className="card-body">
-        <p className="open-sans card-text hidden-until-hover">{props.text}</p>
-      </div>
-    </div>
+    <section>
+      <button onClick={setUpdate} className={ updateMode ? "hidden" : "btn list-group-item list-group-item-action"}>
+        <div className="card-body row justify-content-between">
+          <div>
+            <p className="card-title font-weight-bolder text-left">{props.header}</p>
+            <p className="open-sans card-text text-left">{props.description}</p>
+          </div>
+          <div>
+            <p className="open-sans card-text text-right">{formatDate(props.date)}</p>
+          </div>
+        </div>
+      </button>
+      <AnnouncementForm 
+        id={props.id}
+        header={props.header}
+        description={props.description}
+        date={props.date}
+        orgID={props.orgID}
+        visibility={updateMode}
+        addAnnouncementCallback={updateAnnouncement}
+        onSubmitCallback={setUpdate}
+        />
+    </section>
   )
 }
 
 Announcement.propTypes = {
   id: PropTypes.number,
   header: PropTypes.string,
-  text: PropTypes.string,
+  description: PropTypes.string,
   date: PropTypes.string,
   orgID: PropTypes.number
 };

@@ -42,7 +42,7 @@ const Events = (props) => {
     })
   }
   
-  //toggle visibility of new member component
+  //toggle visibility of event form component
   const toggleFormVisibility = () => {
     setVisibility(!visibility);
     return;
@@ -57,6 +57,7 @@ const Events = (props) => {
         setEventsList(list);
       })
       .catch((error) => {
+        setErrorMessage(error);
         console.log(`There was an error retrieving events: ${error}`)
       });
   },[url])
@@ -85,9 +86,9 @@ const Events = (props) => {
       <div className="d-flex list-group">
         <div className="d-flex py-2 justify-content-between">
           <h4>Events</h4>
-          <p className={ eventComponents !== undefined ? "hidden" : "open-sans" }>You haven't created any events yet.</p>
           <button className="btn btn-secondary" onClick={toggleFormVisibility}>{ visibility ? "-" : "+"}</button>
         </div>
+        <p className={ eventComponents !== undefined ? "hidden" : "open-sans" }>You haven't created any events yet.</p>
         <EventForm 
         orgID={props.orgID}
         visibility={visibility}
