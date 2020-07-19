@@ -81,7 +81,7 @@ const addMember = (memObj) => {
           <tr>
             <th>Name</th>
             <th>Class</th>
-            <th>Raised</th>
+            <th>Funds Raised</th>
             <th>Email</th>
             <th>Birthdate</th>
           </tr>

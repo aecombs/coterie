@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const NewMember = (props) => {
+const UpdateProfile = (props) => {
   //Form
   const [formFields, setFormFields] = useState({
     "name": '',
@@ -132,8 +132,8 @@ const NewMember = (props) => {
 )
 }
 
-NewMember.propTypes = {
+UpdateProfile.propTypes = {
   userID: PropTypes.number,
 };
 
-export default NewMember;
+export default UpdateProfile;
