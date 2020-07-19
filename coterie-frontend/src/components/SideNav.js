@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import OrganizationContainer from './Dashboard/OrganizationContainer';
-import Profile from './SideNavElements/Profile';
-import Announcements from './SideNavElements/Announcements';
-import Events from './SideNavElements/Events';
-import Holidays from './SideNavElements/Holidays';
-import Scriptures from './SideNavElements/Scriptures';
+import Profile from './SideNavElements/Profile/Profile';
+import Announcements from './SideNavElements/Announcements/Announcements';
+import Events from './SideNavElements/Events/Events';
+import Holidays from './SideNavElements/Holidays/Holidays';
+import Scriptures from './SideNavElements/Scriptures/Scriptures';
 import OrgForm from './Dashboard/OrgForm';
 import axios from 'axios';
 

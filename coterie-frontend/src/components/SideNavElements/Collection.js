@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Announcement from './Announcement';
 import Event from './Event';
-import Holiday from './Holiday';
+import Holiday from './Holidays/Holiday';
 import Scripture from './Scripture';
 import Member from './Member';
 
