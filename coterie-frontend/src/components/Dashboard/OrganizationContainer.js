@@ -54,7 +54,10 @@ const OrganizationContainer = (props) => {
   return (
     <section className="d-flex container flex-wrap">
        <p className={ orgComponents !== undefined ? "hidden" : "open-sans" }>It looks like you don't have an organization yet. Go ahead and make a new one!</p>
-       <OrgForm addOrgCallback={props.addOrgCallback} />
+       <OrgForm 
+       addOrgCallback={props.addOrgCallback}
+       visibility={orgComponents === undefined}
+       />
       {orgComponents}
     </section>
   )

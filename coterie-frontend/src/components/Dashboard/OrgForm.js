@@ -34,7 +34,7 @@ const OrgForm = (props) => {
   };
 
   return (
-    <div className="container row">
+    <div className={props.visibility ? "container row" : "hidden"}>
       <form className="w-100" onSubmit={onFormSubmit}>
         <h2 className="form-title">{formFields["name"]}</h2>
         <div className="form-group">
