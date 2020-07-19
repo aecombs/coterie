@@ -35,7 +35,7 @@ const SideNav = (props) => {
 
   return (
     <Router>
-    <div className="d-flex">
+    <div className="d-flex w-100">
       <div className="side-nav">
         <nav className="side-nav">
           <ul className="nav flex-column">

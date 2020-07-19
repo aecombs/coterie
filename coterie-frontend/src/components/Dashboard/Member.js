@@ -14,13 +14,22 @@ const Member = (props) => {
     return formattedInt
   }
 
+  const formatDate = (date) => {
+    const month = date.substring(5, 7)
+    const day = date.substring(8, 10)
+    const year = date.substring(0, 4)
+    const string = `${year}-${month}-${day}`
+    const formattedDate = new Date(string).toUTCString();
+    return formattedDate.substring(0, 17)
+  }
+
   return (
     <tr className="text-left">
       <td className="card-title open-sans">{props.name}</td>
       <td className="card-title open-sans">{props.class}</td>
       <td className="card-text open-sans">{formatCurrency(props.fundsRaised)}</td>
       <td className="card-text open-sans">{props.email}</td>
-      <td className="card-text open-sans">{props.birthdate}</td>
+      <td className="card-text open-sans">{formatDate(props.birthdate)}</td>
     </tr>
   )
 }
