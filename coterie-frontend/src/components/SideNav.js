@@ -100,6 +100,8 @@ const SideNav = (props) => {
               />
             )}
           />
+          
+
           <Route 
             path='/dashboard/new'
             render={(props) => (
@@ -109,6 +111,7 @@ const SideNav = (props) => {
               />
             )}
           />
+
         </Switch>
       </div>
     </div>

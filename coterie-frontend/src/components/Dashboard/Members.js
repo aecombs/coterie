@@ -1,11 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import Member from './Member';
+import NewMember from './NewMember';
 import axios from 'axios';
 
 const Members = (props) => {
   const [membersList, setMembersList] = useState(null);
-
-  const url = `http://localhost:3000/users/${props.userID}/organizations/${props.orgID}/members`
+  const [visibility, setVisibility] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  
+  //get all members
+  const url = `http://localhost:3000/users/${props.userID}/organizations/${props.orgID}/members`;
 
   useEffect(() => {
     axios.get(url)
@@ -14,6 +18,7 @@ const Members = (props) => {
         setMembersList(list);
       })
       .catch((error) => {
+        setErrorMessage(error);
         console.log(`There was an error retrieving members: ${error}`)
       });
   },[url])
@@ -39,9 +44,38 @@ const Members = (props) => {
 }
 
 
+const addMember = (memObj) => {
+  axios.post(url, memObj)
+  .then((response) => {
+    setErrorMessage(`Member ${memObj["name"]} added`);
+    window.location.reload();
+  })
+  
+  .catch((error) => {
+    setErrorMessage(error.message);
+    console.log(`Unable to add mem: ${errorMessage}`);
+  })
+}
+
+
+  //toggle state new member
+  const toggleFormVisibility = () => {
+    setVisibility(!visibility);
+    return;
+  }
+
   return (
     <section className="">
-      <h6 className="text-left w-100">Followers</h6>
+      <NewMember 
+      orgID={props.orgID}
+      visibility={visibility}
+      addMemberCallback={addMember}
+      onSubmitCallback={toggleFormVisibility}
+      />
+      <div className="d-flex py-2">
+        <h6 className="mt-2 w-100">Followers</h6>
+        <button className="btn btn-secondary" onClick={toggleFormVisibility}>{ visibility ? "-" : "+"}</button>
+      </div>
       <table className="table table-hover table-light">
         <thead className="thead-light text-center">
           <tr>

@@ -27,11 +27,11 @@ const Organization = (props) => {
           <h4>{props.name}</h4>
           <p className="open-sans">{props.missionStatement}</p>
         </div>
-        <div>
-          {/* <a href="/dashboard/new" className="">
+        {/* <div>
+          <a href="/dashboard/new" className="">
           <button className="btn btn-secondary">+</button>
-          </a> */}
-        </div>
+          </a>
+        </div> */}
       </div>
       <p className="open-sans">Established {formatDate(props.createdAt)}</p>
       <p className="open-sans">Current Funds: {formatCurrency(props.totalFunds)}</p>

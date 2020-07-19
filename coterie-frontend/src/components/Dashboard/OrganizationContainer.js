@@ -53,9 +53,9 @@ const OrganizationContainer = (props) => {
 
 
   return (
-    <div className="d-flex container flex-wrap">
+    <section className="d-flex container flex-wrap">
       {orgComponents}
-    </div>
+    </section>
   )
 }
 
