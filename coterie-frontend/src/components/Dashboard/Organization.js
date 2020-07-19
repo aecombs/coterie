@@ -12,9 +12,12 @@ const Organization = (props) => {
   }
 
   const formatCurrency = (int) => {
-    let modInt = 0
-    if (int !== 0){
-      let modInt = int/100
+    let modInt = 0;
+    if (int !== 0) {
+      modInt = int/100
+    }
+    if (int === undefined || int === null) {
+      modInt = 0;
     }
     const formattedInt = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(modInt)
     return formattedInt
