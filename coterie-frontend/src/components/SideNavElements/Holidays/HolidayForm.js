@@ -1,23 +1,33 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const AnnouncementForm = (props) => {
+const HolidayForm = (props) => {
   //Form
   const [formFields, setFormFields] = useState({
     "id": (props.id ? props.id : null),
-    "header": (props.header ? props.header : ""),
+    "name": (props.name ? props.name : ""),
+    "date": (props.date ? props.date : ""),
     "description": (props.description ? props.description : ""),
-    "date": (props.date ? props.date : new Date(Date.now())),
     "organization_id": props.orgID,
   });
 
-  const onHeaderChange = (event) => {
-    console.log(`header field updated ${event.target.value}`);
+  const onNameChange = (event) => {
+    console.log(`name field updated ${event.target.value}`);
     setFormFields({
       ...formFields,
-      "header": event.target.value,
+      "name": event.target.value,
     });
   };
+
+
+  const onDateChange = (event) => {
+    console.log(`date field updated ${event.target.value}`);
+    setFormFields({
+      ...formFields,
+      "date": event.target.value,
+    });
+  };
+
 
   const onDescriptionChange = (event) => {
     console.log(`description field updated ${event.target.value}`);
@@ -33,9 +43,9 @@ const AnnouncementForm = (props) => {
     props.onSubmitCallback();
 
     if (props.id !== null) {
-      props.addAnnouncementCallback(formFields);
+      props.addHolidayCallback(formFields);
     } else {
-      props.updateAnnouncementCallback(formFields);
+      props.updateHolidayCallback(formFields);
     }
     
   };
@@ -44,22 +54,32 @@ const AnnouncementForm = (props) => {
     <div className={ props.visibility ? "py-3" : "hidden"}>
       <form className="" onSubmit={onFormSubmit}>
         <div className="form-group">
-          <small className="open-sans form-text text-muted">Announcement Name</small>
+          <small className="open-sans form-text text-muted">Holiday Name</small>
           <input
             className="open-sans form-control"
-            name="header"
+            name="name"
             type="text"
-            placeholder="What header should this announcement have?"
-            value={formFields["header"]}
-            onChange={onHeaderChange}
+            placeholder="What's this holiday called?"
+            value={formFields["name"]}
+            onChange={onNameChange}
           />
         </div>
         <div className="form-group">
-          <small className="open-sans form-text text-muted">Announcement Description</small>
+          <small className="open-sans form-text text-muted">Holiday Date</small>
+          <input
+            className="open-sans form-control"
+            name="date"
+            type="date"
+            value={formFields["date"]}
+            onChange={onDateChange}
+          />
+        </div>
+        <div className="form-group">
+          <small className="open-sans form-text text-muted">Holiday Description</small>
           <textarea
             className="open-sans form-control"
             name="description"
-            placeholder="What would you like to announce?"
+            placeholder="What happens during this holiday?"
             rows="5"
             value={formFields["description"]}
             onChange={onDescriptionChange}
@@ -84,13 +104,13 @@ const AnnouncementForm = (props) => {
 )
 }
 
-AnnouncementForm.propTypes = {
+HolidayForm.propTypes = {
   id: PropTypes.number,
-  header: PropTypes.string,
-  description: PropTypes.string,
+  name: PropTypes.string,
   date: PropTypes.string,
+  description: PropTypes.string,
   orgID: PropTypes.number,
   visibility: PropTypes.bool,
 };
 
-export default AnnouncementForm;
+export default HolidayForm;

@@ -129,6 +129,11 @@ const EventForm = (props) => {
 }
 
 EventForm.propTypes = {
+  id: PropTypes.number,
+  name: PropTypes.string,
+  occasion: PropTypes.string,
+  date: PropTypes.string,
+  description: PropTypes.string,
   orgID: PropTypes.number,
   visibility: PropTypes.bool,
 };
