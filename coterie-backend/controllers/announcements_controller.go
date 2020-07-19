@@ -16,7 +16,7 @@ import (
 func GetAnnouncements(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		
+
 		organizationID := chi.URLParam(r, "organizationID")
 
 		announcements, err := announcementTable.AnnouncementsLister(organizationID)
@@ -33,7 +33,7 @@ func GetAnnouncements(announcementTable *models.AnnouncementTable) http.HandlerF
 func AddAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
-		
+
 		organizationID := chi.URLParam(r, "organizationID")
 		body := map[string]string{}
 		req.BindBody(&body)
@@ -41,7 +41,7 @@ func AddAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFu
 		orgID, _ := strconv.Atoi(organizationID)
 		announcement := models.Announcement{
 			Header:         body["header"],
-			Text:           body["text"],
+			Description:    body["description"],
 			Date:           body["date"],
 			OrganizationID: orgID,
 			CreatedAt:      time.Now().String(),
@@ -64,7 +64,7 @@ func AddAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFu
 func GetAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		
+
 		announcementID := chi.URLParam(r, "announcementID")
 
 		announcement, err := announcementTable.AnnouncementGetter(announcementID)
@@ -81,18 +81,18 @@ func GetAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFu
 func UpdateAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
-		
+
 		announcementID := chi.URLParam(r, "announcementID")
 		body := map[string]string{}
 		req.BindBody(&body)
 
 		annID, _ := strconv.Atoi(announcementID)
 		announcement := models.Announcement{
-			ID:        annID,
-			Header:    body["header"],
-			Text:      body["text"],
-			Date:      body["date"],
-			UpdatedAt: time.Now().String(),
+			ID:          annID,
+			Header:      body["header"],
+			Description: body["description"],
+			Date:        body["date"],
+			UpdatedAt:   time.Now().String(),
 		}
 
 		result, err := announcementTable.AnnouncementUpdater(announcement)
@@ -109,7 +109,7 @@ func UpdateAnnouncement(announcementTable *models.AnnouncementTable) http.Handle
 func DeleteAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		
+
 		announcementID := chi.URLParam(r, "announcementID")
 
 		err := announcementTable.AnnouncementDeleter(announcementID)

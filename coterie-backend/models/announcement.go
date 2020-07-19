@@ -8,7 +8,7 @@ import (
 type Announcement struct {
 	ID             int    `json:"id,omitempty"`
 	Header         string `json:"header,omitempty"`
-	Text           string `json:"text,omitempty"`
+	Description    string `json:"description,omitempty"`
 	Date           string `json:"date,omitempty"`
 	CreatedAt      string `json:"created_at,omitempty"`
 	UpdatedAt      string `json:"updated_at,omitempty"`
@@ -24,7 +24,7 @@ func NewAnnouncementTable(db *sql.DB) *AnnouncementTable {
 		CREATE TABLE IF NOT EXISTS "announcement" (
 			"ID"	INTEGER NOT NULL UNIQUE,
 			"header"	TEXT,
-			"text"	TEXT,
+			"description"	TEXT,
 			"date"	TEXT,
 			"created_at"	TEXT,
 			"updated_at"	TEXT,
@@ -57,17 +57,17 @@ func (announcementTable *AnnouncementTable) AnnouncementsLister(orgID string) ([
 
 	var id int
 	var header string
-	var text string
+	var description string
 	var date string
 	var createdAt string
 	var updatedAt string
 	var organizationID int
 	for rows.Next() {
-		rows.Scan(&id, &header, &text, &date, &createdAt, &updatedAt, &organizationID)
+		rows.Scan(&id, &header, &description, &date, &createdAt, &updatedAt, &organizationID)
 		announcement := Announcement{
 			ID:             id,
 			Header:         header,
-			Text:           text,
+			Description:    description,
 			Date:           date,
 			CreatedAt:      createdAt,
 			UpdatedAt:      updatedAt,
@@ -94,13 +94,13 @@ func (announcementTable *AnnouncementTable) AnnouncementGetter(announcementID st
 	if stmt != nil {
 		var id int
 		var header string
-		var text string
+		var description string
 		var date string
 		var createdAt string
 		var updatedAt string
 		var organizationID int
 
-		err = stmt.QueryRow(announcementID).Scan(&id, &header, &text, &date, &createdAt, &updatedAt, &organizationID)
+		err = stmt.QueryRow(announcementID).Scan(&id, &header, &description, &date, &createdAt, &updatedAt, &organizationID)
 		if err != nil {
 			log.Printf("Unable to retrieve announcement: %s", err.Error())
 			return Announcement{}, err
@@ -108,7 +108,7 @@ func (announcementTable *AnnouncementTable) AnnouncementGetter(announcementID st
 
 		announcement.ID = id
 		announcement.Header = header
-		announcement.Text = text
+		announcement.Description = description
 		announcement.Date = date
 		announcement.CreatedAt = createdAt
 		announcement.UpdatedAt = updatedAt
@@ -120,14 +120,14 @@ func (announcementTable *AnnouncementTable) AnnouncementGetter(announcementID st
 //Model.create
 func (announcementTable *AnnouncementTable) AnnouncementAdder(announcement Announcement) (Announcement, error) {
 	stmt, err := announcementTable.DB.Prepare(`
-		INSERT INTO announcement (header,text,date,created_at,updated_at,organization_id) VALUES (?,?,?,?,?,?)
+		INSERT INTO announcement (header,description,date,created_at,updated_at,organization_id) VALUES (?,?,?,?,?,?)
 	`)
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())
 		return Announcement{}, err
 	}
 
-	_, err = stmt.Exec(announcement.Text, announcement.Header, announcement.Date, announcement.CreatedAt, announcement.UpdatedAt, announcement.OrganizationID)
+	_, err = stmt.Exec(announcement.Header, announcement.Description, announcement.Date, announcement.CreatedAt, announcement.UpdatedAt, announcement.OrganizationID)
 
 	if err != nil {
 		log.Printf("Unable to create announcement: %s", err.Error())
@@ -141,7 +141,7 @@ func (announcementTable *AnnouncementTable) AnnouncementAdder(announcement Annou
 //Model.update
 func (announcementTable *AnnouncementTable) AnnouncementUpdater(announcement Announcement) (Announcement, error) {
 	stmt, err := announcementTable.DB.Prepare(`
-	UPDATE announcement SET header = ?, text = ?, date = ?, updated_at = ? WHERE announcement.id = ?
+	UPDATE announcement SET header = ?, description = ?, date = ?, updated_at = ? WHERE announcement.id = ?
 	`)
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())
@@ -149,7 +149,7 @@ func (announcementTable *AnnouncementTable) AnnouncementUpdater(announcement Ann
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(announcement.Header, announcement.Text, announcement.Date, announcement.UpdatedAt, announcement.ID)
+	_, err = stmt.Exec(announcement.Header, announcement.Description, announcement.Date, announcement.UpdatedAt, announcement.ID)
 
 	if err != nil {
 		log.Printf("Unable to update announcement: %s", err.Error())
