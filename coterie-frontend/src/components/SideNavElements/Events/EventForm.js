@@ -68,7 +68,7 @@ const EventForm = (props) => {
             className="open-sans form-control"
             name="name"
             type="text"
-            placeholder="A Time for Renewal"
+            placeholder="Give your event a name"
             value={formFields["name"]}
             onChange={onNameChange}
           />
@@ -103,6 +103,7 @@ const EventForm = (props) => {
           <textarea
             className="open-sans form-control"
             name="description"
+            placeholder="What should members expect at this event?"
             rows="5"
             value={formFields["description"]}
             onChange={onDescriptionChange}
