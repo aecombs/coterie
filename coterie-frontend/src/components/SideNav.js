@@ -79,6 +79,7 @@ const SideNav = (props) => {
             path='/dashboard/events' 
             render={(props) => (
               <Events {...props} 
+              userID={"1"}
               orgID={"1"}
               />
             )}

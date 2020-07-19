@@ -9,7 +9,14 @@ const Events = (props) => {
   const [visibility, setVisibility] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
+  const url = `http://localhost:3000/users/${props.userID}/organizations/${props.orgID}/events`
+
+  const updateURL = `http://localhost:3000/events`
+
   const addEvent = (eventObj) => {
+    //remove unnecessary id property
+    delete eventObj["id"];
+
     axios.post(url, eventObj)
     .then((response) => {
       setErrorMessage(`Event ${eventObj["name"]} added`);
@@ -21,15 +28,27 @@ const Events = (props) => {
       console.log(`Unable to add mem: ${errorMessage}`);
     })
   }
-  
-  
-    //toggle visibility of new member component
-    const toggleFormVisibility = () => {
-      setVisibility(!visibility);
-      return;
-    }
 
-  const url = `http://localhost:3000/users/${props.userID}/organizations/${props.orgID}/events`
+  const updateEvent = (eventObj) => {
+    axios.put(`${updateURL}/${eventObj.id}`, eventObj)
+    .then((response) => {
+      setErrorMessage(`Event ${eventObj["name"]} was updated`);
+      window.location.reload();
+    })
+    
+    .catch((error) => {
+      setErrorMessage(error.message);
+      console.log(`Unable to add mem: ${errorMessage}`);
+    })
+  }
+  
+  //toggle visibility of new member component
+  const toggleFormVisibility = () => {
+    setVisibility(!visibility);
+    return;
+  }
+
+  
 
   useEffect(() => {
     axios.get(url)
@@ -54,6 +73,7 @@ const Events = (props) => {
       date={e.date}
       description={e.description}
       orgID={e.organization_id}
+      updateEventCallback={updateEvent}
       />
     )
   })

@@ -4,10 +4,11 @@ import PropTypes from 'prop-types';
 const NewEvent = (props) => {
   //Form
   const [formFields, setFormFields] = useState({
-    "name": '',
-    "occasion": 'Picnic',
-    "date": '',
-    "description": '',
+    "id": (props.id ? props.id : null),
+    "name": (props.name ? props.name : ""),
+    "occasion": (props.occasion ? props.occasion : "Picnic"),
+    "date": (props.date ? props.date : ""),
+    "description": (props.description ? props.description : ""),
     "organization_id": props.orgID,
   });
 
@@ -50,7 +51,11 @@ const NewEvent = (props) => {
     event.preventDefault();
     props.onSubmitCallback();
 
-    props.addEventCallback(formFields);
+    if (props.id !== null) {
+      props.addEventCallback(formFields);
+    } else {
+      props.updateEventCallback(formFields);
+    }
     
   };
 
@@ -106,7 +111,7 @@ const NewEvent = (props) => {
         <input 
           className="btn btn-light w-100 text-center" 
           type="submit"
-          value="Add Event"
+          value="Save"
           onClick={onFormSubmit}
         />
       </form>
