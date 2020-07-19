@@ -6,7 +6,7 @@ const OrgForm = (props) => {
   const [formFields, setFormFields] = useState({
     "name": 'Enter your organization\'s name',
     "mission_statement": 'Enter you mission statement',
-    "total_funds": 'Enter the total amount of funds you have raised',
+    "total_funds": '0',
   });
 
   const onNameChange = (event) => {
@@ -22,14 +22,6 @@ const OrgForm = (props) => {
     setFormFields({
       ...formFields,
       "mission_statement": event.target.value,
-    });
-  };
-
-  const onFundsChange = (event) => {
-    console.log(`total_funds field updated ${event.target.value}`);
-    setFormFields({
-      ...formFields,
-      "total_funds": event.target.value,
     });
   };
   
@@ -65,8 +57,7 @@ const OrgForm = (props) => {
             onChange={onMissionChange}
           />
         </div>
-        <div className="form-group">
-          {/* <label className="open-sans">Total Funds</label> */}
+        {/* <div className="form-group">
           <input
             className="open-sans form-control"
             name="total_funds"
@@ -74,7 +65,7 @@ const OrgForm = (props) => {
             value={formFields["total_funds"]}
             onChange={onFundsChange}
           />
-        </div>
+        </div> */}
         <input 
           className="btn btn-light w-100 text-center" 
           type="submit"
