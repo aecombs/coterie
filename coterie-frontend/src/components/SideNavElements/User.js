@@ -12,9 +12,9 @@ const User = (props) => {
 
     
   return (
-    <div className="w-100 ">
+    <div className="w-100 py-2">
       <img src={props.avatar} alt="Avatar" className="w-25" />
-      <h5 className="">{props.name}</h5>
+      <h5 className={visibility ? "hidden" : "py-3 open-sans"}>{props.name}</h5>
 
       <UpdateProfile 
         visibility={visibility}
@@ -24,9 +24,8 @@ const User = (props) => {
         email={props.email}
         bio={props.bio}
       />
-
-      <p className={visibility ? "hidden" : "open-sans"}>{props.bio ? props.bio : <button className="btn btn-primary" onClick={toggleFormVisibility}>Update Profile</button> }</p>
-      
+      <p className={visibility ? "hidden" : "open-sans"}>{props.bio}</p>
+      <button className={visibility ? "hidden" : "btn btn-primary open-sans"} onClick={toggleFormVisibility}>Update Profile</button>
     </div>
   )
 }

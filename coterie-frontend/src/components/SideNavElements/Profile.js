@@ -10,7 +10,7 @@ const Profile = (props) => {
 
   //Updating a user
   const updateUser = (userObj) => {
-    axios.post(url, userObj)
+    axios.put(url, userObj)
     .then((response) => {
       setErrorMessage(`User was updated`);
       window.location.reload();
