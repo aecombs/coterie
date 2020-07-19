@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import Event from './Event';
-import NewEvent from './NewEvent';
+import EventForm from './EventForm';
 
 
 const Events = (props) => {
@@ -83,18 +83,18 @@ const Events = (props) => {
   return (
     <div className="container">
       <div className="d-flex list-group">
-      <div className="d-flex py-2 justify-content-between">
-        <p className={ eventComponents !== undefined ? "hidden" : "open-sans" }>You haven't created any events yet.</p>
+        <div className="d-flex py-2 justify-content-between">
+          <h4>Events</h4>
+          <p className={ eventComponents !== undefined ? "hidden" : "open-sans" }>You haven't created any events yet.</p>
           <button className="btn btn-secondary" onClick={toggleFormVisibility}>{ visibility ? "-" : "+"}</button>
         </div>
-        <NewEvent 
+        <EventForm 
         orgID={props.orgID}
         visibility={visibility}
         addEventCallback={addEvent}
         onSubmitCallback={toggleFormVisibility}
         />
         {eventComponents}
-       
       </div>
     </div>
   )

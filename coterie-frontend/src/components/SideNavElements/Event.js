@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import NewEvent from './NewEvent';
+import EventForm from './EventForm';
 
 const Event = (props) => {
   const [updateMode, setUpdateMode] = useState(false);
@@ -32,7 +32,7 @@ const Event = (props) => {
           </div>
         </div>
       </button>
-      <NewEvent 
+      <EventForm 
         id={props.id}
         name={props.name}
         occasion={props.occasion}

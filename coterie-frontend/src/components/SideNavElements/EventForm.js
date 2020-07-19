@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const NewEvent = (props) => {
+const EventForm = (props) => {
   //Form
   const [formFields, setFormFields] = useState({
     "id": (props.id ? props.id : null),
@@ -60,7 +60,7 @@ const NewEvent = (props) => {
   };
 
   return (
-    <div className={ props.visibility ? "py-3" : "container hidden"}>
+    <div className={ props.visibility ? "py-3" : "hidden"}>
       <form className="" onSubmit={onFormSubmit}>
         <div className="form-group">
           <small className="open-sans form-text text-muted">Event Name</small>
@@ -108,20 +108,28 @@ const NewEvent = (props) => {
             onChange={onDescriptionChange}
           />
         </div>
-        <input 
-          className="btn btn-light w-100 text-center" 
-          type="submit"
-          value="Save"
-          onClick={onFormSubmit}
-        />
+        <div className="btn-group w-100">
+          <input 
+            className="btn btn-success text-center" 
+            type="submit"
+            value="Save"
+            onClick={onFormSubmit}
+          />
+          <input 
+            className="btn btn-light text-center" 
+            type="submit"
+            value="Cancel"
+            onClick={props.onSubmitCallback}
+          />
+        </div>
       </form>
     </div>
 )
 }
 
-NewEvent.propTypes = {
+EventForm.propTypes = {
   orgID: PropTypes.number,
   visibility: PropTypes.bool,
 };
 
-export default NewEvent;
+export default EventForm;
