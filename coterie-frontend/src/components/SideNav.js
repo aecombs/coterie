@@ -14,14 +14,14 @@ const SideNav = (props) => {
 
   const organizationID = props.orgID
 
-  const url = `http://localhost:3000/users/${props.userID}/organizations/`
+  const url = `${process.env.REACT_APP_API_BASE_URL}/users/${props.userID}/organizations/`
 
   const addOrg = (orgObj) => {
     axios.post(url, orgObj)
     .then((response) => {
       setErrorMessage(`organization ${orgObj["name"]} added`);
       //TODO: Update to use intended redirect URL from response
-      window.location.assign("http://localhost:3001/dashboard");
+      window.location.assign(`${process.env.REACT_APP_BASE_URL}/dashboard`);
     })
     
     .catch((error) => {

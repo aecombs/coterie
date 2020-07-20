@@ -26,7 +26,7 @@ const Scripture = (props) => {
     setAddChapterMode(!addChapterMode);
   }
 
-  const url = `http://localhost:3000/scriptures/${props.id}/chapters`
+  const url = `${process.env.REACT_APP_API_BASE_URL}/scriptures/${props.id}/chapters`
 
   const addChapter = (chapObj) => {
     //remove unnecessary id property

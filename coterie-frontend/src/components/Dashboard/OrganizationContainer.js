@@ -10,7 +10,7 @@ const OrganizationContainer = (props) => {
   const [organizationList, setOrganizationList] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const url = `http://localhost:3000/users/${props.userID}/organizations/`
+  const url = `${process.env.REACT_APP_API_BASE_URL}/users/${props.userID}/organizations/`
   useEffect(() => {
     axios.get(url)
       .then( (response) => {

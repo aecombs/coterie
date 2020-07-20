@@ -8,9 +8,9 @@ const Holidays = (props) => {
   const [visibility, setVisibility] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const url = `http://localhost:3000/users/${props.userID}/organizations/${props.orgID}/holidays`
+  const url = `${process.env.REACT_APP_API_BASE_URL}/users/${props.userID}/organizations/${props.orgID}/holidays`
 
-  const updateURL = `http://localhost:3000/holidays`
+  const updateURL = `${process.env.REACT_APP_API_BASE_URL}/holidays`
 
 
   const addHoliday = (holObj) => {

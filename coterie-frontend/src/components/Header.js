@@ -5,7 +5,6 @@ import logo from '../images/logo.png';
 import Homepage from './Homepage';
 import Login from './Login';
 import Dashboard from './Dashboard';
-import ProtectedRoute from '../ProtectedRoute';
 
 const Header = () => {
 
@@ -36,39 +35,15 @@ const Header = () => {
 
 
           <li><Link to={'/login'} className={sessionID ? "hidden" : "nav-link float-right"}>Login</Link></li>
-          <li><a href="http://localhost:3000/logout" className={sessionID ? "nav-link float-right" : "hidden"}>Logout</a></li>
+          <li><a href={process.env.REACT_APP_BASE_URL+"/logout"} className={sessionID ? "nav-link float-right" : "hidden"}>Logout</a></li>
         </ul>
       </nav>
       
       <Switch> 
         <Route exact path='/' component={Homepage} />
-{/* 
-        <ProtectedRoute 
-        exact path="/dashboard"
-        component={Dashboard}/> */}
         <Route path='/dashboard' component={Dashboard} />
-
         <Route path='/login' component={Login} />
-        {/* <ProtectedRoute 
-        exact path='http://localhost:3000/logout'
-        component={Homepage}/> */}
-        <Route exact path='http://localhost:3000/logout' component={Homepage} />
-        {/* <Route 
-          path={'/'+loginButtonText.toLowerCase()}
-          component=
-          { loginButtonText === "Login" ? Login: Homepage } 
-        /> */}
-        {/* <Route 
-        path={'/'+props.buttonText.toLowerCase()}
-        render={ props.buttonText === "Login" ? (props) => (
-        <Login {...props} 
-          loginButtonCallback={props.buttonTextCallback}
-          /> )
-          : (props) => (
-            <Homepage {...props} 
-            />)
-          }
-        /> */}
+        <Route exact path={process.env.REACT_APP_API_BASE_URL+"/logout"}  component={Homepage} />
       </Switch>
     </div>
   </Router>

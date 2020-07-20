@@ -9,9 +9,9 @@ const Announcements = (props) => {
   const [visibility, setVisibility] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const url = `http://localhost:3000/users/${props.userID}/organizations/${props.orgID}/announcements`
+  const url = `${process.env.REACT_APP_API_BASE_URL}/users/${props.userID}/organizations/${props.orgID}/announcements`
 
-  const updateURL = `http://localhost:3000/announcements`
+  const updateURL = `${process.env.REACT_APP_API_BASE_URL}/announcements`
 
   const addAnnouncement = (annObj) => {
     //remove unnecessary id property

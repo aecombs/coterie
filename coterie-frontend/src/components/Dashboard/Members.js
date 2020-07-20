@@ -9,7 +9,7 @@ const Members = (props) => {
   const [errorMessage, setErrorMessage] = useState(null);
   
   //get all members
-  const url = `http://localhost:3000/users/${props.userID}/organizations/${props.orgID}/members`;
+  const url = `${process.env.REACT_APP_API_BASE_URL}/users/${props.userID}/organizations/${props.orgID}/members`;
 
   const addMember = (memObj) => {
     delete memObj["id"];
@@ -26,7 +26,7 @@ const Members = (props) => {
     })
   }
 
-  const updateURL = `http://localhost:3000/members`
+  const updateURL = `${process.env.REACT_APP_API_BASE_URL}/members`
 
   const updateMember = (memObj) => {
     axios.put(`${updateURL}/${memObj.id}`, memObj)
