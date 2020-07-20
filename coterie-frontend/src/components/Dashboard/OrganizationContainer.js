@@ -5,8 +5,6 @@ import axios from 'axios';
 
 
 const OrganizationContainer = (props) => {
-  //TODO: logic that checks the URL... is it just the dashboard? then show xyz stuff.
-
   const [organizationList, setOrganizationList] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -22,18 +20,6 @@ const OrganizationContainer = (props) => {
         console.log(`There was an error: ${err["message"]}`)
       });
   },[url])
-
-  // const addOrg = (org) => {
-  //   axios.post(url, org)
-  //   .then((response) => {
-  //     setErrorMessage(`Organization ${org} added`);
-  //   })
-    
-  //   .catch((error) => {
-  //     setErrorMessage(error.message);
-  //     console.log(`Unable to add org: ${errorMessage}`);
-  //   })
-  // }
 
 
   let orgComponents = undefined

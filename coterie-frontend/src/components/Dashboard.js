@@ -1,7 +1,7 @@
 import React from 'react';
 import SideNav from './SideNav';
 
-const Dashboard = (props) => {
+const Dashboard = () => {
   return (
     <div className="d-flex">
       <SideNav />
