@@ -22,7 +22,7 @@ const Events = (props) => {
     axios.post(url, eventObj)
     .then((response) => {
       setErrorMessage(`Event ${eventObj["name"]} added`);
-      // window.location.reload();
+      window.location.reload();
     })
     
     .catch((error) => {
@@ -35,7 +35,7 @@ const Events = (props) => {
     axios.put(`${updateURL}/${eventObj.id}`, eventObj)
     .then((response) => {
       setErrorMessage(`Event ${eventObj["name"]} was updated`);
-      // window.location.reload();
+      window.location.reload();
     })
     
     .catch((error) => {

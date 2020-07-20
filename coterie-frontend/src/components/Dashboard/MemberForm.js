@@ -55,7 +55,7 @@ const MemberForm = (props) => {
     event.preventDefault();
     props.onSubmitCallback();
     if (formFields["funds_raised"]) {
-      const beforeFunds = formFields["funds_raised"].substr(0);
+      const beforeFunds = formFields["funds_raised"].toString().substr(0);
       formFields["funds_raised"] = beforeFunds.replace(/[^\d]/gi, '');
     }
 
@@ -119,7 +119,7 @@ const MemberForm = (props) => {
             name="funds_raised"
             type="text"
             placeholder="$50.00"
-            value={"$"+formFields["funds_raised"]}
+            value={"$"+formFields["funds_raised"].toString()}
             onChange={onFundsChange}
           />
         </div>
