@@ -154,7 +154,7 @@ func (memberTable *MemberTable) MemberAdder(member Member) (Member, error) {
 //Model.update
 func (memberTable *MemberTable) MemberUpdater(member Member) (Member, error) {
 	stmt, err := memberTable.DB.Prepare(`
-	UPDATE member SET class = ?, email = ?, funds_raised = ?, updated_at = ? WHERE member.id = ?
+	UPDATE member SET name = ?, birthdate = ?, class = ?, email = ?, funds_raised = ?, updated_at = ? WHERE member.id = ?
 	`)
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())
@@ -162,7 +162,7 @@ func (memberTable *MemberTable) MemberUpdater(member Member) (Member, error) {
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(member.Class, member.Email, member.FundsRaised, member.UpdatedAt, member.ID)
+	_, err = stmt.Exec(member.Name, member.Birthdate, member.Class, member.Email, member.FundsRaised, member.UpdatedAt, member.ID)
 
 	if err != nil {
 		log.Printf("Unable to update member: %s", err.Error())

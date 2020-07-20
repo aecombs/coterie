@@ -9,7 +9,7 @@ const MemberForm = (props) => {
     "birthdate": (props.birthdate ? props.birthdate : "1985-01-01"),
     "class": (props.class ? props.class : 'Welcomed'),
     "email": (props.email ? props.email : ""),
-    "funds_raised": (props.fundsRaised ? props.fundsRaised : ""),
+    "funds_raised": (props.fundsRaised ? props.fundsRaised : "100.00"),
     "organization_id": props.orgID,
   });
 
@@ -118,23 +118,29 @@ const MemberForm = (props) => {
             className="open-sans form-control"
             name="funds_raised"
             type="text"
-            placeholder="$50.00"
+            placeholder="50.00"
             value={"$"+formFields["funds_raised"].toString()}
             onChange={onFundsChange}
           />
         </div>
         <div className="btn-group w-100">
           <input 
-            className="btn btn-success text-center w-50" 
+            className="btn btn-success text-center w-75" 
             type="submit"
             value="Save"
             onClick={onFormSubmit}
           />
           <input 
-            className="btn btn-light text-center" 
+            className="btn btn-light text-center w-25" 
             type="submit"
             value="Cancel"
             onClick={props.onSubmitCallback}
+          />
+          <input 
+            className={ props.id ? "btn btn-danger delete-button float-right" : "hidden"} 
+            type="submit"
+            value="Delete"
+            onClick={props.deleteMemberCallback}
           />
         </div>
       </form>

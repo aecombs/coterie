@@ -31,13 +31,26 @@ const Members = (props) => {
   const updateMember = (memObj) => {
     axios.put(`${updateURL}/${memObj.id}`, memObj)
     .then((response) => {
-      setErrorMessage(`Member ${memObj["header"]} was updated`);
+      setErrorMessage(`Member ${memObj["name"]} was updated`);
       window.location.reload();
     })
     
     .catch((error) => {
       setErrorMessage(error.message);
       console.log(`Unable to update member: ${errorMessage}`);
+    })
+  }
+
+  const deleteMember = (memID) => {
+    axios.delete(`${updateURL}/${memID}`)
+    .then((response) => {
+      setErrorMessage(`Member ${memID["name"]} was deleted`);
+      window.location.reload();
+    })
+    
+    .catch((error) => {
+      setErrorMessage(error.message);
+      console.log(`Unable to delete Member: ${errorMessage}`);
     })
   }
 
@@ -75,6 +88,7 @@ const Members = (props) => {
       fundsRaised={mem.funds_raised}
       orgID={mem.organization_id}
       submitMemberCallback={updateMember}
+      deleteMemberCallback={deleteMember}
       />
     )
   })

@@ -31,6 +31,10 @@ const Member = (props) => {
     props.submitMemberCallback(memObj)
   }
 
+  const deleteMember = () => {
+    props.deleteMemberCallback(props.id);
+  }
+
   const setUpdate = () => {
     setUpdateMode(!updateMode);
   }
@@ -74,6 +78,7 @@ const Member = (props) => {
         visibility={updateMode}
         submitMemberCallback={updateMember}
         onSubmitCallback={setUpdate}
+        deleteMemberCallback={deleteMember}
         />
     </section>
   )
