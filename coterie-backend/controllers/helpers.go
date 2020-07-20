@@ -25,7 +25,7 @@ func goDotEnvVariable(key string) string {
 
 //GrabLoggedInUser checks the cookie key Session to see if it's valid and exists. If it does, it returns the user associated with it.
 func GrabLoggedInUser(userTable *models.UserTable, r *http.Request) (models.User, error) {
-	cookie, err := r.Cookie("session")
+	cookie, err := r.Cookie("__session")
 
 	if err == nil && (fmt.Sprintf("%T", cookie.Value) != "int") || err != nil {
 		log.Printf("User is not logged in: %s", err.Error())

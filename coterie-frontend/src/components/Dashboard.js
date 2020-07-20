@@ -5,9 +5,7 @@ import SideNav from './SideNav';
 const Dashboard = (props) => {
   return (
     <div className="d-flex">
-      <SideNav 
-      orgID={"1"}
-      />
+      <SideNav />
     </div>
   )
 }

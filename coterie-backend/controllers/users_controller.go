@@ -40,7 +40,7 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 
 	googleOauthConfig = &oauth2.Config{
-		RedirectURL:  "http://localhost:3000/auth/google/callback",
+		RedirectURL:  goDotEnvVariable("API_BASE_URL_DEV") + "/auth/google/callback",
 		ClientID:     goDotEnvVariable("GOOGLE_CLIENT_ID"),
 		ClientSecret: goDotEnvVariable("GOOGLE_CLIENT_SECRET"),
 		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"},
@@ -60,7 +60,7 @@ func GoogleLogin() http.HandlerFunc {
 func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		
+
 		response, err := getUserInfo(r.FormValue("state"), r.FormValue("code"))
 		if err != nil {
 			log.Printf("Unable to retrieve user info from Google: %s", err.Error())
@@ -77,13 +77,13 @@ func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 		}
 
 		//request session cookie:
-		cookie, err := r.Cookie("session")
+		cookie, err := r.Cookie("__session")
 		//it it doesn't exist, we receive an err. Set the cookie!
 		if err != nil {
 			//TODO: refactor to use uuid
 			sessionID := strconv.Itoa(user.ID)
 			cookie = &http.Cookie{
-				Name:    "session",
+				Name:    "__session",
 				Value:   sessionID,
 				Path:    "/",
 				Expires: time.Now().Add(time.Hour * 24 * 14),
@@ -91,7 +91,7 @@ func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 			http.SetCookie(w, cookie)
 		}
 
-		url := "http://localhost:3001/dashboard"
+		url := goDotEnvVariable("CLIENT_BASE_URL_DEV") + "/dashboard?id=" + strconv.Itoa(user.ID)
 		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 
 	}
@@ -164,23 +164,23 @@ func AddUser(userTable *models.UserTable, content Data) (models.User, error) {
 //LogoutUser will change the session cookie so that it no longer contains the userID.
 func LogoutUser() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		cookie, err := r.Cookie("session")
+		cookie, err := r.Cookie("__session")
 		//it it doesn't exist, we receive an err. No need to delete anything.
 		if err != nil {
-			url := "http://localhost:3001/"
+			url := goDotEnvVariable("CLIENT_BASE_URL_DEV")
 			http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 			return
 		}
 		//reset the cookie to have a "deleted" value and to expire immediately
 		cookie = &http.Cookie{
-			Name:    "session",
+			Name:    "__session",
 			Value:   "deleted",
 			Path:    "/",
 			Expires: time.Now(),
 		}
 		http.SetCookie(w, cookie)
 
-		url := "http://localhost:3001/"
+		url := goDotEnvVariable("CLIENT_BASE_URL_DEV")
 		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 		return
 	}
@@ -192,7 +192,7 @@ func LogoutUser() http.HandlerFunc {
 func GetUser(userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
-		
+
 		userID := chi.URLParam(r, "userID")
 
 		user, err := userTable.UserGetterByID(userID)
@@ -211,7 +211,7 @@ func GetUser(userTable *models.UserTable) http.HandlerFunc {
 func UpdateUser(userTable *models.UserTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
-		
+
 		// user, err := GrabLoggedInUser(userTable, r)
 		// if err != nil {
 		// 	log.Printf("Unable to grab user: %s", err.Error())

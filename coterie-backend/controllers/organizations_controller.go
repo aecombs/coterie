@@ -15,13 +15,6 @@ func GetOrganizations(organizationTable *models.OrganizationTable, userTable *mo
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
 
-		// user, err := GrabLoggedInUser(userTable, r)
-		// //if user isn't logged in
-		// if err != nil {
-		// 	url := "http://localhost:3001/"
-		// 	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
-		// 	return
-		// }
 		userID := chi.URLParam(r, "userID")
 
 		organizations, err := organizationTable.OrganizationsLister(userID)
@@ -63,7 +56,7 @@ func AddOrganization(organizationTable *models.OrganizationTable, userTable *mod
 
 		res.SendJSON(result)
 
-		url := "http://localhost:3001/dashboard"
+		url := goDotEnvVariable("CLIENT_BASE_URL_DEV") + "/dashboard"
 		http.Redirect(w, r, url, http.StatusSeeOther)
 		return
 	}
@@ -112,7 +105,7 @@ func UpdateOrganization(organizationTable *models.OrganizationTable) http.Handle
 		}
 
 		// res.SendJSON(result)
-		url := "http://localhost:3001/dashboard"
+		url := goDotEnvVariable("CLIENT_BASE_URL_DEV") + "/dashboard"
 		http.Redirect(w, r, url, http.StatusSeeOther)
 		return
 	}
@@ -132,7 +125,7 @@ func DeleteOrganization(organizationTable *models.OrganizationTable) http.Handle
 		}
 
 		// res.SendStatus(200)
-		url := "http://localhost:3001/dashboard"
+		url := goDotEnvVariable("CLIENT_BASE_URL_DEV") + "/dashboard"
 		http.Redirect(w, r, url, http.StatusSeeOther)
 		return
 	}
