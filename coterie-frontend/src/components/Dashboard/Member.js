@@ -28,7 +28,7 @@ const Member = (props) => {
   }
 
   const updateMember = (memObj) => {
-    props.updateMemberCallback(memObj)
+    props.submitMemberCallback(memObj)
   }
 
   const setUpdate = () => {

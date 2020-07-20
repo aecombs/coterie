@@ -6,7 +6,7 @@ const Chapter = (props) => {
   const [updateMode, setUpdateMode] = useState(false);
 
   const updateChapter = (chapObj) => {
-    props.updateChapterCallback(chapObj)
+    props.submitChapterCallback(chapObj)
   }
 
   const setUpdate = () => {
@@ -29,7 +29,7 @@ const Chapter = (props) => {
         text={props.text}
         scripID={props.scripID}
         visibility={updateMode}
-        updateChapterCallback={updateChapter}
+        submitChapterCallback={updateChapter}
         onSubmitCallback={setUpdate}
         />
     </section>

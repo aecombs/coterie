@@ -3,15 +3,8 @@ import favicon from '../images/coterie-favicon.png';
 import googleLogo from '../images/google-logo.png';
 import githubLogo from '../images/github-logo.png';
 import fbLogo from '../images/fb-logo.png';
-import auth from '../Auth';
 
 const Login = (props) => {
-  const loginCallback = () => {
-    auth.login(() => {
-      props.history.push("/dashboard");
-    })
-    //probably add some junk to add info to LocalStorage
-  }
 
   return (
     <div className="d-flex text-center justify-content-center login-page">

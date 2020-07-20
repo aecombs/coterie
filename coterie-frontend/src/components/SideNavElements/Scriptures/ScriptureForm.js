@@ -22,11 +22,8 @@ const ScriptureForm = (props) => {
     event.preventDefault();
     props.onSubmitCallback();
 
-    if (props.id !== null) {
-      props.updateScriptureCallback(formFields);
-    } else {
-      props.addScriptureCallback(formFields);
-    }
+    props.submitScriptureCallback(formFields);
+
     
   };
 

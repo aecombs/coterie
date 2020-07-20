@@ -20,7 +20,7 @@ const Events = (props) => {
     axios.post(url, eventObj)
     .then((response) => {
       setErrorMessage(`Event ${eventObj["name"]} added`);
-      window.location.reload();
+      // window.location.reload();
     })
     
     .catch((error) => {
@@ -33,7 +33,7 @@ const Events = (props) => {
     axios.put(`${updateURL}/${eventObj.id}`, eventObj)
     .then((response) => {
       setErrorMessage(`Event ${eventObj["name"]} was updated`);
-      window.location.reload();
+      // window.location.reload();
     })
     
     .catch((error) => {
@@ -74,7 +74,7 @@ const Events = (props) => {
       date={e.date}
       description={e.description}
       orgID={e.organization_id}
-      updateEventCallback={updateEvent}
+      submitEventCallback={updateEvent}
       />
     )
   })
@@ -92,7 +92,7 @@ const Events = (props) => {
         <EventForm 
         orgID={props.orgID}
         visibility={visibility}
-        addEventCallback={addEvent}
+        submitEventCallback={addEvent}
         onSubmitCallback={toggleFormVisibility}
         />
         {eventComponents}

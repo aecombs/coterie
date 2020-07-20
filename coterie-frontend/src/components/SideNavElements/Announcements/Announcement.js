@@ -11,7 +11,7 @@ const Announcement = (props) => {
   }
 
   const updateAnnouncement = (annObj) => {
-    props.updateAnnouncementCallback(annObj)
+    props.submitAnnouncementCallback(annObj)
   }
 
   const setUpdate = () => {
@@ -38,7 +38,7 @@ const Announcement = (props) => {
         date={props.date}
         orgID={props.orgID}
         visibility={updateMode}
-        updateAnnouncementCallback={updateAnnouncement}
+        submitAnnouncementCallback={updateAnnouncement}
         onSubmitCallback={setUpdate}
         />
     </section>

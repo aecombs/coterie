@@ -90,10 +90,6 @@ img.profile-image {
 
 footer.footer {
   background-color: #44A1A0;
-  position: fixed; /* Here's what sticks it */
-  bottom: 0; /* to the bottom of the window */
-  left: 0; /* and to the left of the window. */
-  height: 44px;
-  width: 100%;
-  padding-top: 20px;
+  position: relative;
+  height: 3rem;
 }

@@ -72,7 +72,7 @@ const Announcements = (props) => {
       description={ann.description}
       date={ann.date}
       orgID={ann.organization_id}
-      updateAnnouncementCallback={updateAnnouncement}
+      submitAnnouncementCallback={updateAnnouncement}
       />
     )
   })
@@ -90,7 +90,7 @@ const Announcements = (props) => {
         <AnnouncementForm 
         orgID={props.orgID}
         visibility={visibility}
-        addAnnouncementCallback={addAnnouncement}
+        submitAnnouncementCallback={addAnnouncement}
         onSubmitCallback={toggleFormVisibility}
         />
         {announcementComponents}

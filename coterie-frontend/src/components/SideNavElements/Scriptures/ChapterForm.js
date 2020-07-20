@@ -40,11 +40,7 @@ const ChapterForm = (props) => {
     event.preventDefault();
     props.onSubmitCallback();
 
-    if (props.id !== null) {
-      props.addChapterCallback(formFields);
-    } else {
-      props.updateChapterCallback(formFields);
-    }
+    props.submitChapterCallback(formFields);
     
   };
 

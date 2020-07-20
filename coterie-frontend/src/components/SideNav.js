@@ -12,9 +12,11 @@ import axios from 'axios';
 const SideNav = (props) => {
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const organizationID = props.orgID
+  const userID = sessionStorage.getItem('userID');
 
-  const url = `${process.env.REACT_APP_API_BASE_URL}/users/${props.userID}/organizations/`
+  const url = `${process.env.REACT_APP_API_BASE_URL}/users/${userID}/organizations/`
+
+
 
   const addOrg = (orgObj) => {
     axios.post(url, orgObj)
@@ -55,51 +57,51 @@ const SideNav = (props) => {
             exact path='/dashboard' 
             render={(props) => (
               <OrganizationContainer {...props}
-              userID={"1"}
+              userID={userID}
               addOrgCallback={addOrg}
               />
             )}
           />
 
-          <Route path='/dashboard/profile'
+          <Route exact path='/dashboard/profile'
            render={(props) => (
             <Profile {...props} 
-            userID={"1"}
+            userID={userID}
             />
           )} />
           <Route 
-            path='/dashboard/announcements' 
+            exact path='/dashboard/announcements' 
             render={(props) => (
               <Announcements {...props} 
-              userID={"1"}
+              userID={userID}
               orgID={"1"}
               />
             )}
           />
           <Route 
-            path='/dashboard/events' 
+            exact path='/dashboard/events' 
             render={(props) => (
               <Events {...props} 
-              userID={"1"}
+              userID={userID}
               orgID={"1"}
               />
             )}
           />
           
           <Route 
-            path='/dashboard/holidays' 
+            exact path='/dashboard/holidays' 
             render={(props) => (
               <Holidays {...props} 
-              userID={"1"}
+              userID={userID}
               orgID={"1"}
               />
             )}
           />
           <Route 
-            path='/dashboard/scriptures' 
+            exact path='/dashboard/scriptures' 
             render={(props) => (
               <Scriptures {...props} 
-              userID={"1"}
+              userID={userID}
               orgID={"1"}
               />
             )}
@@ -107,7 +109,7 @@ const SideNav = (props) => {
           
 
           <Route 
-            path='/dashboard/new'
+            exact path='/dashboard/new'
             render={(props) => (
               <OrgForm {...props} 
               addOrgCallback={addOrg}

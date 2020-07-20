@@ -50,7 +50,7 @@ const Profile = (props) => {
       email={userData["email"]}
       bio={userData["bio"]}
       avatar={userData["avatar"]}
-      updateUserCallback={updateUser}
+      submitUserCallback={updateUser}
       />
     } else {
     userComponent = <p className="open-sans">There was an error loading your profile...</p>

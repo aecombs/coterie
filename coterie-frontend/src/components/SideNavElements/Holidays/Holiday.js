@@ -11,7 +11,7 @@ const Holiday = (props) => {
   }
 
   const updateHoliday = (holObj) => {
-    props.updateHolidayCallback(holObj)
+    props.submitHolidayCallback(holObj)
   }
 
   const setUpdate = () => {
@@ -39,7 +39,7 @@ const Holiday = (props) => {
         description={props.description}
         orgID={props.orgID}
         visibility={updateMode}
-        updateHolidayCallback={updateHoliday}
+        submitHolidayCallback={updateHoliday}
         onSubmitCallback={setUpdate}
         />
     </section>

@@ -25,7 +25,7 @@ const User = (props) => {
           </div>
           <UpdateProfile 
             visibility={visibility}
-            updateUserCallback={props.updateUserCallback}
+            submitUserCallback={props.submitUserCallback}
             onSubmitCallback={toggleFormVisibility}
             name={props.name}
             email={props.email}

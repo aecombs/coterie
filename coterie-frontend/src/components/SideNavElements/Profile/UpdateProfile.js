@@ -30,7 +30,7 @@ const UpdateProfile = (props) => {
     event.preventDefault();
     props.onSubmitCallback();
 
-    props.updateUserCallback(formFields);
+    props.submitUserCallback(formFields);
     
   };
 

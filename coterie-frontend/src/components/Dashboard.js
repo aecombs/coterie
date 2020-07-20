@@ -7,7 +7,6 @@ const Dashboard = (props) => {
     <div className="d-flex">
       <SideNav 
       orgID={"1"}
-      userID={"1"}
       />
     </div>
   )

@@ -71,7 +71,7 @@ const Holidays = (props) => {
       date={hol.date}
       description={hol.description}
       orgID={hol.organization_id}
-      updateHolidayCallback={updateHoliday}
+      submitHolidayCallback={updateHoliday}
       />)
     })
   }
@@ -88,7 +88,7 @@ const Holidays = (props) => {
         <HolidayForm 
         orgID={props.orgID}
         visibility={visibility}
-        addHolidayCallback={addHoliday}
+        submitHolidayCallback={addHoliday}
         onSubmitCallback={toggleFormVisibility}
         />
         {holidayComponents}

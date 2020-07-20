@@ -32,11 +32,8 @@ const AnnouncementForm = (props) => {
     event.preventDefault();
     props.onSubmitCallback();
 
-    if (props.id == null || props.id == undefined) {
-      props.addAnnouncementCallback(formFields);
-    } else {
-      props.updateAnnouncementCallback(formFields);
-    }
+    props.submitAnnouncementCallback(formFields);
+
     
   };
 

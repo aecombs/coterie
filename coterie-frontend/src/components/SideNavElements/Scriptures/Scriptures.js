@@ -69,7 +69,7 @@ const Scriptures = (props) => {
       id={scrip.id}
       name={scrip.name}
       orgID={scrip.organization_id}
-      updateScriptureCallback={updateScripture}
+      submitScriptureCallback={updateScripture}
       />)
     })
   }
@@ -87,7 +87,7 @@ const Scriptures = (props) => {
         id={null}
         orgID={props.orgID}
         visibility={visibility}
-        addScriptureCallback={addScripture}
+        submitScriptureCallback={addScripture}
         onSubmitCallback={toggleFormVisibility}
         />
         {scriptureComponents}

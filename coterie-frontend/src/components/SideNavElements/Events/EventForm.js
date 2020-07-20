@@ -51,11 +51,8 @@ const EventForm = (props) => {
     event.preventDefault();
     props.onSubmitCallback();
 
-    if (props.id !== null) {
-      props.updateEventCallback(formFields);
-    } else {
-      props.addEventCallback(formFields);
-    }
+    props.submitEventCallback(formFields);
+
     
   };
 

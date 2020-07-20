@@ -54,9 +54,10 @@ const MemberForm = (props) => {
   const onFormSubmit = (event) => {
     event.preventDefault();
     props.onSubmitCallback();
-
-    const beforeFunds = formFields["funds_raised"].substr(0);
-    formFields["funds_raised"] = beforeFunds.replace(/[^\d]/gi, '');
+    if (formFields["funds_raised"]) {
+      const beforeFunds = formFields["funds_raised"].substr(0);
+      formFields["funds_raised"] = beforeFunds.replace(/[^\d]/gi, '');
+    }
 
     props.submitMemberCallback(formFields);
     

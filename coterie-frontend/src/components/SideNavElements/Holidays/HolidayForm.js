@@ -42,14 +42,7 @@ const HolidayForm = (props) => {
     event.preventDefault();
     props.onSubmitCallback();
 
-    if (props.id !== null) {
-      //the id exists, therefore we are updating
-      props.updateHolidayCallback(formFields);
-    } else {
-      //there is no id set, so we are creating a new one
-      props.addHolidayCallback(formFields);
-    }
-    
+    props.submitHolidayCallback(formFields);
   };
 
   return (

@@ -74,7 +74,7 @@ const Members = (props) => {
       email={mem.email}
       fundsRaised={mem.funds_raised}
       orgID={mem.organization_id}
-      updateMemberCallback={updateMember}
+      submitMemberCallback={updateMember}
       />
     )
   })

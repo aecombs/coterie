@@ -18,6 +18,7 @@ const OrganizationContainer = (props) => {
         setOrganizationList(currentOrgs);
       })
       .catch((err) => {
+        setErrorMessage(err);
         console.log(`There was an error: ${err["message"]}`)
       });
   },[url])

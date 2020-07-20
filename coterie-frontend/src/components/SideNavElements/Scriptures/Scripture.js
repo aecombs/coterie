@@ -13,7 +13,7 @@ const Scripture = (props) => {
 
   //Scripture
   const updateScripture = (scripObj) => {
-    props.updateScriptureCallback(scripObj)
+    props.submitScriptureCallback(scripObj)
   }
 
   const setUpdateScripture = () => {
@@ -80,7 +80,7 @@ const Scripture = (props) => {
       position={chap.position}
       scripID={chap.scripture_id}
       scripLength={chapterComponents !== undefined ? chapterComponents.length : 0}
-      updateChapterCallback={updateChapter}
+      submitChapterCallback={updateChapter}
       />)
     })
   }
@@ -96,7 +96,7 @@ const Scripture = (props) => {
             name={props.name}
             orgID={props.orgID}
             visibility={updateScriptureMode}
-            updateScriptureCallback={updateScripture}
+            submitScriptureCallback={updateScripture}
             onSubmitCallback={setUpdateScripture}
           />
             <button onClick={setUpdateScripture} className={ updateScriptureMode ? "hidden" : "border-0 btn w-100 mt-n2"}><h5 className="card-title font-weight-bolder text-left">{props.name}</h5></button>
@@ -113,7 +113,7 @@ const Scripture = (props) => {
         orgID={props.orgID}
         visibility={addChapterMode}
         scripLength={chapterComponents !== undefined ? chapterComponents.length : 0}
-        addChapterCallback={addChapter}
+        submitChapterCallback={addChapter}
         onSubmitCallback={setAddChapter}
         />
         <div className="list-group-flush">
