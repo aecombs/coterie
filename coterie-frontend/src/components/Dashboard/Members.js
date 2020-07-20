@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Member from './Member';
-import NewMember from './NewMember';
+import MemberForm from './MemberForm';
 import axios from 'axios';
 
 const Members = (props) => {
@@ -45,6 +45,8 @@ const Members = (props) => {
 
 
 const addMember = (memObj) => {
+  delete memObj["id"];
+  
   axios.post(url, memObj)
   .then((response) => {
     setErrorMessage(`Member ${memObj["name"]} added`);
@@ -68,7 +70,7 @@ const addMember = (memObj) => {
     <section className="w-100">
       <div className="">
         <button className="btn btn-secondary float-right mb-2" onClick={toggleFormVisibility}>{ visibility ? "-" : "+"}</button>
-        <NewMember 
+        <MemberForm 
         orgID={props.orgID}
         visibility={visibility}
         addMemberCallback={addMember}

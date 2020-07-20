@@ -24,7 +24,7 @@ const Holiday = (props) => {
       <button onClick={setUpdate} className={ updateMode ? "hidden" : "btn list-group-item list-group-item-action"}>
         <div className="card-body row justify-content-between">
           <div>
-            <p className="card-title font-weight-bolder text-left">{props.name}</p>
+            <h5 className="card-title font-weight-bolder text-left">{props.name}</h5>
             <p className="open-sans card-text text-left">{props.description}</p>
           </div>
           <div>
@@ -39,7 +39,6 @@ const Holiday = (props) => {
         description={props.description}
         orgID={props.orgID}
         visibility={updateMode}
-        addHolidayCallback={updateHoliday}
         updateHolidayCallback={updateHoliday}
         onSubmitCallback={setUpdate}
         />

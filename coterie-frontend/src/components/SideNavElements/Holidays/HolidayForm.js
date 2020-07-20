@@ -43,16 +43,18 @@ const HolidayForm = (props) => {
     props.onSubmitCallback();
 
     if (props.id !== null) {
-      props.addHolidayCallback(formFields);
-    } else {
+      //the id exists, therefore we are updating
       props.updateHolidayCallback(formFields);
+    } else {
+      //there is no id set, so we are creating a new one
+      props.addHolidayCallback(formFields);
     }
     
   };
 
   return (
     <div className={ props.visibility ? "py-3" : "hidden"}>
-      <form className="" onSubmit={onFormSubmit}>
+      <form className="" onSubmit={""}>
         <div className="form-group">
           <small className="open-sans form-text text-muted">Holiday Name</small>
           <input

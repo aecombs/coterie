@@ -32,7 +32,7 @@ const AnnouncementForm = (props) => {
     event.preventDefault();
     props.onSubmitCallback();
 
-    if (props.id !== null) {
+    if (props.id == null || props.id == undefined) {
       props.addAnnouncementCallback(formFields);
     } else {
       props.updateAnnouncementCallback(formFields);
@@ -42,7 +42,7 @@ const AnnouncementForm = (props) => {
 
   return (
     <div className={ props.visibility ? "py-3" : "hidden"}>
-      <form className="" onSubmit={onFormSubmit}>
+      <form className="" onSubmit={""}>
         <div className="form-group">
           <small className="open-sans form-text text-muted">Announcement Name</small>
           <input
@@ -65,7 +65,7 @@ const AnnouncementForm = (props) => {
             onChange={onDescriptionChange}
           />
         </div>
-        <div className="btn-group w-100">
+        <div className="btn-group">
           <input 
             className="btn btn-success text-center" 
             type="submit"

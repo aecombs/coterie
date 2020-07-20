@@ -18,7 +18,7 @@ const Chapter = (props) => {
       <button onClick={setUpdate} className={ updateMode ? "hidden" : "btn list-group-item list-group-item-action"}>
         <div className="card-body row justify-content-between">
           <div>
-            <p className="card-title font-weight-bolder text-left">{props.name}</p>
+            <h5 className="card-title font-weight-bolder text-left">{props.name}</h5>
             <p className="open-sans card-text text-left">{props.text}</p>
           </div>
         </div>
@@ -29,7 +29,6 @@ const Chapter = (props) => {
         text={props.text}
         scripID={props.scripID}
         visibility={updateMode}
-        addChapterCallback={updateChapter}
         updateChapterCallback={updateChapter}
         onSubmitCallback={setUpdate}
         />

@@ -23,16 +23,16 @@ const ScriptureForm = (props) => {
     props.onSubmitCallback();
 
     if (props.id !== null) {
-      props.addScriptureCallback(formFields);
-    } else {
       props.updateScriptureCallback(formFields);
+    } else {
+      props.addScriptureCallback(formFields);
     }
     
   };
 
   return (
     <div className={ props.visibility ? "py-3" : "hidden"}>
-      <form className="" onSubmit={onFormSubmit}>
+      <form className="" onSubmit={""}>
         <div className="form-group">
           <small className="open-sans form-text text-muted">Scripture Title</small>
           <input
@@ -46,7 +46,7 @@ const ScriptureForm = (props) => {
         </div>
         <div className="btn-group w-100">
           <input 
-            className="btn btn-success text-center" 
+            className="btn btn-success text-center w-50" 
             type="submit"
             value="Save"
             onClick={onFormSubmit}

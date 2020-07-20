@@ -35,7 +35,7 @@ const OrgForm = (props) => {
 
   return (
     <div className={props.visibility ? "container row" : "hidden"}>
-      <form className="w-100" onSubmit={onFormSubmit}>
+      <form className="w-100" onSubmit={""}>
         <h2 className="form-title">{formFields["name"]}</h2>
         <div className="form-group">
             {/* <label className="open-sans">Name</label> */}
@@ -48,7 +48,6 @@ const OrgForm = (props) => {
             />
         </div>
         <div className="form-group">
-          {/* <label className="open-sans">Mission Statement</label> */}
           <input
             className="open-sans form-control"
             name="mission_statement"
@@ -58,15 +57,6 @@ const OrgForm = (props) => {
             onChange={onMissionChange}
           />
         </div>
-        {/* <div className="form-group">
-          <input
-            className="open-sans form-control"
-            name="total_funds"
-            type="text"
-            value={formFields["total_funds"]}
-            onChange={onFundsChange}
-          />
-        </div> */}
         <input 
           className="btn btn-light w-100 text-center" 
           type="submit"

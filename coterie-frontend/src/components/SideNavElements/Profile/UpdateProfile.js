@@ -36,7 +36,7 @@ const UpdateProfile = (props) => {
 
   return (
     <div className={ props.visibility ? "container mt-n2" : "hidden"}>
-      <form className="" onSubmit={onFormSubmit}>
+      <form className="" onSubmit={""}>
         <div className="form-group">
           {/* <small className="open-sans form-text text-muted">Name</small> */}
           <input

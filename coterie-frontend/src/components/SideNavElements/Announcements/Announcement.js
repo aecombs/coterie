@@ -23,7 +23,7 @@ const Announcement = (props) => {
       <button onClick={setUpdate} className={ updateMode ? "hidden" : "btn list-group-item list-group-item-action"}>
         <div className="card-body row justify-content-between">
           <div>
-            <p className="card-title font-weight-bolder text-left">{props.header}</p>
+            <h5 className="card-title font-weight-bolder text-left">{props.header}</h5>
             <p className="open-sans card-text text-left">{props.description}</p>
           </div>
           <div>
@@ -38,7 +38,6 @@ const Announcement = (props) => {
         date={props.date}
         orgID={props.orgID}
         visibility={updateMode}
-        addAnnouncementCallback={updateAnnouncement}
         updateAnnouncementCallback={updateAnnouncement}
         onSubmitCallback={setUpdate}
         />

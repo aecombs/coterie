@@ -7,11 +7,11 @@ import axios from 'axios';
 
 const Scripture = (props) => {
   const [chaptersList, setChaptersList] = useState(null);
-  const [updateChapterMode, setUpdateChapterMode] = useState(false);
-  const [visibility, setVisibility] = useState(false);
+  const [addChapterMode, setAddChapterMode] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [updateScriptureMode, setUpdateScriptureMode] = useState(false);
 
+  //Scripture
   const updateScripture = (scripObj) => {
     props.updateScriptureCallback(scripObj)
   }
@@ -20,14 +20,13 @@ const Scripture = (props) => {
     setUpdateScriptureMode(!updateScriptureMode);
   }
 
-  const setUpdateChapter = () => {
-    setUpdateChapterMode(!updateChapterMode);
+
+  //Chapters
+  const setAddChapter = () => {
+    setAddChapterMode(!addChapterMode);
   }
 
-
   const url = `http://localhost:3000/scriptures/${props.id}/chapters`
-
-  const updateChapterURL = `http://localhost:3000/chapters`
 
   const addChapter = (chapObj) => {
     //remove unnecessary id property
@@ -46,7 +45,7 @@ const Scripture = (props) => {
   }
 
   const updateChapter = (chapObj) => {
-    axios.put(`${updateChapterURL}/${chapObj.id}`, chapObj)
+    axios.put(`${url}/${chapObj.id}`, chapObj)
     .then((response) => {
       setErrorMessage(`Chapter ${chapObj["name"]} was updated`);
       window.location.reload();
@@ -57,13 +56,6 @@ const Scripture = (props) => {
       console.log(`Unable to add scripture: ${errorMessage}`);
     })
   }
-
-  //toggle visibility of scripture form component
-  const toggleFormVisibility = () => {
-    setVisibility(!visibility);
-    return;
-  }
-
 
   useEffect(() => {
     axios.get(url)
@@ -87,7 +79,7 @@ const Scripture = (props) => {
       text={chap.text}
       position={chap.position}
       scripID={chap.scripture_id}
-      scripLength={chapterComponents.length}
+      scripLength={chapterComponents !== undefined ? chapterComponents.length : 0}
       updateChapterCallback={updateChapter}
       />)
     })
@@ -96,33 +88,40 @@ const Scripture = (props) => {
 
   return (
     <section>
-
-      <button onClick={setUpdateChapter} className={ updateChapterMode ? "hidden" : "btn list-group-item list-group-item-action"}>
-        <div className="card-body row justify-content-between">
-          <p className="card-title font-weight-bolder text-left">{props.name}</p>
-          <button className="btn btn-info" onClick={toggleFormVisibility}>{ visibility ? "-" : "+"}</button>
+      <button className={ "btn list-group-item list-group-item-action"}>
+        <div className="row">
+          <div className="card-body  justify-content-between">
+          <ScriptureForm 
+            id={props.id}
+            name={props.name}
+            orgID={props.orgID}
+            visibility={updateScriptureMode}
+            updateScriptureCallback={updateScripture}
+            onSubmitCallback={setUpdateScripture}
+          />
+            <button onClick={setUpdateScripture} className={ updateScriptureMode ? "hidden" : "btn btn-light mt-n2"}><h5 className="card-title font-weight-bolder text-left">{props.name}</h5></button>
+            
+          </div>
+          <div className="">
+            <button className="btn btn-outline-secondary mr-2" onClick={setAddChapter}>{ addChapterMode ? "-" : "+"}</button>
+          </div>
         </div>
 
         <p className={ chapterComponents !== undefined ? "hidden" : "open-sans" }>There are no chapters in this scripture...</p>
+
         <ChapterForm 
         orgID={props.orgID}
-        visibility={visibility}
+        visibility={addChapterMode}
         scripLength={chapterComponents !== undefined ? chapterComponents.length : 0}
         addChapterCallback={addChapter}
-        onSubmitCallback={toggleFormVisibility}
+        onSubmitCallback={setAddChapter}
         />
-        {chapterComponents}
+        <div className="list-group-flush">
+          {chapterComponents}
+        </div>
+        
 
       </button>
-      <ScriptureForm 
-        id={props.id}
-        name={props.name}
-        orgID={props.orgID}
-        visibility={updateScriptureMode}
-        addScriptureCallback={updateScripture}
-        updateScriptureCallback={updateScripture}
-        onSubmitCallback={setUpdateScripture}
-        />
     </section>
   )
 }
@@ -130,7 +129,8 @@ const Scripture = (props) => {
 Scripture.propTypes = {
   id: PropTypes.number,
   name: PropTypes.string,
-  orgID: PropTypes.number
+  orgID: PropTypes.number,
+  visibility: PropTypes.bool,
 };
 
 export default Scripture;

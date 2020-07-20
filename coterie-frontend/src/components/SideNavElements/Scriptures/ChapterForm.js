@@ -50,7 +50,7 @@ const ChapterForm = (props) => {
 
   return (
     <div className={ props.visibility ? "py-3" : "hidden"}>
-      <form className="" onSubmit={onFormSubmit}>
+      <form className="" onSubmit={""}>
         <div className="form-group">
           <small className="open-sans form-text text-muted">Chapter Title</small>
           <input

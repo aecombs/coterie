@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const NewMember = (props) => {
+const MemberForm = (props) => {
   //Form
   const [formFields, setFormFields] = useState({
-    "name": '',
-    "birthdate": "1999-01-01",
-    "class": 'Embraced',
-    "email": '',
-    "funds_raised": '',
+    "id": (props.id ? props.id : null),
+    "name": (props.name ? props.name : ""),
+    "birthdate": (props.birthdate ? props.birthdate : "1985-01-01"),
+    "class": (props.class ? props.class : 'Welcomed'),
+    "email": (props.email ? props.email : ""),
+    "funds_raised": (props.fundsRaised ? props.fundsRaised : ""),
     "organization_id": props.orgID,
   });
 
@@ -63,7 +64,7 @@ const NewMember = (props) => {
 
   return (
     <div className={ props.visibility ? "py-3" : "hidden"}>
-      <form className="" onSubmit={onFormSubmit}>
+      <form className="" onSubmit={""}>
         <div className="form-group">
           <small className="open-sans form-text text-muted">Member's Name</small>
           <input
@@ -94,7 +95,7 @@ const NewMember = (props) => {
           >
             <option>Revered</option>
             <option>Respected</option>
-            <option>Embraced</option>
+            <option>Welcomed</option>
             <option>Tolerated</option>
             <option>Shamed</option>
           </select>
@@ -132,9 +133,9 @@ const NewMember = (props) => {
 )
 }
 
-NewMember.propTypes = {
+MemberForm.propTypes = {
   orgID: PropTypes.number,
   visibility: PropTypes.bool,
 };
 
-export default NewMember;
+export default MemberForm;

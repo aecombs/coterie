@@ -52,16 +52,16 @@ const EventForm = (props) => {
     props.onSubmitCallback();
 
     if (props.id !== null) {
-      props.addEventCallback(formFields);
-    } else {
       props.updateEventCallback(formFields);
+    } else {
+      props.addEventCallback(formFields);
     }
     
   };
 
   return (
     <div className={ props.visibility ? "py-3" : "hidden"}>
-      <form className="" onSubmit={onFormSubmit}>
+      <form className="" onSubmit={""}>
         <div className="form-group">
           <small className="open-sans form-text text-muted">Event Name</small>
           <input

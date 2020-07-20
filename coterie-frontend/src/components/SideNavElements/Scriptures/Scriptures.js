@@ -82,7 +82,9 @@ const Scriptures = (props) => {
           <button className="btn btn-secondary" onClick={toggleFormVisibility}>{ visibility ? "-" : "+"}</button>
         </div>
         <p className={ scriptureComponents !== undefined ? "hidden" : "open-sans" }>You haven't created any scriptures yet.</p>
+
         <ScriptureForm 
+        id={null}
         orgID={props.orgID}
         visibility={visibility}
         addScriptureCallback={addScripture}
