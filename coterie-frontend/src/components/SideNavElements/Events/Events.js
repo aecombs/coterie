@@ -44,6 +44,19 @@ const Events = (props) => {
     })
   }
   
+  const deleteEvent = (eventID) => {
+    axios.delete(`${updateURL}/${eventID}`)
+    .then((response) => {
+      setErrorMessage(`Event ${eventID["name"]} was deleted`);
+      window.location.reload();
+    })
+    
+    .catch((error) => {
+      setErrorMessage(error.message);
+      console.log(`Unable to delete event: ${errorMessage}`);
+    })
+  }
+
   //toggle visibility of event form component
   const toggleFormVisibility = () => {
     setVisibility(!visibility);
@@ -77,6 +90,7 @@ const Events = (props) => {
       description={e.description}
       orgID={e.organization_id}
       submitEventCallback={updateEvent}
+      deleteEventCallback={deleteEvent}
       />
     )
   })

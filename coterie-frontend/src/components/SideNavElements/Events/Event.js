@@ -14,6 +14,10 @@ const Event = (props) => {
     props.submitEventCallback(eventObj)
   }
 
+  const deleteEvent = () => {
+    props.deleteEventCallback(props.id);
+  }
+
   const setUpdate = () => {
     setUpdateMode(!updateMode);
   }
@@ -42,6 +46,7 @@ const Event = (props) => {
         visibility={updateMode}
         submitEventCallback={updateEvent}
         onSubmitCallback={setUpdate}
+        deleteEventCallback={deleteEvent}
         />
     </section>
   )
