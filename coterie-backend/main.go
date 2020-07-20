@@ -7,10 +7,12 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
+	"github.com/joho/godotenv"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/qkgo/yin"
 )
@@ -159,5 +161,11 @@ func main() {
 		r.Delete("/", controllers.DeleteChapter(chapters))
 	})
 
-	http.ListenAndServe(":3000", r)
+	err = godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
+	http.ListenAndServe(":"+os.Getenv("PORT"), r)
 }
