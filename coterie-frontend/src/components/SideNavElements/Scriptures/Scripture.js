@@ -28,6 +28,8 @@ const Scripture = (props) => {
 
   const url = `${process.env.REACT_APP_API_BASE_URL}/scriptures/${props.id}/chapters`
 
+  const updateURL = `${process.env.REACT_APP_API_BASE_URL}/chapters`
+
   const addChapter = (chapObj) => {
     //remove unnecessary id property
     delete chapObj["id"];
@@ -45,7 +47,7 @@ const Scripture = (props) => {
   }
 
   const updateChapter = (chapObj) => {
-    axios.put(`${url}/${chapObj.id}`, chapObj)
+    axios.put(`${updateURL}/${chapObj.id}`, chapObj)
     .then((response) => {
       setErrorMessage(`Chapter ${chapObj["name"]} was updated`);
       window.location.reload();
