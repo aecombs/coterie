@@ -43,16 +43,22 @@ const ScriptureForm = (props) => {
         </div>
         <div className="btn-group w-100">
           <input 
-            className="btn btn-success text-center w-50" 
+            className="btn btn-success text-center w-75" 
             type="submit"
             value="Save"
             onClick={onFormSubmit}
           />
           <input 
-            className="btn btn-light text-center" 
+            className="btn btn-light text-center w-25" 
             type="submit"
             value="Cancel"
             onClick={props.onSubmitCallback}
+          />
+          <input 
+            className={ props.id ? "btn btn-danger delete-button float-right" : "hidden"} 
+            type="submit"
+            value="Delete"
+            onClick={props.deleteScriptureCallback}
           />
         </div>
       </form>

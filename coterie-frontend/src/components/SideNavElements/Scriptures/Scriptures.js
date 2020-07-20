@@ -44,6 +44,20 @@ const Scriptures = (props) => {
     })
   }
 
+  const deleteScripture = (scripID) => {
+    axios.delete(`${updateURL}/${scripID}`)
+    .then((response) => {
+      setErrorMessage(`Scripture ${scripID["name"]} was deleted`);
+      window.location.reload();
+    })
+    
+    .catch((error) => {
+      setErrorMessage(error.message);
+      console.log(`Unable to delete scripture: ${errorMessage}`);
+    })
+  }
+
+
    //toggle visibility of scripture form component
    const toggleFormVisibility = () => {
     setVisibility(!visibility);
@@ -73,6 +87,7 @@ const Scriptures = (props) => {
       name={scrip.name}
       orgID={scrip.organization_id}
       submitScriptureCallback={updateScripture}
+      deleteScriptureCallback={deleteScripture}
       />)
     })
   }

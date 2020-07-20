@@ -9,6 +9,10 @@ const Chapter = (props) => {
     props.submitChapterCallback(chapObj)
   }
 
+  const deleteChapter = () => {
+    props.deleteChapterCallback(props.id);
+  }
+
   const setUpdate = () => {
     setUpdateMode(!updateMode);
   }
@@ -32,6 +36,7 @@ const Chapter = (props) => {
         visibility={updateMode}
         submitChapterCallback={updateChapter}
         onSubmitCallback={setUpdate}
+        deleteChapterCallback={deleteChapter}
         />
     </section>
   )

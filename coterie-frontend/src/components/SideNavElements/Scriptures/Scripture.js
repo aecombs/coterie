@@ -20,6 +20,9 @@ const Scripture = (props) => {
     setUpdateScriptureMode(!updateScriptureMode);
   }
 
+  const deleteScripture = () => {
+    props.deleteScriptureCallback(props.id);
+  }
 
   //Chapters
   const setAddChapter = () => {
@@ -59,6 +62,19 @@ const Scripture = (props) => {
     })
   }
 
+  const deleteChapter = (chapID) => {
+    axios.delete(`${updateURL}/${chapID}`)
+    .then((response) => {
+      setErrorMessage(`Chapter ${chapID["name"]} was deleted`);
+      window.location.reload();
+    })
+    
+    .catch((error) => {
+      setErrorMessage(error.message);
+      console.log(`Unable to delete chapter: ${errorMessage}`);
+    })
+  }
+
   useEffect(() => {
     axios.get(url)
       .then( (response) => {
@@ -83,6 +99,7 @@ const Scripture = (props) => {
       scripID={chap.scripture_id}
       scripLength={chapterComponents !== undefined ? chapterComponents.length : 0}
       submitChapterCallback={updateChapter}
+      deleteChapterCallback={deleteChapter}
       />)
     })
   }
@@ -100,6 +117,8 @@ const Scripture = (props) => {
             visibility={updateScriptureMode}
             submitScriptureCallback={updateScripture}
             onSubmitCallback={setUpdateScripture}
+            deleteScriptureCallback={deleteScripture}
+
           />
             <button onClick={setUpdateScripture} className={ updateScriptureMode ? "hidden" : "border-0 btn w-100 mt-n2"}><h5 className="card-title font-weight-bolder text-left">{props.name}</h5></button>
             
