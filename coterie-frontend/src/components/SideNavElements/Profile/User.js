@@ -12,26 +12,28 @@ const User = (props) => {
 
     
   return (
-    <div className="w-100 py-2">
-      <img src={props.avatar} alt="Avatar" className="w-25" />
-      <div className="column">
-        <h5 className={visibility ? "hidden" : "py-3 open-sans"}>{props.name}</h5>
-
-        <UpdateProfile 
-          visibility={visibility}
-          updateUserCallback={props.updateUserCallback}
-          onSubmitCallback={toggleFormVisibility}
-          name={props.name}
-          email={props.email}
-          bio={props.bio}
-        />
-        <p className={visibility ? "hidden" : "open-sans"}>{props.bio}</p>
+    <section className="w-100 py-2 container mr-2 d-flex justify-content-start">
+      <div className="w-100">
+        <img src={props.avatar} alt="Avatar" className="profile-image row" />
+        <div className="row justify-content-between my-2 card">
+          <div className="col card-text pt-2">
+            <p className={visibility ? "hidden" : "open-sans"}>{props.name}</p>
+            <p className={visibility ? "hidden" : "open-sans"}>{props.bio}</p>
+          </div>
+          <div className="col card-text text-right">
+            <button className={visibility ? "hidden" : "btn btn-secondary open-sans mb-2"} onClick={toggleFormVisibility}>Update</button>
+          </div>
+          <UpdateProfile 
+            visibility={visibility}
+            updateUserCallback={props.updateUserCallback}
+            onSubmitCallback={toggleFormVisibility}
+            name={props.name}
+            email={props.email}
+            bio={props.bio}
+          />
+        </div>        
       </div>
-      <div className="column">
-        <button className={visibility ? "hidden" : "btn btn-secondary open-sans"} onClick={toggleFormVisibility}>Update Profile</button> 
-      </div>
-      
-    </div>
+    </section>
   )
 }
 

@@ -17,14 +17,6 @@ const UpdateProfile = (props) => {
     });
   };
 
-  const onEmailChange = (event) => {
-    console.log(`email field updated ${event.target.value}`);
-    setFormFields({
-      ...formFields,
-      "email": event.target.value,
-    });
-  };
-
   const onBioChange = (event) => {
     console.log(`bio field updated ${event.target.value}`);
     setFormFields({
@@ -43,10 +35,10 @@ const UpdateProfile = (props) => {
   };
 
   return (
-    <div className={ props.visibility ? "container" : "container hidden"}>
+    <div className={ props.visibility ? "container mt-n2" : "hidden"}>
       <form className="" onSubmit={onFormSubmit}>
         <div className="form-group">
-          <small className="open-sans form-text text-muted">Name</small>
+          {/* <small className="open-sans form-text text-muted">Name</small> */}
           <input
             className="open-sans form-control"
             name="name"
@@ -56,17 +48,7 @@ const UpdateProfile = (props) => {
           />
         </div>
         <div className="form-group">
-          <small className="open-sans form-text text-muted">Email</small>
-          <input
-            className="open-sans form-control"
-            name="email"
-            type="email"
-            value={formFields["email"]}
-            onChange={onEmailChange}
-          />
-        </div>
-        <div className="form-group">
-          <small className="open-sans form-text text-muted">Bio</small>
+          {/* <small className="open-sans form-text text-muted">Bio</small> */}
           <textarea
             className="open-sans form-control"
             name="bio"

@@ -87,6 +87,7 @@ const Scripture = (props) => {
       text={chap.text}
       position={chap.position}
       scripID={chap.scripture_id}
+      scripLength={chapterComponents.length}
       updateChapterCallback={updateChapter}
       />)
     })
@@ -99,14 +100,14 @@ const Scripture = (props) => {
       <button onClick={setUpdateChapter} className={ updateChapterMode ? "hidden" : "btn list-group-item list-group-item-action"}>
         <div className="card-body row justify-content-between">
           <p className="card-title font-weight-bolder text-left">{props.name}</p>
-          <button className="btn btn-secondary" onClick={toggleFormVisibility}>{ visibility ? "-" : "+"}</button>
+          <button className="btn btn-info" onClick={toggleFormVisibility}>{ visibility ? "-" : "+"}</button>
         </div>
 
         <p className={ chapterComponents !== undefined ? "hidden" : "open-sans" }>There are no chapters in this scripture...</p>
         <ChapterForm 
         orgID={props.orgID}
         visibility={visibility}
-        scripLength={chapterComponents.length}
+        scripLength={chapterComponents !== undefined ? chapterComponents.length : 0}
         addChapterCallback={addChapter}
         onSubmitCallback={toggleFormVisibility}
         />

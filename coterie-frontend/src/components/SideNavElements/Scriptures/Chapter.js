@@ -1,16 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import ChapterForm from './ChapterForm';
 
 const Chapter = (props) => {
+  const [updateMode, setUpdateMode] = useState(false);
+
+  const updateChapter = (chapObj) => {
+    props.updateChapterCallback(chapObj)
+  }
+
+  const setUpdate = () => {
+    setUpdateMode(!updateMode);
+  }
+
   return (
-    <div className="list-group-item card">
-      <div className="card-body">
-        <p className="open-sans card-title">{props.name}</p>
-      </div>
-      <div className="card-body">
-        <p className="open-sans card-text hidden-until-hover">{props.text}</p>
-      </div>
-    </div>
+    <section>
+      <button onClick={setUpdate} className={ updateMode ? "hidden" : "btn list-group-item list-group-item-action"}>
+        <div className="card-body row justify-content-between">
+          <div>
+            <p className="card-title font-weight-bolder text-left">{props.name}</p>
+            <p className="open-sans card-text text-left">{props.text}</p>
+          </div>
+        </div>
+      </button>
+      <ChapterForm 
+        id={props.id}
+        name={props.name}
+        text={props.text}
+        scripID={props.scripID}
+        visibility={updateMode}
+        addChapterCallback={updateChapter}
+        updateChapterCallback={updateChapter}
+        onSubmitCallback={setUpdate}
+        />
+    </section>
   )
 }
 
@@ -19,6 +42,7 @@ Chapter.propTypes = {
   name: PropTypes.string,
   text: PropTypes.string,
   position: PropTypes.string,
+  scripLength: PropTypes.number,
   scripID: PropTypes.number
 };
 

@@ -58,7 +58,7 @@ const Profile = (props) => {
   
 
   return (
-    <div className="container">
+    <div className="">
       <div className="d-flex flex-wrap">
         {userComponent}
 

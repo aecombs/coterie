@@ -63,7 +63,6 @@ div.dashboard-display {
   min-width: 80vw;
 }
 
-
 img.favicon {
   margin: auto;
   width: 15vw;
@@ -80,16 +79,13 @@ div.login-card {
   padding-top: 1rem;
 }
 
-p.hidden-until-hover {
-  visibility: hidden;
-}
-
-p.hidden-until-hover:hover {
-  visibility: visible;
-}
-
 h2.form-title {
   height: 6.5vh;
+}
+
+img.profile-image {
+  width: 20rem;
+  margin: auto;
 }
 
 footer.footer {
