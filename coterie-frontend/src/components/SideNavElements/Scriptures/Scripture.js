@@ -99,7 +99,7 @@ const Scripture = (props) => {
             updateScriptureCallback={updateScripture}
             onSubmitCallback={setUpdateScripture}
           />
-            <button onClick={setUpdateScripture} className={ updateScriptureMode ? "hidden" : "btn btn-light mt-n2"}><h5 className="card-title font-weight-bolder text-left">{props.name}</h5></button>
+            <button onClick={setUpdateScripture} className={ updateScriptureMode ? "hidden" : "border-0 btn w-100 mt-n2"}><h5 className="card-title font-weight-bolder text-left">{props.name}</h5></button>
             
           </div>
           <div className="">

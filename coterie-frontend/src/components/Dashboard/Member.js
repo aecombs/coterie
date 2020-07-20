@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import MemberForm from './MemberForm';
 
 const Member = (props) => {
+  const [updateMode, setUpdateMode] = useState(false);
+
+
   const formatCurrency = (int) => {
     let modInt = 0;
     if (int !== 0) {
@@ -23,14 +27,55 @@ const Member = (props) => {
     return formattedDate.substring(0, 17)
   }
 
+  const updateMember = (memObj) => {
+    props.updateMemberCallback(memObj)
+  }
+
+  const setUpdate = () => {
+    setUpdateMode(!updateMode);
+  }
+
+
   return (
-    <tr className="text-left">
-      <td className="card-title open-sans">{props.name}</td>
-      <td className="card-title open-sans">{props.class}</td>
-      <td className="card-text open-sans">{formatCurrency(props.fundsRaised)}</td>
-      <td className="card-text open-sans">{props.email}</td>
-      <td className="card-text open-sans">{formatDate(props.birthdate)}</td>
-    </tr>
+    <section>
+      <button onClick={setUpdate} className={ updateMode ? "hidden" : "btn list-group-item list-group-item-action"}>
+        <div className="card-body row justify-content-between">
+          <div className="text-left">
+            <h5 className="card-title font-weight-bolder text-left">{props.name}</h5>
+          </div>
+          <div className="row container justify-content-around">
+            <div className="text-left">
+              <small>Class</small>
+              <p className="open-sans card-text text-left">{props.class}</p>
+            </div>
+            <div className="text-left">
+              <small>Birthdate</small>
+              <p className="open-sans card-text text-right">{formatDate(props.birthdate)}</p>
+            </div>
+            <div className="text-left">
+              <small>Email</small>
+              <p className="open-sans card-text text-right">{props.email}</p>
+            </div>
+            <div className="text-left">
+              <small>Total funds raised</small>
+              <p className="open-sans card-text text-right">{formatCurrency(props.fundsRaised)}</p>
+            </div>
+          </div>
+        </div>
+      </button>
+      <MemberForm 
+        id={props.id}
+        name={props.name}
+        birthdate={props.birthdate}
+        class={props.class}
+        email={props.email}
+        fundsRaised={props.fundsRaised}
+        orgID={props.orgID}
+        visibility={updateMode}
+        submitMemberCallback={updateMember}
+        onSubmitCallback={setUpdate}
+        />
+    </section>
   )
 }
 

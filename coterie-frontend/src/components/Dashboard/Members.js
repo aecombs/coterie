@@ -11,6 +11,44 @@ const Members = (props) => {
   //get all members
   const url = `http://localhost:3000/users/${props.userID}/organizations/${props.orgID}/members`;
 
+  const addMember = (memObj) => {
+    delete memObj["id"];
+    
+    axios.post(url, memObj)
+    .then((response) => {
+      setErrorMessage(`Member ${memObj["name"]} added`);
+      window.location.reload();
+    })
+    
+    .catch((error) => {
+      setErrorMessage(error.message);
+      console.log(`Unable to add mem: ${errorMessage}`);
+    })
+  }
+
+  const updateURL = `http://localhost:3000/members`
+
+  const updateMember = (memObj) => {
+    axios.put(`${updateURL}/${memObj.id}`, memObj)
+    .then((response) => {
+      setErrorMessage(`Member ${memObj["header"]} was updated`);
+      window.location.reload();
+    })
+    
+    .catch((error) => {
+      setErrorMessage(error.message);
+      console.log(`Unable to update member: ${errorMessage}`);
+    })
+  }
+
+
+  //toggle visibility of new member component
+  const toggleFormVisibility = () => {
+    setVisibility(!visibility);
+    return;
+  }
+
+
   useEffect(() => {
     axios.get(url)
       .then( (response) => {
@@ -36,6 +74,7 @@ const Members = (props) => {
       email={mem.email}
       fundsRaised={mem.funds_raised}
       orgID={mem.organization_id}
+      updateMemberCallback={updateMember}
       />
     )
   })
@@ -44,28 +83,6 @@ const Members = (props) => {
 }
 
 
-const addMember = (memObj) => {
-  delete memObj["id"];
-  
-  axios.post(url, memObj)
-  .then((response) => {
-    setErrorMessage(`Member ${memObj["name"]} added`);
-    window.location.reload();
-  })
-  
-  .catch((error) => {
-    setErrorMessage(error.message);
-    console.log(`Unable to add mem: ${errorMessage}`);
-  })
-}
-
-
-  //toggle visibility of new member component
-  const toggleFormVisibility = () => {
-    setVisibility(!visibility);
-    return;
-  }
-
   return (
     <section className="w-100">
       <div className="">
@@ -73,12 +90,12 @@ const addMember = (memObj) => {
         <MemberForm 
         orgID={props.orgID}
         visibility={visibility}
-        addMemberCallback={addMember}
+        submitMemberCallback={addMember}
         onSubmitCallback={toggleFormVisibility}
         />
       </div>
       <h6 className="mt-3 w-100">Followers</h6>
-      <table className="table table-hover table-light">
+      {/* <table className="table table-hover table-light">
         <thead className="thead-light text-left">
           <tr>
             <th>Name</th>
@@ -88,10 +105,10 @@ const addMember = (memObj) => {
             <th>Birthdate</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody> */}
           {memberComponents}
-        </tbody>
-      </table>
+        {/* </tbody>
+      </table> */}
     </section>
   )
 }

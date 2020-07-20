@@ -58,7 +58,7 @@ const MemberForm = (props) => {
     const beforeFunds = formFields["funds_raised"].substr(0);
     formFields["funds_raised"] = beforeFunds.replace(/[^\d]/gi, '');
 
-    props.addMemberCallback(formFields);
+    props.submitMemberCallback(formFields);
     
   };
 
@@ -125,7 +125,7 @@ const MemberForm = (props) => {
         <input 
           className="btn btn-light w-100 text-center" 
           type="submit"
-          value="Add Member"
+          value="Submit"
           onClick={onFormSubmit}
         />
       </form>
