@@ -95,5 +95,19 @@ input.delete-button{
 footer.footer {
   background-color: #44A1A0;
   position: relative;
-  height: 3rem;
+  /* height: 3rem; */
+}
+
+div.footer-logo{
+  margin: auto;
+}
+
+footer.footer a {
+  color: white;
+  text-decoration: none;
+}
+
+footer.footer a:hover {
+  color: rgb(238, 238, 238);
+  text-decoration: none;
 }
