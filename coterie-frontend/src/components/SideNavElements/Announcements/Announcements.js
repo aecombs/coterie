@@ -44,6 +44,19 @@ const Announcements = (props) => {
     })
   }
 
+  const deleteAnnouncement = (annID) => {
+    axios.delete(`${updateURL}/${annID}`)
+    .then((response) => {
+      setErrorMessage(`Announcement ${annID["header"]} was deleted`);
+      window.location.reload();
+    })
+    
+    .catch((error) => {
+      setErrorMessage(error.message);
+      console.log(`Unable to delete announcement: ${errorMessage}`);
+    })
+  }
+
    //toggle visibility of announcement form component
    const toggleFormVisibility = () => {
     setVisibility(!visibility);
@@ -75,6 +88,7 @@ const Announcements = (props) => {
       date={ann.date}
       orgID={ann.organization_id}
       submitAnnouncementCallback={updateAnnouncement}
+      deleteAnnouncementCallback={deleteAnnouncement}
       />
     )
   })

@@ -14,6 +14,10 @@ const Announcement = (props) => {
     props.submitAnnouncementCallback(annObj)
   }
 
+  const deleteAnnouncement = () => {
+    props.deleteAnnouncementCallback(props.id);
+  }
+
   const setUpdate = () => {
     setUpdateMode(!updateMode);
   }
@@ -40,6 +44,7 @@ const Announcement = (props) => {
         visibility={updateMode}
         submitAnnouncementCallback={updateAnnouncement}
         onSubmitCallback={setUpdate}
+        deleteAnnouncementCallback={deleteAnnouncement}
         />
     </section>
   )
