@@ -56,7 +56,7 @@ func AddOrganization(organizationTable *models.OrganizationTable, userTable *mod
 
 		res.SendJSON(result)
 
-		url := goDotEnvVariable("CLIENT_BASE_URL_DEV") + "/dashboard"
+		url := goDotEnvVariable("CLIENT_BASE_URL_PROD") + "/dashboard"
 		http.Redirect(w, r, url, http.StatusSeeOther)
 		return
 	}
@@ -105,7 +105,7 @@ func UpdateOrganization(organizationTable *models.OrganizationTable) http.Handle
 		}
 
 		// res.SendJSON(result)
-		url := goDotEnvVariable("CLIENT_BASE_URL_DEV") + "/dashboard"
+		url := goDotEnvVariable("CLIENT_BASE_URL_PROD") + "/dashboard"
 		http.Redirect(w, r, url, http.StatusSeeOther)
 		return
 	}
@@ -125,7 +125,7 @@ func DeleteOrganization(organizationTable *models.OrganizationTable) http.Handle
 		}
 
 		// res.SendStatus(200)
-		url := goDotEnvVariable("CLIENT_BASE_URL_DEV") + "/dashboard"
+		url := goDotEnvVariable("CLIENT_BASE_URL_PROD") + "/dashboard"
 		http.Redirect(w, r, url, http.StatusSeeOther)
 		return
 	}

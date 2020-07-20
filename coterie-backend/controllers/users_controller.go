@@ -91,7 +91,7 @@ func GoogleCallback(userTable *models.UserTable) http.HandlerFunc {
 			http.SetCookie(w, cookie)
 		}
 
-		url := goDotEnvVariable("CLIENT_BASE_URL_DEV") + "/dashboard?id=" + strconv.Itoa(user.ID)
+		url := goDotEnvVariable("CLIENT_BASE_URL_PROD") + "/dashboard?id=" + strconv.Itoa(user.ID)
 		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 
 	}
@@ -167,7 +167,7 @@ func LogoutUser() http.HandlerFunc {
 		cookie, err := r.Cookie("__session")
 		//it it doesn't exist, we receive an err. No need to delete anything.
 		if err != nil {
-			url := goDotEnvVariable("CLIENT_BASE_URL_DEV")
+			url := goDotEnvVariable("CLIENT_BASE_URL_PROD")
 			http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 			return
 		}
@@ -180,7 +180,7 @@ func LogoutUser() http.HandlerFunc {
 		}
 		http.SetCookie(w, cookie)
 
-		url := goDotEnvVariable("CLIENT_BASE_URL_DEV")
+		url := goDotEnvVariable("CLIENT_BASE_URL_PROD")
 		http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 		return
 	}
