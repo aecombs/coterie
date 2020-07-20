@@ -8,7 +8,10 @@ const Scriptures = (props) => {
   const [visibility, setVisibility] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const url = `${process.env.REACT_APP_API_BASE_URL}/users/${props.userID}/organizations/${props.orgID}/scriptures`
+  //grab the current org
+  const orgID = sessionStorage.getItem('orgID');
+
+  const url = `${process.env.REACT_APP_API_BASE_URL}/users/${props.userID}/organizations/${orgID}/scriptures`
 
   const updateURL = `${process.env.REACT_APP_API_BASE_URL}/scriptures`
 
@@ -85,7 +88,7 @@ const Scriptures = (props) => {
 
         <ScriptureForm 
         id={null}
-        orgID={props.orgID}
+        orgID={orgID}
         visibility={visibility}
         submitScriptureCallback={addScripture}
         onSubmitCallback={toggleFormVisibility}

@@ -9,7 +9,9 @@ const Events = (props) => {
   const [visibility, setVisibility] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const url = `${process.env.REACT_APP_API_BASE_URL}/users/${props.userID}/organizations/${props.orgID}/events`
+  const orgID = sessionStorage.getItem('orgID');
+
+  const url = `${process.env.REACT_APP_API_BASE_URL}/users/${props.userID}/organizations/${orgID}/events`
 
   const updateURL = `${process.env.REACT_APP_API_BASE_URL}/events`
 
@@ -90,7 +92,7 @@ const Events = (props) => {
         </div>
         <p className={ eventComponents !== undefined ? "hidden" : "open-sans" }>You haven't created any events yet.</p>
         <EventForm 
-        orgID={props.orgID}
+        orgID={orgID}
         visibility={visibility}
         submitEventCallback={addEvent}
         onSubmitCallback={toggleFormVisibility}

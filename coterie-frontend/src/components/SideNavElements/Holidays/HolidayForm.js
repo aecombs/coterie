@@ -82,7 +82,7 @@ const HolidayForm = (props) => {
         </div>
         <div className="btn-group w-100">
           <input 
-            className="btn btn-success text-center" 
+            className="btn btn-success text-center w-50" 
             type="submit"
             value="Save"
             onClick={onFormSubmit}

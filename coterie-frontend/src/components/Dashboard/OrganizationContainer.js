@@ -39,6 +39,7 @@ const OrganizationContainer = (props) => {
   let orgComponents = undefined
   if (organizationList !== null && organizationList.length > 0) {
     orgComponents = organizationList.map((org) => {
+    props.tellParentID(org.id);
     return(<Organization
       key = {org.id}
       id = {org.id}
@@ -46,8 +47,8 @@ const OrganizationContainer = (props) => {
       missionStatement = {org.mission_statement}
       totalFunds = {org.total_funds}
       createdAt = {org.created_at}
-      userID = "1"
-    />) 
+      userID = {props.userID}
+    />)
     })
   }
 

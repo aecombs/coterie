@@ -60,7 +60,7 @@ const OrgForm = (props) => {
         <input 
           className="btn btn-light w-100 text-center" 
           type="submit"
-          value="Add Organization"
+          value="Submit"
           onClick={onFormSubmit}
         />
       </form>

@@ -69,19 +69,9 @@ const ChapterForm = (props) => {
             onChange={onTextChange}
           />
         </div>
-        {/* <div className="form-group">
-          <small className="open-sans form-text text-muted">Position in Scripture</small>
-          <input
-            className="open-sans form-control"
-            name="date"
-            type="date"
-            value={formFields["date"]}
-            onChange={onPositionChange}
-          />
-        </div> */}
         <div className="btn-group w-100">
           <input 
-            className="btn btn-success text-center" 
+            className="btn btn-success text-center w-50" 
             type="submit"
             value="Save"
             onClick={onFormSubmit}

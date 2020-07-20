@@ -9,7 +9,8 @@ import Scriptures from './SideNavElements/Scriptures/Scriptures';
 import OrgForm from './Dashboard/OrgForm';
 import axios from 'axios';
 
-const SideNav = (props) => {
+const SideNav = () => {
+  const [orgID, setOrgID] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
   const userID = sessionStorage.getItem('userID');
@@ -30,6 +31,13 @@ const SideNav = (props) => {
       setErrorMessage(error.message);
       console.log(`Unable to add org: ${errorMessage}`);
     })
+  }
+
+  const updateOrgSession = (orgID) => {
+    if (orgID) {
+      sessionStorage.setItem('orgID', orgID);
+      setOrgID(sessionStorage.getItem('orgID'));
+    }
   }
 
 
@@ -59,6 +67,7 @@ const SideNav = (props) => {
               <OrganizationContainer {...props}
               userID={userID}
               addOrgCallback={addOrg}
+              tellParentID={updateOrgSession}
               />
             )}
           />
@@ -74,7 +83,7 @@ const SideNav = (props) => {
             render={(props) => (
               <Announcements {...props} 
               userID={userID}
-              orgID={"1"}
+              orgID={orgID}
               />
             )}
           />
@@ -83,7 +92,7 @@ const SideNav = (props) => {
             render={(props) => (
               <Events {...props} 
               userID={userID}
-              orgID={"1"}
+              orgID={orgID}
               />
             )}
           />
@@ -93,7 +102,7 @@ const SideNav = (props) => {
             render={(props) => (
               <Holidays {...props} 
               userID={userID}
-              orgID={"1"}
+              orgID={orgID}
               />
             )}
           />
@@ -102,7 +111,7 @@ const SideNav = (props) => {
             render={(props) => (
               <Scriptures {...props} 
               userID={userID}
-              orgID={"1"}
+              orgID={orgID}
               />
             )}
           />

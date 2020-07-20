@@ -123,12 +123,20 @@ const MemberForm = (props) => {
             onChange={onFundsChange}
           />
         </div>
-        <input 
-          className="btn btn-light w-100 text-center" 
-          type="submit"
-          value="Submit"
-          onClick={onFormSubmit}
-        />
+        <div className="btn-group w-100">
+          <input 
+            className="btn btn-success text-center w-50" 
+            type="submit"
+            value="Save"
+            onClick={onFormSubmit}
+          />
+          <input 
+            className="btn btn-light text-center" 
+            type="submit"
+            value="Cancel"
+            onClick={props.onSubmitCallback}
+          />
+        </div>
       </form>
     </div>
 )
