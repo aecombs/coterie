@@ -44,6 +44,19 @@ const Holidays = (props) => {
     })
   }
 
+  const deleteHoliday = (holID) => {
+    axios.delete(`${updateURL}/${holID}`)
+    .then((response) => {
+      setErrorMessage(`Holiday ${holID["name"]} was deleted`);
+      window.location.reload();
+    })
+    
+    .catch((error) => {
+      setErrorMessage(error.message);
+      console.log(`Unable to delete holiday: ${errorMessage}`);
+    })
+  }
+
    //toggle visibility of holiday form component
    const toggleFormVisibility = () => {
     setVisibility(!visibility);
@@ -74,6 +87,7 @@ const Holidays = (props) => {
       description={hol.description}
       orgID={hol.organization_id}
       submitHolidayCallback={updateHoliday}
+      deleteHolidayCallback={deleteHoliday}
       />)
     })
   }

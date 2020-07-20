@@ -88,6 +88,10 @@ img.profile-image {
   margin: auto;
 }
 
+input.delete-button{
+  width: 5rem;
+}
+
 footer.footer {
   background-color: #44A1A0;
   position: relative;

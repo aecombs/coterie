@@ -11,7 +11,11 @@ const Holiday = (props) => {
   }
 
   const updateHoliday = (holObj) => {
-    props.submitHolidayCallback(holObj)
+    props.submitHolidayCallback(holObj);
+  }
+
+  const deleteHoliday = () => {
+    props.deleteHolidayCallback(props.id);
   }
 
   const setUpdate = () => {
@@ -41,6 +45,7 @@ const Holiday = (props) => {
         visibility={updateMode}
         submitHolidayCallback={updateHoliday}
         onSubmitCallback={setUpdate}
+        deleteHolidayCallback={deleteHoliday}
         />
     </section>
   )
