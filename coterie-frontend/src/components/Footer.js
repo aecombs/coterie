@@ -13,24 +13,24 @@ const Footer = () => {
       </div>
       <div className="container text-left col">
         <h5 className="pb-1">About Coterie</h5>
-        <a href="/"><p>Careers</p></a>
-        <a href="/"><p>Blog</p></a>
-        <a href="/"><p>News</p></a>
-        <a href="/"><p>Company Info</p></a>
+        <a href="/"><p className="open-sans">Why Coterie</p></a>
+        <a href="/"><p className="open-sans">What is a Cult Anyway?</p></a>
+        <a href="/"><p className="open-sans">News</p></a>
+        <a href="/"><p className="open-sans">Additional Reading</p></a>
       </div>
       <div className="container text-left col">
         <h5 className="pb-1">Workshops</h5>
-        <a href="/"><p>Getting New Members</p></a>
-        <a href="/"><p>asdf</p></a>
-        <a href="/"><p>Rentals Policy</p></a>
-        <a href="/"><p>Contact Us</p></a>
+        <a href="/"><p className="open-sans">Organizing the Organizers</p></a>
+        <a href="/"><p className="open-sans">Contact Us</p></a>
+        <a href="/"><p className="open-sans">Getting New Members</p></a>
+        <a href="/"><p className="open-sans">Mixing Your Own Kool-Aid</p></a>
       </div>
       <div className="container text-left col">
-        <h5 className="pb-1">Community</h5>
-        <a href="/"><p>Announcements</p></a>
-        <a href="/"><p>Picnic Schedule</p></a>
-        <a href="/"><p>Employee of the Month</p></a>
-        <a href="/"><p>Videobook</p></a>
+        <h5 className="pb-1">Resources</h5>
+        <a href="/"><p className="open-sans">How to Get Started</p></a>
+        <a href="/"><p className="open-sans">So You've Decided to Be a Cult Leader</p></a>
+        <a href="/"><p className="open-sans">Employee of the Month</p></a>
+        <a href="/"><p className="open-sans">Videobook</p></a>
       </div>
 
       <div className="w-100"></div>
