@@ -15,14 +15,17 @@ const User = (props) => {
     <section className="w-100 py-2 container mr-2 d-flex justify-content-start">
       <div className="w-100">
         <img src={props.avatar} alt="Avatar" className="profile-image row img-thumbnail" />
-        <div className="row justify-content-between my-2 card">
-          <div className="col card-text pt-2">
-            <p className={visibility ? "hidden" : "open-sans"}>{props.name}</p>
-            <p className={visibility ? "hidden" : "open-sans"}>{props.bio}</p>
-          </div>
-          <div className="col card-text text-right">
-            <button className={visibility ? "hidden" : "btn btn-secondary open-sans mb-2"} onClick={toggleFormVisibility}>Update</button>
-          </div>
+          <div className="row justify-content-between my-2 card border-0">
+          <button className={visibility ? "hidden" : "btn btn-outline-light text-dark open-sans mb-2"} onClick={toggleFormVisibility}>
+            <div className="col card-text pt-2">
+              <h4 className={visibility ? "hidden" : "mt-3 text-center open-sans"}>{props.name}</h4>
+              <div className="container w-75 mt-4 mb-5">
+                 <small className="open-sans text-muted text-left">Full Bio</small>
+                <p className={visibility ? "hidden" : "open-sans"}>{props.bio}</p>
+              </div>
+            
+            </div>
+          </button>
           <UpdateProfile 
             visibility={visibility}
             submitUserCallback={props.submitUserCallback}

@@ -38,7 +38,7 @@ const UpdateProfile = (props) => {
     <div className={ props.visibility ? "container mt-n2" : "hidden"}>
       <form className="" onSubmit={""}>
         <div className="form-group">
-          {/* <small className="open-sans form-text text-muted">Name</small> */}
+          <small className="open-sans form-text text-muted">Name</small>
           <input
             className="open-sans form-control"
             name="name"
@@ -48,7 +48,7 @@ const UpdateProfile = (props) => {
           />
         </div>
         <div className="form-group">
-          {/* <small className="open-sans form-text text-muted">Bio</small> */}
+          <small className="open-sans form-text text-muted">Bio</small>
           <textarea
             className="open-sans form-control"
             name="bio"
