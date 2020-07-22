@@ -12,25 +12,25 @@ import (
 
 //NESTED
 
-//GetAnnouncements retrieves all announcements from the DB for a given org
-func GetAnnouncements(announcementTable *models.AnnouncementTable) http.HandlerFunc {
+//GetNewsletters retrieves all newsletters from the DB for a given org
+func GetNewsletters(newsletterTable *models.NewsletterTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
 
 		organizationID := chi.URLParam(r, "organizationID")
 
-		announcements, err := announcementTable.AnnouncementsLister(organizationID)
+		newsletters, err := newsletterTable.NewslettersLister(organizationID)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
 		}
 
-		res.SendJSON(announcements)
+		res.SendJSON(newsletters)
 	}
 }
 
-//AddAnnouncement adds a new announcement to the DB for the appropriate org
-func AddAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
+//AddNewsletter adds a new newsletter to the DB for the appropriate org
+func AddNewsletter(newsletterTable *models.NewsletterTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
 
@@ -39,7 +39,7 @@ func AddAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFu
 		req.BindBody(&body)
 
 		orgID, _ := strconv.Atoi(organizationID)
-		announcement := models.Announcement{
+		newsletter := models.Newsletter{
 			Header:         body["header"],
 			Description:    body["description"],
 			Date:           body["date"],
@@ -48,7 +48,7 @@ func AddAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFu
 			UpdatedAt:      time.Now().String(),
 		}
 
-		result, err := announcementTable.AnnouncementAdder(announcement)
+		result, err := newsletterTable.NewsletterAdder(newsletter)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
@@ -60,34 +60,34 @@ func AddAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFu
 
 //UNNESTED ROUTES
 
-//GetAnnouncement retrieves a single instance of announcement from the DB
-func GetAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
+//GetNewsletter retrieves a single instance of newsletter from the DB
+func GetNewsletter(newsletterTable *models.NewsletterTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
 
-		announcementID := chi.URLParam(r, "announcementID")
+		newsletterID := chi.URLParam(r, "newsletterID")
 
-		announcement, err := announcementTable.AnnouncementGetter(announcementID)
+		newsletter, err := newsletterTable.NewsletterGetter(newsletterID)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
 		}
 
-		res.SendJSON(announcement)
+		res.SendJSON(newsletter)
 	}
 }
 
-//UpdateAnnouncement updates an announcement in the DB
-func UpdateAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
+//UpdateNewsletter updates an newsletter in the DB
+func UpdateNewsletter(newsletterTable *models.NewsletterTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, req := yin.Event(w, r)
 
-		announcementID := chi.URLParam(r, "announcementID")
+		newsletterID := chi.URLParam(r, "newsletterID")
 		body := map[string]string{}
 		req.BindBody(&body)
 
-		annID, _ := strconv.Atoi(announcementID)
-		announcement := models.Announcement{
+		annID, _ := strconv.Atoi(newsletterID)
+		newsletter := models.Newsletter{
 			ID:          annID,
 			Header:      body["header"],
 			Description: body["description"],
@@ -95,7 +95,7 @@ func UpdateAnnouncement(announcementTable *models.AnnouncementTable) http.Handle
 			UpdatedAt:   time.Now().String(),
 		}
 
-		result, err := announcementTable.AnnouncementUpdater(announcement)
+		result, err := newsletterTable.NewsletterUpdater(newsletter)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
@@ -105,14 +105,14 @@ func UpdateAnnouncement(announcementTable *models.AnnouncementTable) http.Handle
 	}
 }
 
-//DeleteAnnouncement removes an announcement from the DB
-func DeleteAnnouncement(announcementTable *models.AnnouncementTable) http.HandlerFunc {
+//DeleteNewsletter removes an newsletter from the DB
+func DeleteNewsletter(newsletterTable *models.NewsletterTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, _ := yin.Event(w, r)
 
-		announcementID := chi.URLParam(r, "announcementID")
+		newsletterID := chi.URLParam(r, "newsletterID")
 
-		err := announcementTable.AnnouncementDeleter(announcementID)
+		err := newsletterTable.NewsletterDeleter(newsletterID)
 		if err != nil {
 			http.Error(w, http.StatusText(400), 400)
 			return

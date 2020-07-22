@@ -83,18 +83,15 @@ func GetOrganization(organizationTable *models.OrganizationTable) http.HandlerFu
 func UpdateOrganization(organizationTable *models.OrganizationTable) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		_, req := yin.Event(w, r)
-
 		organizationID := chi.URLParam(r, "organizationID")
 		body := map[string]string{}
 		req.BindBody(&body)
 
 		orgID, _ := strconv.Atoi(organizationID)
-		tFunds, _ := strconv.Atoi(body["total_funds"])
 		organization := models.Organization{
 			ID:               orgID,
 			Name:             body["name"],
 			MissionStatement: body["mission_statement"],
-			TotalFunds:       tFunds,
 			UpdatedAt:        time.Now().String(),
 		}
 

@@ -158,7 +158,7 @@ func (organizationTable *OrganizationTable) OrganizationAdder(organization Organ
 //Model.update
 func (organizationTable *OrganizationTable) OrganizationUpdater(organization Organization) (Organization, error) {
 	stmt, err := organizationTable.DB.Prepare(`
-	UPDATE organization SET name = ?, mission_statement = ?, total_funds = ?, updated_at = ? WHERE id = ?
+	UPDATE organization SET name = ?, mission_statement = ?, updated_at = ? WHERE id = ?
 	`)
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())
@@ -166,7 +166,7 @@ func (organizationTable *OrganizationTable) OrganizationUpdater(organization Org
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(organization.Name, organization.MissionStatement, organization.TotalFunds, organization.UpdatedAt, organization.ID)
+	_, err = stmt.Exec(organization.Name, organization.MissionStatement, organization.UpdatedAt, organization.ID)
 
 	if err != nil {
 		log.Printf("Unable to update org: %s", err.Error())

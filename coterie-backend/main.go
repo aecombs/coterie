@@ -56,7 +56,7 @@ func main() {
 
 	users := models.NewUserTable(db)
 	organizations := models.NewOrganizationTable(db)
-	announcements := models.NewAnnouncementTable(db)
+	newsletters := models.NewNewsletterTable(db)
 	scriptures := models.NewScriptureTable(db)
 	chapters := models.NewChapterTable(db)
 	events := models.NewEventTable(db)
@@ -107,10 +107,10 @@ func main() {
 					r.Put("/", controllers.UpdateOrganization(organizations))
 					r.Delete("/", controllers.DeleteOrganization(organizations))
 
-					//nested announcements
-					r.Route("/announcements", func(r chi.Router) {
-						r.Get("/", controllers.GetAnnouncements(announcements))
-						r.Post("/", controllers.AddAnnouncement(announcements))
+					//nested newsletters
+					r.Route("/newsletters", func(r chi.Router) {
+						r.Get("/", controllers.GetNewsletters(newsletters))
+						r.Post("/", controllers.AddNewsletter(newsletters))
 					})
 
 					//nested events
@@ -140,11 +140,11 @@ func main() {
 		})
 	})
 
-	//Announcements
-	r.Route("/announcements/{announcementID}", func(r chi.Router) {
-		r.Get("/", controllers.GetAnnouncement(announcements))
-		r.Put("/", controllers.UpdateAnnouncement(announcements))
-		r.Delete("/", controllers.DeleteAnnouncement(announcements))
+	//Newsletters
+	r.Route("/newsletters/{newsletterID}", func(r chi.Router) {
+		r.Get("/", controllers.GetNewsletter(newsletters))
+		r.Put("/", controllers.UpdateNewsletter(newsletters))
+		r.Delete("/", controllers.DeleteNewsletter(newsletters))
 	})
 
 	//Events
