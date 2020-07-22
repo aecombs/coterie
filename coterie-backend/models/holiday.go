@@ -47,7 +47,7 @@ func NewHolidayTable(db *sql.DB) *HolidayTable {
 func (holidayTable *HolidayTable) HolidaysLister(orgID string) ([]Holiday, error) {
 	holidays := []Holiday{}
 	rows, err := holidayTable.DB.Query(`
-		SELECT * FROM holiday WHERE holiday.organization_id = ?
+		SELECT * FROM holiday WHERE organization_id = ?
 	`, orgID)
 	if err != nil {
 		log.Printf("Unable to retrieve holidays: %s", err.Error())
@@ -142,7 +142,7 @@ func (holidayTable *HolidayTable) HolidayAdder(holiday Holiday) (Holiday, error)
 //Model.update
 func (holidayTable *HolidayTable) HolidayUpdater(holiday Holiday) (Holiday, error) {
 	stmt, err := holidayTable.DB.Prepare(`
-	UPDATE holiday SET name = ?, date = ?, description = ?, updated_at = ? WHERE holiday.id = ?
+	UPDATE holiday SET name = ?, date = ?, description = ?, updated_at = ? WHERE id = ?
 	`)
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())
@@ -162,7 +162,7 @@ func (holidayTable *HolidayTable) HolidayUpdater(holiday Holiday) (Holiday, erro
 //Model.delete
 func (holidayTable *HolidayTable) HolidayDeleter(holidayID string) error {
 	stmt, err := holidayTable.DB.Prepare(`
-		DELETE FROM holiday WHERE holiday.id = ?
+		DELETE FROM holiday WHERE id = ?
 	`)
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())

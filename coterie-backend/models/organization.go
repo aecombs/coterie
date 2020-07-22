@@ -48,7 +48,7 @@ func NewOrganizationTable(db *sql.DB) *OrganizationTable {
 func (organizationTable *OrganizationTable) OrganizationsLister(usID string) ([]Organization, error) {
 	organizations := []Organization{}
 	rows, err := organizationTable.DB.Query(`
-		SELECT * FROM organization WHERE organization.user_id = ?
+		SELECT * FROM organization WHERE user_id = ?
 	`, usID)
 	if err != nil {
 		log.Printf("Unable to retrieve organizations: %s", err.Error())
@@ -92,7 +92,7 @@ func (organizationTable *OrganizationTable) OrganizationGetter(organizationID st
 	var organization Organization
 
 	stmt, err := organizationTable.DB.Prepare(`
-		SELECT * FROM organization WHERE organization.id = ?
+		SELECT * FROM organization WHERE id = ?
 	`)
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())
@@ -158,7 +158,7 @@ func (organizationTable *OrganizationTable) OrganizationAdder(organization Organ
 //Model.update
 func (organizationTable *OrganizationTable) OrganizationUpdater(organization Organization) (Organization, error) {
 	stmt, err := organizationTable.DB.Prepare(`
-	UPDATE organization SET name = ?, mission_statement = ?, total_funds = ?, updated_at = ? WHERE organization.id = ?
+	UPDATE organization SET name = ?, mission_statement = ?, total_funds = ?, updated_at = ? WHERE id = ?
 	`)
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())
@@ -178,7 +178,7 @@ func (organizationTable *OrganizationTable) OrganizationUpdater(organization Org
 //Model.delete
 func (organizationTable *OrganizationTable) OrganizationDeleter(organizationID string) error {
 	stmt, err := organizationTable.DB.Prepare(`
-		DELETE FROM organization WHERE organization.id = ?
+		DELETE FROM organization WHERE id = ?
 	`)
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())

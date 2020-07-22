@@ -51,7 +51,7 @@ func NewMemberTable(db *sql.DB) *MemberTable {
 func (memberTable *MemberTable) MembersLister(orgID string) ([]Member, error) {
 	members := []Member{}
 	rows, err := memberTable.DB.Query(`
-		SELECT * FROM member WHERE member.organization_id = ?
+		SELECT * FROM member WHERE organization_id = ?
 	`, orgID)
 	if err != nil {
 		log.Printf("Unable to retrieve members: %s", err.Error())
@@ -154,7 +154,7 @@ func (memberTable *MemberTable) MemberAdder(member Member) (Member, error) {
 //Model.update
 func (memberTable *MemberTable) MemberUpdater(member Member) (Member, error) {
 	stmt, err := memberTable.DB.Prepare(`
-	UPDATE member SET name = ?, birthdate = ?, class = ?, email = ?, funds_raised = ?, updated_at = ? WHERE member.id = ?
+	UPDATE member SET name = ?, birthdate = ?, class = ?, email = ?, funds_raised = ?, updated_at = ? WHERE id = ?
 	`)
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())
@@ -174,7 +174,7 @@ func (memberTable *MemberTable) MemberUpdater(member Member) (Member, error) {
 //Model.delete
 func (memberTable *MemberTable) MemberDeleter(memberID string) error {
 	stmt, err := memberTable.DB.Prepare(`
-		DELETE FROM member WHERE member.id = ?
+		DELETE FROM member WHERE id = ?
 	`)
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())

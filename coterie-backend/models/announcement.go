@@ -47,7 +47,7 @@ func NewAnnouncementTable(db *sql.DB) *AnnouncementTable {
 func (announcementTable *AnnouncementTable) AnnouncementsLister(orgID string) ([]Announcement, error) {
 	announcements := []Announcement{}
 	rows, err := announcementTable.DB.Query(`
-		SELECT * FROM announcement WHERE announcement.organization_id = ?
+		SELECT * FROM announcement WHERE organization_id = ?
 	`, orgID)
 	if err != nil {
 		log.Printf("Unable to retrieve announcements: %s", err.Error())
@@ -141,7 +141,7 @@ func (announcementTable *AnnouncementTable) AnnouncementAdder(announcement Annou
 //Model.update
 func (announcementTable *AnnouncementTable) AnnouncementUpdater(announcement Announcement) (Announcement, error) {
 	stmt, err := announcementTable.DB.Prepare(`
-	UPDATE announcement SET header = ?, description = ?, date = ?, updated_at = ? WHERE announcement.id = ?
+	UPDATE announcement SET header = ?, description = ?, date = ?, updated_at = ? WHERE id = ?
 	`)
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())
@@ -161,7 +161,7 @@ func (announcementTable *AnnouncementTable) AnnouncementUpdater(announcement Ann
 //Model.delete
 func (announcementTable *AnnouncementTable) AnnouncementDeleter(announcementID string) error {
 	stmt, err := announcementTable.DB.Prepare(`
-		DELETE FROM announcement WHERE announcement.id = ?
+		DELETE FROM announcement WHERE id = ?
 	`)
 	if err != nil {
 		log.Printf("Bad query: %s", err.Error())

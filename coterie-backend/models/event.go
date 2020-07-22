@@ -49,7 +49,7 @@ func NewEventTable(db *sql.DB) *EventTable {
 func (eventTable *EventTable) EventsLister(orgID string) ([]Event, error) {
 	events := []Event{}
 	rows, err := eventTable.DB.Query(`
-		SELECT * FROM event WHERE event.organization_id = ?
+		SELECT * FROM event WHERE organization_id = ?
 	`, orgID)
 	if err != nil {
 		log.Printf("Unable to retrieve events: %s", err.Error())
@@ -148,7 +148,7 @@ func (eventTable *EventTable) EventAdder(event Event) (Event, error) {
 //Model.update
 func (eventTable *EventTable) EventUpdater(event Event) (Event, error) {
 	stmt, err := eventTable.DB.Prepare(`
-	UPDATE event SET name = ?, occasion = ?, date = ?, description = ?, updated_at = ? WHERE event.id = ?
+	UPDATE event SET name = ?, occasion = ?, date = ?, description = ?, updated_at = ? WHERE id = ?
 	`)
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())
@@ -168,7 +168,7 @@ func (eventTable *EventTable) EventUpdater(event Event) (Event, error) {
 //Model.delete
 func (eventTable *EventTable) EventDeleter(eventID string) error {
 	stmt, err := eventTable.DB.Prepare(`
-		DELETE FROM event WHERE event.id = ?
+		DELETE FROM event WHERE id = ?
 	`)
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())

@@ -47,7 +47,7 @@ func NewChapterTable(db *sql.DB) *ChapterTable {
 func (chapterTable *ChapterTable) ChaptersLister(scripID string) ([]Chapter, error) {
 	chapters := []Chapter{}
 	rows, err := chapterTable.DB.Query(`
-		SELECT * FROM chapter WHERE chapter.scripture_id = ? ORDER BY chapter.position ASC;
+		SELECT * FROM chapter WHERE scripture_id = ? ORDER BY position ASC;
 	`, scripID)
 	if err != nil {
 		log.Printf("Unable to retrieve chapters: %s", err.Error())
@@ -143,7 +143,7 @@ func (chapterTable *ChapterTable) ChapterAdder(chapter Chapter) (Chapter, error)
 //Model.update
 func (chapterTable *ChapterTable) ChapterUpdater(chapter Chapter) (Chapter, error) {
 	stmt, err := chapterTable.DB.Prepare(`
-	UPDATE chapter SET name = ?, text = ?, position = ?, updated_at = ? WHERE chapter.id = ?
+	UPDATE chapter SET name = ?, text = ?, position = ?, updated_at = ? WHERE id = ?
 	`)
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())
@@ -163,7 +163,7 @@ func (chapterTable *ChapterTable) ChapterUpdater(chapter Chapter) (Chapter, erro
 //Model.delete
 func (chapterTable *ChapterTable) ChapterDeleter(chapterID string) error {
 	stmt, err := chapterTable.DB.Prepare(`
-		DELETE FROM chapter WHERE chapter.id = ?
+		DELETE FROM chapter WHERE id = ?
 	`)
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())

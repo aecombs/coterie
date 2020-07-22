@@ -43,7 +43,7 @@ func NewScriptureTable(db *sql.DB) *ScriptureTable {
 func (scriptureTable *ScriptureTable) ScripturesLister(orgID string) ([]Scripture, error) {
 	scriptures := []Scripture{}
 	rows, err := scriptureTable.DB.Query(`
-		SELECT * FROM scripture WHERE scripture.organization_id = ?
+		SELECT * FROM scripture WHERE organization_id = ?
 	`, orgID)
 	if err != nil {
 		log.Printf("Unable to retrieve scriptures: %s", err.Error())
@@ -129,7 +129,7 @@ func (scriptureTable *ScriptureTable) ScriptureAdder(scripture Scripture) (Scrip
 //Model.update
 func (scriptureTable *ScriptureTable) ScriptureUpdater(scripture Scripture) (Scripture, error) {
 	stmt, err := scriptureTable.DB.Prepare(`
-	UPDATE scripture SET name = ?, updated_at = ? WHERE scripture.id = ?
+	UPDATE scripture SET name = ?, updated_at = ? WHERE id = ?
 	`)
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())
@@ -149,7 +149,7 @@ func (scriptureTable *ScriptureTable) ScriptureUpdater(scripture Scripture) (Scr
 //Model.delete
 func (scriptureTable *ScriptureTable) ScriptureDeleter(scriptureID string) error {
 	stmt, err := scriptureTable.DB.Prepare(`
-		DELETE FROM scripture WHERE scripture.id = ?
+		DELETE FROM scripture WHERE id = ?
 	`)
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())

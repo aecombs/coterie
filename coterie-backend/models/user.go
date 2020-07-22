@@ -53,7 +53,7 @@ func (userTable *UserTable) UserGetterByID(userID string) (User, error) {
 	var user User
 
 	stmt, err := userTable.DB.Prepare(`
-			SELECT * FROM user WHERE user.id = ?
+			SELECT * FROM user WHERE id = ?
 	`)
 
 	if err != nil {
@@ -100,7 +100,7 @@ func (userTable *UserTable) UserGetterByGoogleID(googleID string) (User, error) 
 	var user User
 
 	stmt, err := userTable.DB.Prepare(`
-			SELECT * FROM user WHERE user.google_id = ?
+			SELECT * FROM user WHERE google_id = ?
 	`)
 
 	if err != nil {
@@ -179,7 +179,7 @@ func (userTable *UserTable) RegisterUser(user User) (User, error) {
 //UserUpdater will update a single instance of user in the database
 func (userTable *UserTable) UserUpdater(user User) (User, error) {
 	stmt, err := userTable.DB.Prepare(`
-	UPDATE user SET name = ?, email = ?, bio = ?, updated_at = ? WHERE user.id = ?
+	UPDATE user SET name = ?, email = ?, bio = ?, updated_at = ? WHERE id = ?
 	`)
 	if err != nil {
 		log.Printf("Bad Query: %s", err.Error())
