@@ -30,7 +30,7 @@ const Footer = () => {
         <a href="/"><p className="open-sans">Getting Started</p></a>
         <a href="/"><p className="open-sans">What Makes a Great Leader?</p></a>
         <a href="/"><p className="open-sans">Learning from Other Cults</p></a>
-        <a href="/"><p className="open-sans">Contact Us</p></a>
+        <a href="/"><p className="open-sans">Modern Advertising</p></a>
       </div>
 
       <div className="w-100"></div>
