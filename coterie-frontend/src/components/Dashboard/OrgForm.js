@@ -6,8 +6,7 @@ const OrgForm = (props) => {
   const [formFields, setFormFields] = useState({
     "id": (props.id ? props.id : null),
     "name": (props.name ? props.name : 'Your organization\'s name here'),
-    "mission_statement": (props.mission_statement ? props.mission_statement : ''),
-    "total_funds": (props.mission_statement ? props.mission_statement : '0'),
+    "mission_statement": (props.missionStatement ? props.missionStatement : ''),
     "user_id": props.userID,
   });
 
