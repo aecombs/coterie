@@ -19,7 +19,7 @@ const OrganizationContainer = (props) => {
     .then((response) => {
       setErrorMessage(`organization ${orgObj["name"]} added`);
       //TODO: Update to use intended redirect URL from response
-      window.location.assign(`${process.env.REACT_APP_BASE_URL}/dashboard`);
+      window.location.reload();
     })
     
     .catch((error) => {
@@ -42,6 +42,13 @@ const OrganizationContainer = (props) => {
     })
   }
 
+  //toggle visibility of new member component
+  const toggleFormVisibility = () => {
+    setAddOrgMode(!addOrgMode);
+    return;
+  }  
+
+
   useEffect(() => {
     axios.get(url)
       .then( (response) => {
@@ -53,12 +60,6 @@ const OrganizationContainer = (props) => {
         console.log(`There was an error: ${err["message"]}`)
       });
   },[url])
-
-    //toggle visibility of new member component
-    const toggleFormVisibility = () => {
-      setAddOrgMode(!addOrgMode);
-      return;
-    }  
 
   let orgComponents = undefined
   if (organizationList !== null && organizationList.length > 0) {

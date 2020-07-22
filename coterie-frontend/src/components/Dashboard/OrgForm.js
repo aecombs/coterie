@@ -59,12 +59,20 @@ const OrgForm = (props) => {
             onChange={onMissionChange}
           />
         </div>
-        <input 
-          className="btn btn-light w-100 text-center" 
-          type="submit"
-          value="Submit"
-          onClick={onFormSubmit}
-        />
+        <div className="btn-group w-100">
+          <input 
+            className="btn btn-success text-center w-75" 
+            type="submit"
+            value="Save"
+            onClick={onFormSubmit}
+          />
+          <input 
+            className="btn btn-light text-center w-25" 
+            type="submit"
+            value="Cancel"
+            onClick={props.onSubmitCallback}
+          />
+        </div>
       </form>
     </div>
 )

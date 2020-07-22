@@ -44,10 +44,10 @@ const Newsletters = (props) => {
     })
   }
 
-  const deleteNewsletter = (newsObj) => {
-    axios.delete(`${updateURL}/${newsObj}`)
+  const deleteNewsletter = (newsID) => {
+    axios.delete(`${updateURL}/${newsID}`)
     .then((response) => {
-      setErrorMessage(`Newsletter ${newsObj["header"]} was deleted`);
+      setErrorMessage(`Newsletter ${newsID["header"]} was deleted`);
       window.location.reload();
     })
     
@@ -78,15 +78,15 @@ const Newsletters = (props) => {
 
   let newsletterComponents = undefined
   if (newslettersList !== null && newslettersList.length > 0) {
-    newsletterComponents = newslettersList.map((ann) => {
+    newsletterComponents = newslettersList.map((news) => {
     return(
       <Newsletter
-      key={ann.id}
-      id={ann.id}
-      header={ann.header}
-      description={ann.description}
-      date={ann.date}
-      orgID={ann.organization_id}
+      key={news.id}
+      id={news.id}
+      header={news.header}
+      description={news.description}
+      date={news.date}
+      orgID={news.organization_id}
       submitNewsletterCallback={updateNewsletter}
       deleteNewsletterCallback={deleteNewsletter}
       />

@@ -10,8 +10,8 @@ const Newsletter = (props) => {
     return formattedDate.substring(0,17)
   }
 
-  const updateNewsletter = (annObj) => {
-    props.submitNewsletterCallback(annObj)
+  const updateNewsletter = (newsObj) => {
+    props.submitNewsletterCallback(newsObj)
   }
 
   const deleteNewsletter = () => {
