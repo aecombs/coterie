@@ -26,16 +26,16 @@ type UserTable struct {
 //NewUserTable creates a new table when there isn't one that exists already
 func NewUserTable(db *sql.DB) *UserTable {
 	stmt, _ := db.Prepare(`
-		CREATE TABLE IF NOT EXISTS "user" (
-			"ID"	INTEGER NOT NULL UNIQUE,
-			"google_id" TEXT,
-			"name"	TEXT,
-			"email"  TEXT,
-			"bio"  TEXT,
-			"avatar"  TEXT,
-			"created_at"	TEXT,
-			"updated_at"	TEXT,
-			PRIMARY KEY("ID" AUTOINCREMENT)
+		CREATE TABLE IF NOT EXISTS user (
+			ID	INTEGER NOT NULL UNIQUE AUTO_INCREMENT,
+			google_id TEXT,
+			name	TEXT,
+			email  TEXT,
+			bio  TEXT,
+			avatar  TEXT,
+			created_at	TEXT,
+			updated_at	TEXT,
+			PRIMARY KEY(ID)
 		);
 	`)
 

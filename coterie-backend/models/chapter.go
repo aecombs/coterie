@@ -21,16 +21,16 @@ type ChapterTable struct {
 
 func NewChapterTable(db *sql.DB) *ChapterTable {
 	stmt, _ := db.Prepare(`
-		CREATE TABLE IF NOT EXISTS "chapter" (
-			"ID"	INTEGER NOT NULL UNIQUE,
-			"name"	TEXT,
-			"text"  TEXT,
-			"position"  INTEGER,
-			"created_at"	TEXT,
-			"updated_at"	TEXT,
-			"scripture_id"	INTEGER,
-			FOREIGN KEY("scripture_id") REFERENCES "scripture"("ID"),
-			PRIMARY KEY("ID" AUTOINCREMENT)
+		CREATE TABLE IF NOT EXISTS chapter (
+			ID	INT NOT NULL UNIQUE AUTO_INCREMENT,
+			name	TEXT,
+			text  TEXT,
+			position  INT,
+			created_at	TEXT,
+			updated_at	TEXT,
+			scripture_id	INT,
+			PRIMARY KEY(ID),
+			FOREIGN KEY(scripture_id) REFERENCES scripture(ID)
 		);
 	`)
 

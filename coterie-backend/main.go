@@ -4,7 +4,7 @@ import (
 	"coterie/controllers"
 	"coterie/models"
 	"database/sql"
-	"flag"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -12,29 +12,56 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
-	_ "github.com/mattn/go-sqlite3"
 	"github.com/qkgo/yin"
 )
 
 func main() {
-	flag.Parse()
-	//open the database!
-	db, err := sql.Open("sqlite3", "./database/coterie.db")
-	if err != nil {
-		log.Printf("Unable to access database: %s", err.Error())
-		log.Fatal(err)
-	}
-	defer db.Close()
 
+	// If the optional DB_TCP_HOST environment variable is set, it contains
+	// the IP address and port number of a TCP connection pool to be created,
+	// such as "127.0.0.1:3306". If DB_TCP_HOST is not set, a Unix socket
+	// connection pool will be created instead.
+
+	//Access the cloud SQL database
+	// var (
+	// 	err                    = godotenv.Load(".env")
+	// 	dbUser                 = os.Getenv("DB_USER")
+	// 	dbPwd                  = os.Getenv("DB_PASS")
+	// 	instanceConnectionName = os.Getenv("INSTANCE_CONNECTION_NAME")
+	// 	dbName                 = os.Getenv("DB_NAME")
+	// )
+
+	// socketDir, isSet := os.LookupEnv("DB_SOCKET_DIR")
+	// if !isSet {
+	// 	socketDir = "cloudsql"
+	// }
+
+	// var dbURI string
+
+	// dbURI = fmt.Sprintf("%s:%s@unix(/%s/%s)/%s?parseTime=true", dbUser, dbPwd, socketDir, instanceConnectionName, dbName)
+
+	//access the database
+	// db, err := sql.Open("mysql", dbURI)
+	// if err != nil {
+	// 	log.Printf("Unable to access database: %s", err.Error())
+	// 	log.Fatal(err)
+	// }
+	// defer db.Close()
+	db, err := initSocketConnectionPool()
+	if err != nil {
+		log.Fatalf("initSocketConnectionPool: unable to connect: %v", err)
+	}
+
+	users := models.NewUserTable(db)
+	organizations := models.NewOrganizationTable(db)
 	announcements := models.NewAnnouncementTable(db)
+	scriptures := models.NewScriptureTable(db)
 	chapters := models.NewChapterTable(db)
 	events := models.NewEventTable(db)
 	holidays := models.NewHolidayTable(db)
 	members := models.NewMemberTable(db)
-	organizations := models.NewOrganizationTable(db)
-	scriptures := models.NewScriptureTable(db)
-	users := models.NewUserTable(db)
 
 	r := chi.NewRouter()
 
@@ -168,4 +195,68 @@ func main() {
 	}
 
 	http.ListenAndServe(":"+os.Getenv("PORT"), r)
+}
+
+// mustGetEnv is a helper function for getting environment variables.
+// Displays a warning if the environment variable is not set.
+func getEnvOrDie(k string) string {
+	v := os.Getenv(k)
+	if v == "" {
+		log.Fatalf("Warning: %s environment variable not set.\n", k)
+	}
+	return v
+}
+
+// initSocketConnectionPool initializes a Unix socket connection pool for
+// a Cloud SQL instance of SQL Server.
+func initSocketConnectionPool() (*sql.DB, error) {
+	// [START cloud_sql_mysql_databasesql_create_socket]
+	var (
+		dbUser                 = getEnvOrDie("DB_USER")
+		dbPwd                  = getEnvOrDie("DB_PASS")
+		instanceConnectionName = getEnvOrDie("INSTANCE_CONNECTION_NAME")
+		dbName                 = getEnvOrDie("DB_NAME")
+	)
+
+	socketDir, isSet := os.LookupEnv("DB_SOCKET_DIR")
+	if !isSet {
+		socketDir = "/cloudsql"
+	}
+
+	var dbURI string
+	dbURI = fmt.Sprintf("%s:%s@unix(/%s/%s)/%s?parseTime=true", dbUser, dbPwd, socketDir, instanceConnectionName, dbName)
+
+	// dbPool is the pool of database connections.
+	dbPool, err := sql.Open("mysql", dbURI)
+	if err != nil {
+		return nil, fmt.Errorf("sql.Open: %v", err)
+	}
+
+	// [START_EXCLUDE]
+	configureConnectionPool(dbPool)
+	// [END_EXCLUDE]
+
+	return dbPool, nil
+	// [END cloud_sql_mysql_databasesql_create_socket]
+}
+
+// configureConnectionPool sets database connection pool properties.
+// For more information, see https://golang.org/pkg/database/sql
+func configureConnectionPool(dbPool *sql.DB) {
+	// [START cloud_sql_mysql_databasesql_limit]
+
+	// Set maximum number of connections in idle connection pool.
+	dbPool.SetMaxIdleConns(5)
+
+	// Set maximum number of open connections to the database.
+	dbPool.SetMaxOpenConns(7)
+
+	// [END cloud_sql_mysql_databasesql_limit]
+
+	// [START cloud_sql_mysql_databasesql_lifetime]
+
+	// Set Maximum time (in seconds) that a connection can remain open.
+	dbPool.SetConnMaxLifetime(1800)
+
+	// [END cloud_sql_mysql_databasesql_lifetime]
 }

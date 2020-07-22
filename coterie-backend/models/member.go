@@ -23,18 +23,18 @@ type MemberTable struct {
 
 func NewMemberTable(db *sql.DB) *MemberTable {
 	stmt, _ := db.Prepare(`
-		CREATE TABLE IF NOT EXISTS "member" (
-			"ID"	INTEGER NOT NULL UNIQUE,
-			"name"	TEXT,
-			"birthdate"  TEXT,
-			"class"  TEXT,
-			"email"  TEXT,
-			"funds_raised"  INTEGER,
-			"created_at"	TEXT,
-			"updated_at"	TEXT,
-			"organization_id"	INTEGER,
-			FOREIGN KEY("organization_id") REFERENCES "organization"("ID"),
-			PRIMARY KEY("ID" AUTOINCREMENT)
+		CREATE TABLE IF NOT EXISTS member (
+			ID	INT NOT NULL UNIQUE AUTO_INCREMENT,
+			name	TEXT,
+			birthdate  TEXT,
+			class  TEXT,
+			email  TEXT,
+			funds_raised  INT,
+			created_at	TEXT,
+			updated_at	TEXT,
+			organization_id	INT,
+			PRIMARY KEY(ID),
+			FOREIGN KEY(organization_id) REFERENCES organization(ID)
 		);
 	`)
 

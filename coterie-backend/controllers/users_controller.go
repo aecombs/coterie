@@ -40,7 +40,7 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 
 	googleOauthConfig = &oauth2.Config{
-		RedirectURL:  goDotEnvVariable("API_BASE_URL_DEV") + "/auth/google/callback",
+		RedirectURL:  goDotEnvVariable("API_BASE_URL_PROD") + "/auth/google/callback",
 		ClientID:     goDotEnvVariable("GOOGLE_CLIENT_ID"),
 		ClientSecret: goDotEnvVariable("GOOGLE_CLIENT_SECRET"),
 		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"},

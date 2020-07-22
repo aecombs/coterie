@@ -22,16 +22,16 @@ type OrganizationTable struct {
 
 func NewOrganizationTable(db *sql.DB) *OrganizationTable {
 	stmt, _ := db.Prepare(`
-		CREATE TABLE IF NOT EXISTS "organization" (
-			"ID"	INTEGER NOT NULL UNIQUE,
-			"name"	TEXT,
-			"mission_statement"	TEXT,
-			"total_funds"	INTEGER,
-			"created_at"	TEXT,
-			"updated_at"	TEXT,
-			"user_id"	INTEGER,
-			FOREIGN KEY("user_id") REFERENCES "user"("ID"),
-			PRIMARY KEY("ID" AUTOINCREMENT)
+		CREATE TABLE IF NOT EXISTS organization (
+			ID	INT NOT NULL UNIQUE AUTO_INCREMENT,
+			name	TEXT,
+			mission_statement	TEXT,
+			total_funds	INT,
+			created_at	TEXT,
+			updated_at	TEXT,
+			user_id	INT,
+			PRIMARY KEY(ID),
+			FOREIGN KEY(user_id) REFERENCES user(ID)
 		);
 	`)
 

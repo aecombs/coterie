@@ -21,16 +21,16 @@ type HolidayTable struct {
 
 func NewHolidayTable(db *sql.DB) *HolidayTable {
 	stmt, _ := db.Prepare(`
-		CREATE TABLE IF NOT EXISTS "holiday" (
-			"ID"	INTEGER NOT NULL UNIQUE,
-			"name"	TEXT,
-			"date"  TEXT,
-			"description"  TEXT,
-			"created_at"	TEXT,
-			"updated_at"	TEXT,
-			"organization_id"	INTEGER,
-			FOREIGN KEY("organization_id") REFERENCES "organization"("ID"),
-			PRIMARY KEY("ID" AUTOINCREMENT)
+		CREATE TABLE IF NOT EXISTS holiday (
+			ID	INT NOT NULL UNIQUE AUTO_INCREMENT,
+			name	TEXT,
+			date  TEXT,
+			description  TEXT,
+			created_at	TEXT,
+			updated_at	TEXT,
+			organization_id	INT,
+			PRIMARY KEY(ID),
+			FOREIGN KEY(organization_id) REFERENCES organization(ID)
 		);
 	`)
 

@@ -21,16 +21,16 @@ type AnnouncementTable struct {
 
 func NewAnnouncementTable(db *sql.DB) *AnnouncementTable {
 	stmt, _ := db.Prepare(`
-		CREATE TABLE IF NOT EXISTS "announcement" (
-			"ID"	INTEGER NOT NULL UNIQUE,
-			"header"	TEXT,
-			"description"	TEXT,
-			"date"	TEXT,
-			"created_at"	TEXT,
-			"updated_at"	TEXT,
-			"organization_id"	INTEGER,
-			FOREIGN KEY("organization_id") REFERENCES "organization"("ID"),
-			PRIMARY KEY("ID" AUTOINCREMENT)
+		CREATE TABLE IF NOT EXISTS announcement (
+			ID INT NOT NULL UNIQUE AUTO_INCREMENT,
+			header	TEXT,
+			description	 TEXT,
+			date  TEXT,
+			created_at  TEXT,
+			updated_at  TEXT,
+			organization_id INT,
+			PRIMARY KEY(ID),
+			FOREIGN KEY (organization_id) REFERENCES organization(ID)
 		);
 	`)
 

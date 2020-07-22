@@ -19,14 +19,14 @@ type ScriptureTable struct {
 
 func NewScriptureTable(db *sql.DB) *ScriptureTable {
 	stmt, _ := db.Prepare(`
-		CREATE TABLE IF NOT EXISTS "scripture" (
-			"ID"	INTEGER NOT NULL UNIQUE,
-			"name"	TEXT,
-			"created_at"	TEXT,
-			"updated_at"	TEXT,
-			"organization_id"	INTEGER,
-			FOREIGN KEY("organization_id") REFERENCES "organization"("ID"),
-			PRIMARY KEY("ID" AUTOINCREMENT)
+		CREATE TABLE IF NOT EXISTS scripture (
+			ID	INT NOT NULL UNIQUE AUTO_INCREMENT,
+			name	TEXT,
+			created_at	TEXT,
+			updated_at	TEXT,
+			organization_id	INT,
+			PRIMARY KEY(ID),
+			FOREIGN KEY(organization_id) REFERENCES organization(ID)
 		);
 	`)
 
