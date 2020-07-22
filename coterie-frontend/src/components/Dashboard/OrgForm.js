@@ -4,9 +4,11 @@ import PropTypes from 'prop-types';
 const OrgForm = (props) => {
   //Form
   const [formFields, setFormFields] = useState({
-    "name": 'Your organization\'s name here',
-    "mission_statement": '',
-    "total_funds": '0',
+    "id": (props.id ? props.id : null),
+    "name": (props.name ? props.name : 'Your organization\'s name here'),
+    "mission_statement": (props.mission_statement ? props.mission_statement : ''),
+    "total_funds": (props.mission_statement ? props.mission_statement : '0'),
+    "user_id": props.userID,
   });
 
   const onNameChange = (event) => {
@@ -28,8 +30,9 @@ const OrgForm = (props) => {
 //callback func to an http req for posting org.
   const onFormSubmit = (event) => {
     event.preventDefault();
+    props.onSubmitCallback();
 
-    props.addOrgCallback(formFields);
+    props.submitOrgCallback(formFields);
     
   };
 

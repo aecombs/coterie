@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Members from './Members';
 import PropTypes from 'prop-types';
+import OrgForm from './OrgForm';
 
 const Organization = (props) => {
+  const [updateMode, setUpdateMode] = useState(false);
+
+  const updateOrg = (orgObj) => {
+    props.submitOrgCallback(orgObj)
+  }
+
+  const setUpdate = () => {
+    setUpdateMode(!updateMode);
+  }
+
+
+
   const formatDate = (date) => {
     const month = date.substring(5, 7)
     const day = date.substring(8, 10)
@@ -25,18 +38,29 @@ const Organization = (props) => {
   }
 
   return (
-    <section className="w-100 container py-2">
-      <div className="row">
-        <div>
+    <section className="w-100 container py-2 card">
+      <div className="row card-body">
+        <div className="w-100">
+          <button onClick={setUpdate} className={ updateMode ? "hidden" : "btn list-group-item list-group-item-action"}>
           <h4 className="">{props.name}</h4>
           <p className="open-sans">{props.missionStatement}</p>
+          </button>
+          <OrgForm 
+           id={props.id}
+           name={props.name}
+           missionStatement={props.missionStatement}
+           userID={props.userID}
+           visibility={updateMode}
+           submitOrgCallback={updateOrg}
+           onSubmitCallback={setUpdate}
+          />
         </div>
       </div>
-      <div className="row justify-content-between">
+      <div className="row justify-content-between card-body">
         <p className="open-sans">Current Funds: {formatCurrency(props.totalFunds)}</p>
         <p className="open-sans">Established {formatDate(props.createdAt)}</p>
       </div>
-      <div className="row">
+      <div className="row card-body">
         <Members 
         orgID={props.id}
         userID={props.userID}

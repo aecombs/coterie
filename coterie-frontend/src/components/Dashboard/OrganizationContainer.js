@@ -9,7 +9,39 @@ const OrganizationContainer = (props) => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [addOrgMode, setAddOrgMode] = useState(false);
 
-  const url = `${process.env.REACT_APP_API_BASE_URL}/users/${props.userID}/organizations/`
+
+  const url = `${process.env.REACT_APP_API_BASE_URL}/users/${props.userID}/organizations`
+
+  const addOrg = (orgObj) => {
+    delete orgObj["id"];
+
+    axios.post(url, orgObj)
+    .then((response) => {
+      setErrorMessage(`organization ${orgObj["name"]} added`);
+      //TODO: Update to use intended redirect URL from response
+      window.location.assign(`${process.env.REACT_APP_BASE_URL}/dashboard`);
+    })
+    
+    .catch((error) => {
+      setErrorMessage(error.message);
+      console.log(`Unable to add org: ${errorMessage}`);
+    })
+  }
+
+
+  const updateOrg = (orgObj) => {
+    axios.put(`${url}/${orgObj.id}`, orgObj)
+    .then((response) => {
+      setErrorMessage(`Organization ${orgObj["name"]} was updated`);
+      window.location.reload();
+    })
+    
+    .catch((error) => {
+      setErrorMessage(error.message);
+      console.log(`Unable to update organization: ${errorMessage}`);
+    })
+  }
+
   useEffect(() => {
     axios.get(url)
       .then( (response) => {
@@ -40,6 +72,7 @@ const OrganizationContainer = (props) => {
       totalFunds = {org.total_funds}
       createdAt = {org.created_at}
       userID = {props.userID}
+      submitOrgCallback={updateOrg}
     />)
     })
   }
@@ -47,12 +80,18 @@ const OrganizationContainer = (props) => {
 
   return (
     <section className="d-flex container flex-wrap">
-       <p className={ orgComponents !== undefined ? "hidden" : "open-sans" }>Organization</p>
-       <button className={ orgComponents === undefined ? "btn btn-secondary float-right mb-2" : "hidden"} onClick={toggleFormVisibility}>+</button>
-       <OrgForm 
-       addOrgCallback={props.addOrgCallback}
-       visibility={orgComponents === undefined}
-       onSubmitCallback={toggleFormVisibility}
+      <div className="d-flex py-2 justify-content-between w-100">
+        <h4 className="font-weight-bolder">
+          Organization</h4>
+        <button className={ orgComponents === undefined ? "btn btn-outline-secondary mb-2" : "hidden"} onClick={toggleFormVisibility}>+</button>
+      </div>
+
+      <OrgForm 
+        userID={props.userID}
+        addOrgCallback={props.addOrgCallback}
+        visibility={addOrgMode}
+        onSubmitCallback={toggleFormVisibility}
+        submitOrgCallback={addOrg}
        />
       {orgComponents}
     </section>

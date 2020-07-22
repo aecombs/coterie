@@ -15,13 +15,13 @@ const Newsletters = (props) => {
 
   const updateURL = `${process.env.REACT_APP_API_BASE_URL}/newsletters`
 
-  const addNewsletter = (annObj) => {
+  const addNewsletter = (newsObj) => {
     //remove unnecessary id property
-    delete annObj["id"];
+    delete newsObj["id"];
 
-    axios.post(url, annObj)
+    axios.post(url, newsObj)
     .then((response) => {
-      setErrorMessage(`Newsletter ${annObj["header"]} added`);
+      setErrorMessage(`Newsletter ${newsObj["header"]} added`);
       window.location.reload();
     })
     
@@ -31,10 +31,10 @@ const Newsletters = (props) => {
     })
   }
 
-  const updateNewsletter = (annObj) => {
-    axios.put(`${updateURL}/${annObj.id}`, annObj)
+  const updateNewsletter = (newsObj) => {
+    axios.put(`${updateURL}/${newsObj.id}`, newsObj)
     .then((response) => {
-      setErrorMessage(`Newsletter ${annObj["header"]} was updated`);
+      setErrorMessage(`Newsletter ${newsObj["header"]} was updated`);
       window.location.reload();
     })
     
@@ -44,10 +44,10 @@ const Newsletters = (props) => {
     })
   }
 
-  const deleteNewsletter = (annID) => {
-    axios.delete(`${updateURL}/${annID}`)
+  const deleteNewsletter = (newsObj) => {
+    axios.delete(`${updateURL}/${newsObj}`)
     .then((response) => {
-      setErrorMessage(`Newsletter ${annID["header"]} was deleted`);
+      setErrorMessage(`Newsletter ${newsObj["header"]} was deleted`);
       window.location.reload();
     })
     

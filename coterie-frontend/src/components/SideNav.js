@@ -17,22 +17,6 @@ const SideNav = () => {
 
   const url = `${process.env.REACT_APP_API_BASE_URL}/users/${userID}/organizations/`
 
-
-
-  const addOrg = (orgObj) => {
-    axios.post(url, orgObj)
-    .then((response) => {
-      setErrorMessage(`organization ${orgObj["name"]} added`);
-      //TODO: Update to use intended redirect URL from response
-      window.location.assign(`${process.env.REACT_APP_BASE_URL}/dashboard`);
-    })
-    
-    .catch((error) => {
-      setErrorMessage(error.message);
-      console.log(`Unable to add org: ${errorMessage}`);
-    })
-  }
-
   const updateOrgSession = (orgID) => {
     if (orgID) {
       sessionStorage.setItem('orgID', orgID);
@@ -66,7 +50,6 @@ const SideNav = () => {
             render={(props) => (
               <OrganizationContainer {...props}
               userID={userID}
-              addOrgCallback={addOrg}
               tellParentID={updateOrgSession}
               />
             )}
@@ -112,16 +95,6 @@ const SideNav = () => {
               <Scriptures {...props} 
               userID={userID}
               orgID={orgID}
-              />
-            )}
-          />
-          
-
-          <Route 
-            exact path='/dashboard/new'
-            render={(props) => (
-              <OrgForm {...props} 
-              addOrgCallback={addOrg}
               />
             )}
           />
