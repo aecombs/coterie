@@ -86,6 +86,7 @@ h2.form-title {
 img.profile-image {
   width: 20rem;
   margin: auto;
+  border-radius: 50%;
 }
 
 input.delete-button{

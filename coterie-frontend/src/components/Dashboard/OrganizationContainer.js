@@ -7,6 +7,7 @@ import axios from 'axios';
 const OrganizationContainer = (props) => {
   const [organizationList, setOrganizationList] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [addOrgMode, setAddOrgMode] = useState(false);
 
   const url = `${process.env.REACT_APP_API_BASE_URL}/users/${props.userID}/organizations/`
   useEffect(() => {
@@ -21,6 +22,11 @@ const OrganizationContainer = (props) => {
       });
   },[url])
 
+    //toggle visibility of new member component
+    const toggleFormVisibility = () => {
+      setAddOrgMode(!addOrgMode);
+      return;
+    }  
 
   let orgComponents = undefined
   if (organizationList !== null && organizationList.length > 0) {
@@ -41,10 +47,12 @@ const OrganizationContainer = (props) => {
 
   return (
     <section className="d-flex container flex-wrap">
-       <p className={ orgComponents !== undefined ? "hidden" : "open-sans" }>It looks like you don't have an organization yet. Go ahead and make a new one!</p>
+       <p className={ orgComponents !== undefined ? "hidden" : "open-sans" }>Organization</p>
+       <button className={ orgComponents === undefined ? "btn btn-secondary float-right mb-2" : "hidden"} onClick={toggleFormVisibility}>+</button>
        <OrgForm 
        addOrgCallback={props.addOrgCallback}
        visibility={orgComponents === undefined}
+       onSubmitCallback={toggleFormVisibility}
        />
       {orgComponents}
     </section>

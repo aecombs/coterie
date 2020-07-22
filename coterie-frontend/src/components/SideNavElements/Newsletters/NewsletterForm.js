@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const AnnouncementForm = (props) => {
+const NewsletterForm = (props) => {
   //Form
   const [formFields, setFormFields] = useState({
     "id": (props.id ? props.id : null),
@@ -32,7 +32,7 @@ const AnnouncementForm = (props) => {
     event.preventDefault();
     props.onSubmitCallback();
 
-    props.submitAnnouncementCallback(formFields);
+    props.submitNewsletterCallback(formFields);
 
     
   };
@@ -41,22 +41,22 @@ const AnnouncementForm = (props) => {
     <div className={ props.visibility ? "py-3" : "hidden"}>
       <form className="" onSubmit={""}>
         <div className="form-group">
-          <small className="open-sans form-text text-muted">Announcement Name</small>
+          <small className="open-sans form-text text-muted">Newsletter Header</small>
           <input
             className="open-sans form-control"
             name="header"
             type="text"
-            placeholder="What header should this announcement have?"
+            placeholder="What header should this newsletter have?"
             value={formFields["header"]}
             onChange={onHeaderChange}
           />
         </div>
         <div className="form-group">
-          <small className="open-sans form-text text-muted">Announcement Description</small>
+          <small className="open-sans form-text text-muted">Newsletter Body</small>
           <textarea
             className="open-sans form-control"
             name="description"
-            placeholder="What would you like to announce?"
+            placeholder="What would you like your people to know?"
             rows="5"
             value={formFields["description"]}
             onChange={onDescriptionChange}
@@ -79,7 +79,7 @@ const AnnouncementForm = (props) => {
             className={ props.id ? "btn btn-danger delete-button float-right" : "hidden"} 
             type="submit"
             value="Delete"
-            onClick={props.deleteAnnouncementCallback}
+            onClick={props.deleteNewsletterCallback}
           />
         </div>
       </form>
@@ -87,7 +87,7 @@ const AnnouncementForm = (props) => {
 )
 }
 
-AnnouncementForm.propTypes = {
+NewsletterForm.propTypes = {
   id: PropTypes.number,
   header: PropTypes.string,
   description: PropTypes.string,
@@ -96,4 +96,4 @@ AnnouncementForm.propTypes = {
   visibility: PropTypes.bool,
 };
 
-export default AnnouncementForm;
+export default NewsletterForm;

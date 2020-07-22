@@ -1,94 +1,94 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import Announcement from './Announcement';
-import AnnouncementForm from './AnnouncementForm';
+import Newsletter from './Newsletter';
+import NewsletterForm from './NewsletterForm';
 
 
-const Announcements = (props) => {
-  const [announcementsList, setAnnouncementsList] = useState(null);
+const Newsletters = (props) => {
+  const [newslettersList, setNewslettersList] = useState(null);
   const [visibility, setVisibility] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
   const orgID = sessionStorage.getItem('orgID');
 
-  const url = `${process.env.REACT_APP_API_BASE_URL}/users/${props.userID}/organizations/${orgID}/announcements`
+  const url = `${process.env.REACT_APP_API_BASE_URL}/users/${props.userID}/organizations/${orgID}/newsletters`
 
-  const updateURL = `${process.env.REACT_APP_API_BASE_URL}/announcements`
+  const updateURL = `${process.env.REACT_APP_API_BASE_URL}/newsletters`
 
-  const addAnnouncement = (annObj) => {
+  const addNewsletter = (annObj) => {
     //remove unnecessary id property
     delete annObj["id"];
 
     axios.post(url, annObj)
     .then((response) => {
-      setErrorMessage(`Announcement ${annObj["header"]} added`);
+      setErrorMessage(`Newsletter ${annObj["header"]} added`);
       window.location.reload();
     })
     
     .catch((error) => {
       setErrorMessage(error.message);
-      console.log(`Unable to add announcement: ${errorMessage}`);
+      console.log(`Unable to add newsletter: ${errorMessage}`);
     })
   }
 
-  const updateAnnouncement = (annObj) => {
+  const updateNewsletter = (annObj) => {
     axios.put(`${updateURL}/${annObj.id}`, annObj)
     .then((response) => {
-      setErrorMessage(`Announcement ${annObj["header"]} was updated`);
+      setErrorMessage(`Newsletter ${annObj["header"]} was updated`);
       window.location.reload();
     })
     
     .catch((error) => {
       setErrorMessage(error.message);
-      console.log(`Unable to update announcement: ${errorMessage}`);
+      console.log(`Unable to update newsletter: ${errorMessage}`);
     })
   }
 
-  const deleteAnnouncement = (annID) => {
+  const deleteNewsletter = (annID) => {
     axios.delete(`${updateURL}/${annID}`)
     .then((response) => {
-      setErrorMessage(`Announcement ${annID["header"]} was deleted`);
+      setErrorMessage(`Newsletter ${annID["header"]} was deleted`);
       window.location.reload();
     })
     
     .catch((error) => {
       setErrorMessage(error.message);
-      console.log(`Unable to delete announcement: ${errorMessage}`);
+      console.log(`Unable to delete newsletter: ${errorMessage}`);
     })
   }
 
-   //toggle visibility of announcement form component
+   //toggle visibility of newsletter form component
    const toggleFormVisibility = () => {
     setVisibility(!visibility);
     return;
   }
 
-  //Get all announcements
+  //Get all newsletters
   useEffect(() => {
     axios.get(url)
       .then( (response) => {
         const list = response.data;
-        setAnnouncementsList(list);
+        setNewslettersList(list);
       })
       .catch((error) => {
         setErrorMessage(error);
-        console.log(`There was an error retrieving announcements: ${error}`)
+        console.log(`There was an error retrieving newsletters: ${error}`)
       });
   },[url])
 
-  let announcementComponents = undefined
-  if (announcementsList !== null && announcementsList.length > 0) {
-    announcementComponents = announcementsList.map((ann) => {
+  let newsletterComponents = undefined
+  if (newslettersList !== null && newslettersList.length > 0) {
+    newsletterComponents = newslettersList.map((ann) => {
     return(
-      <Announcement
+      <Newsletter
       key={ann.id}
       id={ann.id}
       header={ann.header}
       description={ann.description}
       date={ann.date}
       orgID={ann.organization_id}
-      submitAnnouncementCallback={updateAnnouncement}
-      deleteAnnouncementCallback={deleteAnnouncement}
+      submitNewsletterCallback={updateNewsletter}
+      deleteNewsletterCallback={deleteNewsletter}
       />
     )
   })
@@ -99,20 +99,20 @@ const Announcements = (props) => {
     <div className="container">
       <div className="d-flex list-group">
         <div className="d-flex py-2 justify-content-between">
-          <h4>Announcements</h4>
+          <h4>Newsletters</h4>
           <button className="btn btn-secondary" onClick={toggleFormVisibility}>{ visibility ? "-" : "+"}</button>
         </div>
-        <p className={ announcementComponents !== undefined ? "hidden" : "open-sans" }>You haven't created any announcements yet.</p>
-        <AnnouncementForm 
+        <p className={ newsletterComponents !== undefined ? "hidden" : "open-sans" }>You haven't created any newsletters yet.</p>
+        <NewsletterForm 
         orgID={orgID}
         visibility={visibility}
-        submitAnnouncementCallback={addAnnouncement}
+        submitNewsletterCallback={addNewsletter}
         onSubmitCallback={toggleFormVisibility}
         />
-        {announcementComponents}
+        {newsletterComponents}
       </div>
     </div>
   )
 }
 
-export default Announcements;
+export default Newsletters;

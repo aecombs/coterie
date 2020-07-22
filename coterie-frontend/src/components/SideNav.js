@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import OrganizationContainer from './Dashboard/OrganizationContainer';
 import Profile from './SideNavElements/Profile/Profile';
-import Announcements from './SideNavElements/Announcements/Announcements';
+import Newsletters from './SideNavElements/Newsletters/Newsletters';
 import Events from './SideNavElements/Events/Events';
 import Holidays from './SideNavElements/Holidays/Holidays';
 import Scriptures from './SideNavElements/Scriptures/Scriptures';
@@ -54,7 +54,7 @@ const SideNav = () => {
             <li className="nav-item nav-link"><Link to={'/dashboard/scriptures'} className="">Scriptures</Link></li>
             <li className="nav-item nav-link"><Link to={'/dashboard/holidays'} className="">Holidays</Link></li>
             <li className="nav-item nav-link"><Link to={'/dashboard/events'} className="">Events</Link></li>
-            <li className="nav-item nav-link"><Link to={'/dashboard/announcements'} className="">Announcements</Link></li>
+            <li className="nav-item nav-link"><Link to={'/dashboard/newsletters'} className="">Newsletters</Link></li>
           </ul>
         </nav>
       </div>
@@ -79,9 +79,9 @@ const SideNav = () => {
             />
           )} />
           <Route 
-            exact path='/dashboard/announcements' 
+            exact path='/dashboard/newsletters' 
             render={(props) => (
-              <Announcements {...props} 
+              <Newsletters {...props} 
               userID={userID}
               orgID={orgID}
               />

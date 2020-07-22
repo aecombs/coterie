@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import AnnouncementForm from './AnnouncementForm';
+import NewsletterForm from './NewsletterForm';
 
-const Announcement = (props) => {
+const Newsletter = (props) => {
   const [updateMode, setUpdateMode] = useState(false);
 
   const formatDate = (dateStr) => {
@@ -10,12 +10,12 @@ const Announcement = (props) => {
     return formattedDate.substring(0,17)
   }
 
-  const updateAnnouncement = (annObj) => {
-    props.submitAnnouncementCallback(annObj)
+  const updateNewsletter = (annObj) => {
+    props.submitNewsletterCallback(annObj)
   }
 
-  const deleteAnnouncement = () => {
-    props.deleteAnnouncementCallback(props.id);
+  const deleteNewsletter = () => {
+    props.deleteNewsletterCallback(props.id);
   }
 
   const setUpdate = () => {
@@ -35,22 +35,22 @@ const Announcement = (props) => {
           </div>
         </div>
       </button>
-      <AnnouncementForm 
+      <NewsletterForm 
         id={props.id}
         header={props.header}
         description={props.description}
         date={props.date}
         orgID={props.orgID}
         visibility={updateMode}
-        submitAnnouncementCallback={updateAnnouncement}
+        submitNewsletterCallback={updateNewsletter}
         onSubmitCallback={setUpdate}
-        deleteAnnouncementCallback={deleteAnnouncement}
+        deleteNewsletterCallback={deleteNewsletter}
         />
     </section>
   )
 }
 
-Announcement.propTypes = {
+Newsletter.propTypes = {
   id: PropTypes.number,
   header: PropTypes.string,
   description: PropTypes.string,
@@ -58,4 +58,4 @@ Announcement.propTypes = {
   orgID: PropTypes.number
 };
 
-export default Announcement;
+export default Newsletter;
