@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const OrgForm = (props) => {
   //Form
   const [formFields, setFormFields] = useState({
-    "name": 'Your organization\'s name here!',
+    "name": 'Your organization\'s name here',
     "mission_statement": '',
     "total_funds": '0',
   });

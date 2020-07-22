@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import logo from '../images/logo.png';
 import Homepage from './Homepage';
@@ -40,11 +40,11 @@ const Header = () => {
           {/* TODO: Make dashboard only visible to auth'd users */}
           <li><Link to={'/dashboard'} className={userID ? "nav-link float-right" : "hidden"}>Dashboard</Link></li>
 
-
+          <li><button onClick={logoutUser} className={userID ? "nav-link float-right border-0 btn" : "hidden"}>Logout</button></li>
           <li><Link to={'/login'} className={userID ? "hidden" : "nav-link float-right"}>Login</Link></li>
 
           {/* <li><a href={process.env.REACT_APP_API_BASE_URL+"/logout"} className={userID ? "nav-link float-right" : "hidden"}>Logout</a></li> */}
-          <li><button onClick={logoutUser} className={userID ? "nav-link float-right border-0 btn" : "hidden"}>Logout</button></li>
+          
         </ul>
       </nav>
       
