@@ -31,7 +31,7 @@ func NewOrganizationTable(db *sql.DB) *OrganizationTable {
 			updated_at	TEXT,
 			user_id	INT,
 			PRIMARY KEY(ID),
-			FOREIGN KEY(user_id) REFERENCES user(ID)
+			FOREIGN KEY(user_id) REFERENCES user(ID) ON DELETE CASCADE
 		);
 	`)
 
@@ -200,7 +200,7 @@ func (organizationTable *OrganizationTable) updateFunds(orgID int) (int, error) 
 	var calculatedFunds int
 
 	rows, err := organizationTable.DB.Query(`
-		SELECT funds_raised FROM member WHERE member.organization_id = ?
+		SELECT funds_raised FROM member WHERE organization_id = ?
 	`, strconv.Itoa(orgID))
 	if err != nil {
 		log.Printf("Unable to retrieve information: %s", err.Error())

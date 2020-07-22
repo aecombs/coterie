@@ -30,7 +30,7 @@ func NewChapterTable(db *sql.DB) *ChapterTable {
 			updated_at	TEXT,
 			scripture_id	INT,
 			PRIMARY KEY(ID),
-			FOREIGN KEY(scripture_id) REFERENCES scripture(ID)
+			FOREIGN KEY(scripture_id) REFERENCES scripture(ID) ON DELETE CASCADE
 		);
 	`)
 

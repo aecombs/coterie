@@ -26,7 +26,7 @@ func NewScriptureTable(db *sql.DB) *ScriptureTable {
 			updated_at	TEXT,
 			organization_id	INT,
 			PRIMARY KEY(ID),
-			FOREIGN KEY(organization_id) REFERENCES organization(ID)
+			FOREIGN KEY(organization_id) REFERENCES organization(ID) ON DELETE CASCADE
 		);
 	`)
 
