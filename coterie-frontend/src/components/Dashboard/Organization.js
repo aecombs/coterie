@@ -41,7 +41,7 @@ const Organization = (props) => {
     <section className="w-100 container py-2 card">
       <div className="row card-body">
         <div className="w-100">
-          <button onClick={setUpdate} className={ updateMode ? "hidden" : "btn list-group-item list-group-item-action"}>
+          <button onClick={setUpdate} className={ updateMode ? "hidden" : "btn list-group-item border-0 list-group-item-action"}>
           <h4 className="">{props.name}</h4>
           <p className="open-sans">{props.missionStatement}</p>
           </button>
