@@ -40,11 +40,11 @@ const Homepage = () => {
         <hr/>
       </div>
       <div className="container my-5">
-        <img className="w-100 homepage-large-img float-left" alt="A Flamboyance of Flamingos" src="https://images.unsplash.com/photo-1515048397571-d8d6729fb49c?ixlib=rb-1.2.1&auto=format&fit=crop&w=2689&q=80"/>
+        <img className="w-100 homepage-large-img float-left mb-5" alt="A Flamboyance of Flamingos" src="https://images.unsplash.com/photo-1515048397571-d8d6729fb49c?ixlib=rb-1.2.1&auto=format&fit=crop&w=2689&q=80"/>
       </div>
-      <div className="container mb-5">
-        <div className="my-5">
-          <h4 className="text-center font-weight-bold mt-5 mb-4">Why Flamingos?</h4>
+      <div className="container">
+        <div className="">
+          <h4 className="text-center font-weight-bold my-4">Why Flamingos?</h4>
           <p className="open-sans float-right">Much like humans, flamingos are very social creatures. They tend to live in large colonies, with numbers ranging from 50 up to the thousands. They often communicate using non-verbal cues and engage in group activities. Flamingos form strong pair bonds with others of either the same sex or opposite sex, and they learn to recognize the calls of their parents and of their children so that they can hear them even in large colonies. As for the young, they form groups known as crèches, and the entire colony will take on the burden of caring for them.</p>
         </div>
           
