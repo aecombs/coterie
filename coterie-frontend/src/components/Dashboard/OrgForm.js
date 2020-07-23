@@ -54,7 +54,7 @@ const OrgForm = (props) => {
             className="open-sans form-control"
             name="mission_statement"
             type="text"
-            placeholder="Enter you mission statement"
+            placeholder="Enter your mission statement"
             value={formFields["mission_statement"]}
             onChange={onMissionChange}
           />
