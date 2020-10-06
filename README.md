@@ -2,9 +2,10 @@
   <img src="https://github.com/aecombs/coterie/blob/master/coterie-frontend/public/logo.png" alt="Coterie Logo" width="500">
 </p>
 
-### Do you know a cult when you see one?
+
 Coterie, on paper, is a straight-forward enough tool. A web app to help leaders manage their organizations. It's useful, efficient, and clean.
-It is also an uncomfortable reminder for 
+
+It is also meant to bring attention to an uncomfortable fact — that cults are still a very real problem. We don't hear about them often, not as often as we used to. The word alone inspires images of ritualistic sacrifices and deluded followers from the '70s. The folks who join these organizations are often perceived to be the very opposite of normal. This lack of attention and sense of "it could never happen to me" does not bring solutions or resolutions. Vulnerable folks will continue to be persuaded into joining these all-consuming factions until there are frank dialogues around why sane, smart folks decide to join cults, why they stay in them, and what we can do to prevent the circumstances that lead them there in the first place.
 
 
 ## Demo
